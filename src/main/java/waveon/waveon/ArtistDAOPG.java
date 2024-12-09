@@ -16,7 +16,7 @@ public class ArtistDAOPG implements ArtistDAO {
     }
 
     /**
-     * 
+     *
      */
     public Connection connection;
 
@@ -28,10 +28,4 @@ public class ArtistDAOPG implements ArtistDAO {
         // TODO implement here
         return null;
     }
-
-    /**
-     * @param int id
-     */
-    public abstract void getArtistById(int id);
-
 }
