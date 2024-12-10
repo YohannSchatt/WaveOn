@@ -45,7 +45,8 @@ public class LoginUIJavaFX extends Application  implements ILoginController {
         loginButton.setOnAction(event -> {
             String email = emailInput.getText();
             String password = passwordInput.getText();
-            if (loginFacade.login(email, password)) {
+            loginFacade.login(email);
+            if (loginFacade.checkCredentials(email, password)) {
                 resultLabel.setText("Login successful");
                 resultLabel.setText("");
             } else {

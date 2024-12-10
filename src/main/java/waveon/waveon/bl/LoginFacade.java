@@ -29,25 +29,24 @@ public class LoginFacade {
     public User loginService;
 
     /**
-     * @param   email
-     * @param  password
-     * @return
+     * @param  email
      */
-    public boolean login(String  email, String password) {
-        OrdUser user = userDAO.getUserByEmail(email);
-        if (user != null && user.getPassword().equals(password)) {
-            currentUser = user;
-            return true;
-        } else {
-            System.out.println("Login échoué : identifiants incorrects.");
-            return false;
-        }
+    public void login(String  email) {
+        this.currentUser = userDAO.getUserByEmail(email);
     }
 
     /**
      * @return
      */
-    public boolean checkCredentials() {
+    public boolean checkCredentials(String email, String password) {
+        if (currentUser != null) {
+            if (this.currentUser.getPassword().equals(password) && this.currentUser.getEmail().equals(email)) {
+                return true;
+            } else {
+                System.out.println("Login échoué : identifiants incorrects.");
+                return false;
+            }
+        }
         return false;
     }
 
