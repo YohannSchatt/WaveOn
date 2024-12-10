@@ -13,6 +13,7 @@ public class ArtistDAOPG implements ArtistDAO {
      * Default constructor
      */
     public ArtistDAOPG() {
+        this.connection = null;
     }
 
     /**
@@ -21,10 +22,10 @@ public class ArtistDAOPG implements ArtistDAO {
     public Connection connection;
 
     /**
-     * @param int id
+     * @param String id
      * @return
      */
-    public Artist getArtistById(int id) {
+    public Artist getArtistByEmail(String email) {
         // TODO implement here
         return null;
     }

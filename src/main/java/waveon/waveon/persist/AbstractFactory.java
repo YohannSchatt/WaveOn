@@ -21,29 +21,21 @@ public abstract class AbstractFactory {
     /**
      * 
      */
-    public static AbstractFactory getInstance() {
-        // TODO implement here
-        return null;
+    public static AbstractFactory getInstance(){
+        if (Instance == null) {
+            Instance = new PGFactory();
+        }
+        return Instance;
     }
 
     /**
      * @return
      */
-    public abstract OrdUserDAOPG createUserDAO();
+    public abstract OrdUserDAO createOrdUserDAO();
 
     /**
      * @return
      */
     public abstract ArtistDAO createArtistDAO();
-
-    /**
-     * @param String username 
-     * @param int subscriptionLevel 
-     * @return
-     */
-    public OrdUser createOrdinaryUser(String username, int subscriptionLevel) {
-        // TODO implement here
-        return null;
-    }
 
 }

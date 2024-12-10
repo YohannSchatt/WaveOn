@@ -9,27 +9,20 @@ public class PGFactory extends AbstractFactory {
     /**
      * Default constructor
      */
-    public PGFactory() {
-    }
+    public PGFactory() {}
 
-    /**
-     *
-     */
-    public int Attribute1 = 0;
 
     /**
      * @return
      */
-    public OrdUserDAOPG createUserDAO() {
-        // TODO implement here
-        return null;
+    public OrdUserDAOPG createUserDAO(String email) {
+        return new OrdUserDAOPG();
     }
 
     /**
      * @return
      */
-    public ArtistDAOPG createArtistDAO() {
-        // TODO implement here
-        return null;
+    public ArtistDAOPG createArtistDAO(String email) {
+        return new ArtistDAOPG();
     }
 }
