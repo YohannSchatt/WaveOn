@@ -18,6 +18,6 @@ public interface OrdUserDAO {
      * @param int id
      * @return
      */
-    public abstract User getUserById(int id);
+    public abstract User getUserByEmail(String email);
 
 }

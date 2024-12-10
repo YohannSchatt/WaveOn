@@ -13,6 +13,7 @@ public class OrdUserDAOPG implements OrdUserDAO {
      * Default constructor
      */
     public OrdUserDAOPG() {
+        this.connection = null;
     }
 
     /**
@@ -24,7 +25,7 @@ public class OrdUserDAOPG implements OrdUserDAO {
      * @param int id
      * @return
      */
-    public User getUserById(int id) {
+    public User getUserByEmail(String email) {
         // TODO implement here
         return null;
     }

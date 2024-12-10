@@ -7,7 +7,6 @@ module waveon.waveon {
     requires java.desktop;
 
     opens waveon.waveon to javafx.fxml;
-    exports waveon.waveon;
     exports waveon.waveon.persist;
     opens waveon.waveon.persist to javafx.fxml;
     exports waveon.waveon.core;
