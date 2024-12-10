@@ -1,6 +1,5 @@
 package waveon.waveon.ui;
 
-//import business.facades.LoginFacade;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -8,18 +7,14 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import waveon.waveon.bl.LoginFacade;
-import waveon.waveon.core.IUser;
-import waveon.waveon.core.OrdUser;
-//import users.User;
 
-public class LoginUIJavaFX extends Application  implements ILoginController {
+public class LoginUIJavaFX extends Application implements ILoginController {
     private final LoginFacade loginFacade = new LoginFacade();
 
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Login System");
 
-        // créer un form pour le login
         GridPane grid = new GridPane();
         grid.setPadding(new Insets(10, 10, 10, 10));
         grid.setVgap(8);
@@ -35,31 +30,29 @@ public class LoginUIJavaFX extends Application  implements ILoginController {
         PasswordField passwordInput = new PasswordField();
         GridPane.setConstraints(passwordInput, 1, 1);
 
+        CheckBox artistCheckBox = new CheckBox("Je suis un Artiste");
+        GridPane.setConstraints(artistCheckBox, 1, 2);
+
         Button loginButton = new Button("Login");
-        GridPane.setConstraints(loginButton, 1, 2);
+        GridPane.setConstraints(loginButton, 1, 3);
 
         Label resultLabel = new Label();
-        GridPane.setConstraints(resultLabel, 1, 3);
+        GridPane.setConstraints(resultLabel, 1, 4);
 
-        // bouton d'action du login
         loginButton.setOnAction(event -> {
             String email = emailInput.getText();
             String password = passwordInput.getText();
-            loginFacade.login(email);
+            boolean isArtist = artistCheckBox.isSelected();
+            loginFacade.login(email, isArtist);
             if (loginFacade.checkCredentials(email, password)) {
                 resultLabel.setText("Login successful");
-                resultLabel.setText("");
             } else {
                 resultLabel.setText("Login failed");
             }
-
-            resultLabel.setText("Welcome to test");
         });
 
-        // ajoute tous les composants au grid
-        grid.getChildren().addAll(emailLabel, emailInput, passwordLabel, passwordInput, loginButton, resultLabel);
+        grid.getChildren().addAll(emailLabel, emailInput, passwordLabel, passwordInput, artistCheckBox, loginButton, resultLabel);
 
-        // créer et affiche la scène
         Scene scene = new Scene(grid, 300, 200);
         primaryStage.setScene(scene);
         primaryStage.show();

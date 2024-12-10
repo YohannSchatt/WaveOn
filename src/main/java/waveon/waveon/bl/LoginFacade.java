@@ -1,43 +1,39 @@
 package waveon.waveon.bl;
 
+import waveon.waveon.core.IUser;
 import waveon.waveon.core.OrdUser;
 import waveon.waveon.core.User;
 import waveon.waveon.persist.AbstractFactory;
+import waveon.waveon.persist.ArtistDAO;
 import waveon.waveon.persist.OrdUserDAO;
 import waveon.waveon.persist.PGFactory;
 
-/**
- * 
- */
 public class LoginFacade {
     private AbstractFactory factory;
-    private OrdUserDAO userDAO; // DAO pour accéder aux données utilisateur
-    private OrdUser currentUser;     // Utilisateur actuellement connecté
+    private OrdUserDAO userDAO;
+    private ArtistDAO artistDAO;
 
-    /**
-     * Default constructor
-     */
+    private IUser currentUser;
+
     public LoginFacade() {
-       factory = AbstractFactory.getInstance();
-       assert factory != null;
-       userDAO = factory.createOrdUserDAO();
+        factory = AbstractFactory.getInstance();
+        assert factory != null;
+        userDAO = factory.createOrdUserDAO();
+        artistDAO = factory.createArtistDAO();
     }
 
-    /**
-     * 
-     */
-    public User loginService;
+    public void login(String email, boolean isArtist) {
 
-    /**
-     * @param  email
-     */
-    public void login(String  email) {
-        this.currentUser = userDAO.getUserByEmail(email);
+        // Utilisez la valeur de isArtist selon vos besoins
+        if (isArtist) {
+            System.out.println("L'utilisateur est un artiste.");
+            this.currentUser = artistDAO.getArtistByEmail(email);
+        } else {
+            System.out.println("L'utilisateur n'est pas un artiste.");
+            this.currentUser = userDAO.getUserByEmail(email);
+        }
     }
 
-    /**
-     * @return
-     */
     public boolean checkCredentials(String email, String password) {
         if (currentUser != null) {
             if (this.currentUser.getPassword().equals(password) && this.currentUser.getEmail().equals(email)) {
@@ -49,5 +45,4 @@ public class LoginFacade {
         }
         return false;
     }
-
 }

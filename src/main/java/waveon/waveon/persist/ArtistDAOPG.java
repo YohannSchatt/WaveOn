@@ -24,7 +24,7 @@ public class ArtistDAOPG implements ArtistDAO {
      * @param email
      * @return
      */
-    public Artist getArtistByEmail(String email) {
+    public  Artist getArtistByEmail(String email) {
         // TODO implement here
         return null;
     }
