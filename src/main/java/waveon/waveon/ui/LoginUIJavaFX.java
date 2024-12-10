@@ -7,10 +7,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import waveon.waveon.bl.LoginFacade;
 //import users.User;
 
 public class LoginUIJavaFX extends Application  implements ILoginController {
-    //private final LoginFacade loginFacade = new LoginFacade();
+    private final LoginFacade loginFacade = new LoginFacade();
 
     @Override
     public void start(Stage primaryStage) {
@@ -42,15 +43,15 @@ public class LoginUIJavaFX extends Application  implements ILoginController {
         loginButton.setOnAction(event -> {
             String username = usernameInput.getText();
             String password = passwordInput.getText();
-            //User user = loginFacade.login(username, password);
+            boolean user = loginFacade.login(username, password);
 
-            //if (user != null) {
-               // resultLabel.setText("Welcome, " + user.getUsername() + " (" + user.getRole() + ")");
-            //} else {
-              //  resultLabel.setText("Invalid username or password.");
-            //}
+            if (user) {
+                resultLabel.setText("Welcome " + username);
+            } else {
+                resultLabel.setText("Invalid username or password.");
+            }
 
-            resultLabel.setText("Welcome to test");
+            //resultLabel.setText("Welcome to test");
         });
 
         // ajoute tous les composants au grid
