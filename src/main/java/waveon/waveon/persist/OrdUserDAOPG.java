@@ -1,5 +1,6 @@
 package waveon.waveon.persist;
 
+import waveon.waveon.core.OrdUser;
 import waveon.waveon.core.User;
 
 import java.sql.Connection;
@@ -21,10 +22,10 @@ public class OrdUserDAOPG implements OrdUserDAO {
     public Connection connection;
 
     /**
-     * @param int id
+     * @param email
      * @return
      */
-    public User getUserById(int id) {
+    public OrdUser getUserByEmail(String email) {
         // TODO implement here
         return null;
     }

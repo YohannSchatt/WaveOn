@@ -1,5 +1,6 @@
 package waveon.waveon.persist;
 
+import waveon.waveon.core.OrdUser;
 import waveon.waveon.core.User;
 
 import java.sql.Connection;
@@ -18,6 +19,6 @@ public interface OrdUserDAO {
      * @param int id
      * @return
      */
-    public abstract User getUserById(int id);
+    public abstract OrdUser getUserByEmail(String email);
 
 }

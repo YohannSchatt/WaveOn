@@ -16,13 +16,14 @@ public abstract class AbstractFactory {
     /**
      * 
      */
-    private AbstractFactory Instance;
+    private static AbstractFactory Instance;
 
     /**
      * 
      */
-    public void getInstance() {
+    public static AbstractFactory getInstance() {
         // TODO implement here
+        return null;
     }
 
     /**
