@@ -21,10 +21,10 @@ public class ArtistDAOPG implements ArtistDAO {
     public Connection connection;
 
     /**
-     * @param String id
+     * @param email
      * @return
      */
-    public Artist getArtistById(int id) {
+    public Artist getArtistByEmail(String email) {
         // TODO implement here
         return null;
     }
