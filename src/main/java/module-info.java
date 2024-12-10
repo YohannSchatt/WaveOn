@@ -8,4 +8,12 @@ module waveon.waveon {
 
     opens waveon.waveon to javafx.fxml;
     exports waveon.waveon;
+    exports waveon.waveon.persist;
+    opens waveon.waveon.persist to javafx.fxml;
+    exports waveon.waveon.core;
+    opens waveon.waveon.core to javafx.fxml;
+    exports waveon.waveon.ui;
+    opens waveon.waveon.ui to javafx.fxml;
+    exports waveon.waveon.bl;
+    opens waveon.waveon.bl to javafx.fxml;
 }

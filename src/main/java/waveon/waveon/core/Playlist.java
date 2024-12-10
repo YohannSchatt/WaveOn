@@ -1,44 +1,50 @@
-package waveon.waveon;
-
-import java.io.*;
-import java.sql.Time;
-import java.util.*;
+package waveon.waveon.core;
 
 /**
  * 
  */
-public class Music {
+public class Playlist {
 
     /**
      * Default constructor
      */
-    public Music() {
+    public Playlist() {
     }
 
     /**
      * 
      */
-    private int id;
+    public int id;
 
     /**
      * 
      */
-    private String name;
+    public String name;
 
     /**
      * 
      */
-    private Artist Artist;
+    public User Creator;
 
     /**
      * 
      */
-    private Time Duration;
+    public Music[] Musics;
 
     /**
      * 
      */
-    private File Content;
+    public PlaylistFollower[] UsersList;
+
+    /**
+     * 
+     */
+    public int Attribute6;
+
+    /**
+     * 
+     */
+    public Boolean IsRandom;
 
     /**
      * 
@@ -48,30 +54,32 @@ public class Music {
     }
 
     /**
-     * 
+     * @param musicid  
+     * @return
      */
-    public void Operation2() {
+    public void AddMusic(int musicid ) {
         // TODO implement here
     }
 
     /**
-     * 
+     * @param musicid 
+     * @return
      */
-    public void Operation3() {
+    public void RemoveMusic(int musicid) {
         // TODO implement here
     }
 
     /**
-     * 
+     * @return
      */
-    public void Operation4() {
+    public void DeletePlaylist() {
         // TODO implement here
     }
 
     /**
-     * 
+     * @return
      */
-    public void Operation5() {
+    public void ChangeRandom() {
         // TODO implement here
     }
 

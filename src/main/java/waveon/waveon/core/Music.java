@@ -1,56 +1,43 @@
-package waveon.waveon;
+package waveon.waveon.core;
 
 import java.io.*;
-import java.util.*;
+import java.sql.Time;
 
 /**
  * 
  */
-public class Ticket {
+public class Music {
 
     /**
      * Default constructor
      */
-    public Ticket() {
+    public Music() {
     }
 
     /**
      * 
      */
-    public int id;
+    private int id;
 
     /**
      * 
      */
-    public int Place;
+    private String name;
 
     /**
      * 
      */
-    public int Price;
+    private waveon.waveon.core.Artist Artist;
 
     /**
      * 
      */
-    public int Eventrelate;
+    private Time Duration;
 
     /**
      * 
      */
-    public String TypeOfTi;
-
-    /**
-     * 
-     */
-    public int Categorie;
-
-    /**
-     * @return
-     */
-    public Event WhatIsEvent() {
-        // TODO implement here
-        return null;
-    }
+    private File Content;
 
     /**
      * 
@@ -60,25 +47,37 @@ public class Ticket {
     }
 
     /**
-     * @return
+     * 
      */
-    public int WhatIsCat() {
+    public void Operation2() {
         // TODO implement here
-        return 0;
-    }
-
-    /**
-     * @return
-     */
-    public String WhatIsCatName() {
-        // TODO implement here
-        return "";
     }
 
     /**
      * 
      */
-    public void Operation1() {
+    public void Operation3() {
+        // TODO implement here
+    }
+
+    /**
+     * 
+     */
+    public void Operation4() {
+        // TODO implement here
+    }
+
+    /**
+     * 
+     */
+    public void Operation5() {
+        // TODO implement here
+    }
+
+    /**
+     * @return
+     */
+    public void AddToQueue() {
         // TODO implement here
     }
 

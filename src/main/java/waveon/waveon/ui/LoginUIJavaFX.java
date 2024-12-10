@@ -1,4 +1,4 @@
-package waveon.waveon;
+package waveon.waveon.ui;
 
 //import business.facades.LoginFacade;
 import javafx.application.Application;
@@ -9,7 +9,7 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 //import users.User;
 
-public class LoginUIJavaFX extends Application  implements LoginController{
+public class LoginUIJavaFX extends Application  implements ILoginController {
     //private final LoginFacade loginFacade = new LoginFacade();
 
     @Override

@@ -1,7 +1,4 @@
-package waveon.waveon;
-
-import java.io.*;
-import java.util.*;
+package waveon.waveon.core;
 
 /**
  * 

@@ -1,6 +1,6 @@
-package waveon.waveon;
+package waveon.waveon.ui;
 
-public interface LoginController {
+public interface ILoginController {
     /**
      * Launches the login interface.
      */

@@ -1,8 +1,8 @@
-package waveon.waveon;
+package waveon.waveon.persist;
 
-import java.io.*;
+import waveon.waveon.core.User;
+
 import java.sql.Connection;
-import java.util.*;
 
 /**
  * 

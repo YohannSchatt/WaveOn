@@ -1,4 +1,4 @@
-package waveon.waveon;
+package waveon.waveon.ui;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

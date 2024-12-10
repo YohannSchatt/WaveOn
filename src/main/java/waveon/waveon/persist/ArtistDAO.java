@@ -1,7 +1,7 @@
-package waveon.waveon;
+package waveon.waveon.persist;
 
-import java.io.*;
-import java.util.*;
+import waveon.waveon.core.Artist;
+
 import java.sql.Connection;
 
 /**
@@ -17,6 +17,6 @@ public interface ArtistDAO {
     /**
      * @param int id
      */
-    public abstract Artist getArtistById( int id);
+    public abstract Artist getArtistById(int id);
 
 }

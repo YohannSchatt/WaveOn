@@ -1,4 +1,4 @@
-package waveon.waveon;
+package waveon.waveon.persist;
 
 
 /**
