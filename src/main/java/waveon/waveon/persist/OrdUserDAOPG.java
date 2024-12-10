@@ -5,27 +5,16 @@ import waveon.waveon.connector.PGconnector;
 
 import java.sql.*;
 
-/**
- * 
- */
 public class OrdUserDAOPG implements OrdUserDAO {
 
     /**
      * Default constructor
      */
     public OrdUserDAOPG() {
-
     }
 
-    /**
-     * 
-     */
     public Connection connection;
 
-    /**
-     * @param email
-     * @return
-     */
     public OrdUser getUserByEmail(String email) {
         PGconnector pg = PGconnector.getInstance();
         String sql = "SELECT * FROM ordinaryuser WHERE email = ?";
@@ -33,8 +22,7 @@ public class OrdUserDAOPG implements OrdUserDAO {
             pstmt.setString(1, email);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                OrdUser user = new OrdUser(rs.getInt("id"), rs.getString("username"), rs.getString("email"), rs.getString("password"));
-                return user;
+                return new OrdUser(rs.getInt("id"), rs.getString("username"), rs.getString("email"), rs.getString("password"));
             }
         }
         catch (Exception e) {

@@ -4,14 +4,8 @@ import waveon.waveon.core.OrdUser;
 
 import java.sql.Connection;
 
-/**
- * 
- */
 public interface OrdUserDAO {
 
-    /**
-     * 
-     */
     public Connection connection = null;
 
     /**
