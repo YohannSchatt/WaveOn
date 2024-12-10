@@ -17,6 +17,10 @@ public class ArtistDAOPG implements ArtistDAO {
 
     public Connection connection;
 
+    /**
+     * @param email
+     * @return Artist
+     */
     public Artist getArtistByEmail(String email) {
         PGconnector pg = PGconnector.getInstance();
         String sql = "SELECT * FROM artist WHERE email = ?";

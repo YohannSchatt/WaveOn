@@ -13,8 +13,15 @@ public class OrdUserDAOPG implements OrdUserDAO {
     public OrdUserDAOPG() {
     }
 
+    /**
+     *
+     */
     public Connection connection;
 
+    /**
+     * @param email
+     * @return OrduUser
+     */
     public OrdUser getUserByEmail(String email) {
         PGconnector pg = PGconnector.getInstance();
         String sql = "SELECT * FROM ordinaryuser WHERE email = ?";

@@ -10,7 +10,7 @@ public interface OrdUserDAO {
 
     /**
      * @param email
-     * @return
+     * @return OrduUser
      */
     public abstract OrdUser getUserByEmail(String email);
 

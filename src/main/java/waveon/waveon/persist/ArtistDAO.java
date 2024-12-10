@@ -6,6 +6,7 @@ import java.sql.Connection;
 
 public interface ArtistDAO {
 
+
     public Connection connection = null;
 
     /**

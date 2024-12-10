@@ -12,6 +12,10 @@ public class LoginFacade {
 
     private IUser currentUser;
 
+
+    /**
+     * Default constructor
+     */
     public LoginFacade() {
         AbstractFactory factory = AbstractFactory.getInstance();
         assert factory != null;
@@ -19,6 +23,10 @@ public class LoginFacade {
         artistDAO = factory.createArtistDAO();
     }
 
+
+    /**
+     * @param email
+     */
     public void login(String email, boolean isArtist) {
 
         // Utilisez la valeur de isArtist selon vos besoins
@@ -31,6 +39,11 @@ public class LoginFacade {
         }
     }
 
+    /**
+     * @param email
+     * @param password
+     * @return Boolean
+     */
     public boolean checkCredentials(String email, String password) {
         if (currentUser != null) {
             if (this.currentUser.getPassword().equals(password) && this.currentUser.getEmail().equals(email)) {
@@ -43,6 +56,9 @@ public class LoginFacade {
         return false;
     }
 
+    /**
+     * @return IUser
+     */
     public IUser getCurrentUser() {
         return currentUser;
     }
