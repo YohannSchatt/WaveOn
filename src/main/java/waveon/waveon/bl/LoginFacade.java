@@ -20,7 +20,7 @@ public class LoginFacade {
     public LoginFacade() {
        factory = AbstractFactory.getInstance();
        assert factory != null;
-       userDAO = factory.createUserDAO();
+       userDAO = factory.createOrdUserDAO();
     }
 
     /**

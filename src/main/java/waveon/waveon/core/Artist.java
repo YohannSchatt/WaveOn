@@ -20,12 +20,18 @@ public class Artist implements IUser {
     public String email = "";
 
     /**
+     *
+     */
+    public String password = "";
+
+    /**
      * Default constructor
      */
-    public Artist(int id, String username, String email) {
+    public Artist(int id, String username, String email, String password) {
         this.id = id;
         this.username = username;
         this.email = email;
+        this.password = password;
     }
 
     public Music[] music = new Music[0];
@@ -66,7 +72,7 @@ public class Artist implements IUser {
 
     @Override
     public String getUsername() {
-        return "";
+        return this.username;
     }
 
     @Override
@@ -76,11 +82,21 @@ public class Artist implements IUser {
 
     @Override
     public String getEmail() {
-        return "";
+        return this.email;
     }
 
     @Override
     public void setEmail(String email) {
+
+    }
+
+    @Override
+    public String getPassword() {
+        return this.password;
+    }
+
+    @Override
+    public void setPassword(String password) {
 
     }
 }

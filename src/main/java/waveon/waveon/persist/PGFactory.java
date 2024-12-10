@@ -15,14 +15,14 @@ public class PGFactory extends AbstractFactory {
     /**
      * @return
      */
-    public OrdUserDAOPG createUserDAO(String email) {
+    public OrdUserDAOPG createOrdUserDAO() {
         return new OrdUserDAOPG();
     }
 
     /**
      * @return
      */
-    public ArtistDAOPG createArtistDAO(String email) {
+    public ArtistDAOPG createArtistDAO() {
         return new ArtistDAOPG();
     }
 }
