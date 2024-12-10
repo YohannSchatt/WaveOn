@@ -1,6 +1,6 @@
 package waveon.waveon.persist;
 
-import waveon.waveon.core.OrdUser;
+import waveon.waveon.core.User;
 
 import java.sql.Connection;
 
