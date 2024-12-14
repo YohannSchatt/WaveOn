@@ -1,43 +1,21 @@
 package waveon.waveon.core;
 
-/**
- * 
- */
+import java.util.ArrayList;
+import java.util.List;
+
 public class Conversation {
+    private IUser[] users = new IUser[2];
+    private List<Message> listMessages = new ArrayList<>();
 
-    /**
-     * Default constructor
-     */
-    public Conversation() {
+    public Conversation(IUser user) {
+        this.users[0] = user;
     }
 
-    /**
-     * 
-     */
-    public  User[] Users;
-
-    /**
-     * 
-     */
-    public Message[] ListMessage;
-
-    /**
-     * 
-     */
-    public Message Brouillon;
-
-    /**
-     * @param Message
-     */
-    public void DeleteMessage(Message Message) {
-        // TODO implement here
+    public void deleteMessage(Message message) {
+        listMessages.remove(message);
     }
 
-    /**
-     * @return
-     */
-    public void SendMessage() {
-        // TODO implement here
+    public void sendMessage(Message message) {
+        listMessages.add(message);
     }
-
 }

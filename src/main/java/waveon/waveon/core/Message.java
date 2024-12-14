@@ -11,7 +11,9 @@ public class Message {
     /**
      * Default constructor
      */
-    public Message() {
+    public Message(String messageText) {
+        this.content = messageText;
+        this.date = new Date();
     }
 
     /**

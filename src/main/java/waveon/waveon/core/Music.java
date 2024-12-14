@@ -8,9 +8,15 @@ import java.sql.Time;
  */
 public class Music {
 
-    /**
-     * Default constructor
-     */
+
+    public Music(int id, String name, waveon.waveon.core.Artist Artist, Time Duration, File Content) {
+        this.id = id;
+        this.name = name;
+        this.Artist = Artist;
+        this.Duration = Duration;
+        this.Content = Content;
+    }
+
     public Music() {
     }
 

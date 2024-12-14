@@ -35,4 +35,6 @@ public abstract class AbstractFactory {
      */
     public abstract ArtistDAO createArtistDAO();
 
+    public abstract ConversationDAO createConversationDAO();
+
 }
