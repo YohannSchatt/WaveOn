@@ -46,6 +46,12 @@ public class LoginUIJavaFX extends Application implements ILoginController {
             loginFacade.login(email, isArtist);
             if (loginFacade.checkCredentials(email, password)) {
                 resultLabel.setText("Login successful");
+                MainpageUIJavaFX mainPage = new MainpageUIJavaFX();
+                try {
+                    mainPage.start(primaryStage);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             } else {
                 resultLabel.setText("Login failed");
             }
