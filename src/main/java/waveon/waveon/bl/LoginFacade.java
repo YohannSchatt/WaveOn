@@ -10,11 +10,7 @@ public class LoginFacade {
     private AbstractFactory factory;
     private OrdUserDAO userDAO;
     private ArtistDAO artistDAO;
-
-
-    private static OrdUser faux = new OrdUser(0, "coco", "coco@gmail.com","21032004");
-
-    private static IUser currentUser = faux;
+    private static IUser currentUser;
     public LoginFacade() {
         factory = AbstractFactory.getInstance();
         assert factory != null;

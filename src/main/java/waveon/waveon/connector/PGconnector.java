@@ -4,7 +4,7 @@ import java.sql.*;
 
 public class PGconnector {
 
-    private static final String URL = "jdbc:postgresql://cluster-ig4.igpolytech.fr:30017/waveon_db";
+    private static final String URL = "jdbc:postgresql://cluster-ig4.igpolytech.fr:30011/waveon_db";
     private static final String USER = "postgres";
     private static final String PASSWORD = "86ff479c8e85cc70f0c7aa5868e0c04d";
 
