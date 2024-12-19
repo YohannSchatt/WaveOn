@@ -1,44 +1,52 @@
 package waveon.waveon.bl;
 
-//import waveon.waveon.core.User;
+import waveon.waveon.core.IUser;
+import waveon.waveon.core.OrdUser;
+import waveon.waveon.persist.AbstractFactory;
+import waveon.waveon.persist.ArtistDAO;
+import waveon.waveon.persist.OrdUserDAO;
 
-import java.sql.*;
-
-/**
- * 
- */
 public class LoginFacade {
-
-
-    private static final String URL = "jdbc:postgresql://cluster-ig4.igpolytech.fr:30017/waveon_db";
-    private static final String USER = "postgres";
-    private static final String PASSWORD = "86ff479c8e85cc70f0c7aa5868e0c04d";
-
-    /**
-     * Default constructor
-     */
+    private AbstractFactory factory;
+    private OrdUserDAO userDAO;
+    private ArtistDAO artistDAO;
+    private static IUser currentUser;
     public LoginFacade() {
+        factory = AbstractFactory.getInstance();
+        assert factory != null;
+        userDAO = factory.createOrdUserDAO();
+        artistDAO = factory.createArtistDAO();
     }
 
+    public void login(String email, boolean isArtist) {
 
-    public boolean login(String username, String password) {
-        String sql = "SELECT * FROM ordinaryuser WHERE username = ? AND password = ?";
-
-        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-            pstmt.setString(1, username);
-            pstmt.setString(2, password);
-            ResultSet rs = pstmt.executeQuery();
-            if (!rs.next()) {
-                return false;
-            } else {
-                return true;
-            }
-
-        } catch (SQLException e) {
-            System.err.println("SQL error: " + e.getMessage());
-            return false;
+        // Utilisez la valeur de isArtist selon vos besoins
+        if (isArtist) {
+            System.out.println("L'utilisateur est un artiste.");
+            currentUser = artistDAO.getArtistByEmail(email);
+        } else {
+            System.out.println("L'utilisateur n'est pas un artiste.");
+            currentUser = userDAO.getUserByEmail(email);
         }
+    }
+
+    public boolean checkCredentials(String email, String password) {
+        if (currentUser != null) {
+            if (currentUser.getPassword().equals(password) && currentUser.getEmail().equals(email)) {
+                return true;
+            } else {
+                System.out.println("Login échoué : identifiants incorrects.");
+                return false;
+            }
+        }
+        return false;
+    }
+
+    public IUser getCurrentUser() {
+        return currentUser;
+    }
+
+    public void logout() {
+        currentUser = null;
     }
 }

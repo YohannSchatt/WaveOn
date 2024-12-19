@@ -15,8 +15,8 @@ public interface ArtistDAO {
     public Connection connection = null;
 
     /**
-     * @param int id
+     * @param email
      */
-    public abstract Artist getArtistById(int id);
+    public abstract Artist getArtistByEmail(String email);
 
 }
