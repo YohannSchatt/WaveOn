@@ -11,72 +11,45 @@ public class Music {
     /**
      * Default constructor
      */
-    public Music() {
+    public Music( int id, String title, String artist_id){//Time duration, File content) {
+        this.id = id;
+        this.name = title;
+        this.artist_id = artist_id;
     }
 
-    /**
-     * 
-     */
+
     private int id;
 
-    /**
-     * 
-     */
+
     private String name;
 
-    /**
-     * 
-     */
-    private waveon.waveon.core.Artist Artist;
 
-    /**
-     * 
-     */
+    private String artist_id;
+
     private Time Duration;
 
-    /**
-     * 
-     */
     private File Content;
 
-    /**
-     * 
-     */
-    public void Getters() {
-        // TODO implement here
+    public int getId() {
+        return id;
     }
 
-    /**
-     * 
-     */
-    public void Operation2() {
-        // TODO implement here
+    public String getName() {
+        return name;
     }
 
-    /**
-     * 
-     */
-    public void Operation3() {
-        // TODO implement here
+    public String getArtist_id() {
+        return artist_id;
     }
 
-    /**
-     * 
-     */
-    public void Operation4() {
-        // TODO implement here
+    public Time getDuration() {
+        return Duration;
     }
 
-    /**
-     * 
-     */
-    public void Operation5() {
-        // TODO implement here
+    public File getContent() {
+        return Content;
     }
 
-    /**
-     * @return
-     */
     public void AddToQueue() {
         // TODO implement here
     }

@@ -20,7 +20,6 @@ public class LoginFacade {
 
     public void login(String email, boolean isArtist) {
 
-        // Utilisez la valeur de isArtist selon vos besoins
         if (isArtist) {
             System.out.println("L'utilisateur est un artiste.");
             currentUser = artistDAO.getArtistByEmail(email);
