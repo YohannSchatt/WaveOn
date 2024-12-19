@@ -1,3 +1,4 @@
+// File: src/main/java/waveon/waveon/ui/MainpageUIJavaFX.java
 package waveon.waveon.ui;
 
 import javafx.application.Application;
@@ -8,12 +9,20 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import waveon.waveon.bl.LoginFacade;
+import waveon.waveon.bl.MusicFacade;
+import waveon.waveon.core.Music;
+
+import java.io.File;
+import java.sql.Time;
 
 public class MainpageUIJavaFX extends Application {
     private final LoginFacade loginFacade = new LoginFacade();
+    private final MusicFacade musicFacade = new MusicFacade(new Music(1, "Sample Music", null, new Time(0), new File("src/music/Zoltraak.mp3")));
     private Stage primaryStage;
     private VBox vBox;
+    private Slider progressBar;
 
     @Override
     public void start(Stage primaryStage) {
@@ -48,18 +57,11 @@ public class MainpageUIJavaFX extends Application {
     private void updateLoginButton() {
         vBox.getChildren().clear();
         if (loginFacade.getCurrentUser() != null) {
-            //Label userEmailLabel = new Label(loginFacade.getCurrentUser().getEmail());
-            //Button logoutButton = new Button("Se déconnecter");
-            //logoutButton.setOnAction(e -> {
-               // loginFacade.logout();
-                //updateLoginButton();
-            //});
-            //vBox.getChildren().addAll(userEmailLabel, logoutButton);
             Menu userMenu = new Menu(loginFacade.getCurrentUser().getUsername());
             MenuItem logoutItem = new MenuItem("Se déconnecter");
             logoutItem.setOnAction(e -> {
-                loginFacade.logout();// permet de mettre à null l'utilisateur courant
-                updateLoginButton(); // met à jour l'affichage et le bouton se connecter
+                loginFacade.logout();
+                updateLoginButton();
             });
             userMenu.getItems().add(logoutItem);
             MenuBar menuBar = new MenuBar();
@@ -77,6 +79,36 @@ public class MainpageUIJavaFX extends Application {
                 }
             });
             vBox.getChildren().add(loginButton);
+        }
+
+        // Add buttons to play and stop music
+        Button playMusicButton = new Button("Play Music");
+        playMusicButton.setOnAction(e -> {
+            musicFacade.playMusic();
+            updateProgressBar();
+        });
+        vBox.getChildren().add(playMusicButton);
+
+        Button stopMusicButton = new Button("Stop Music");
+        stopMusicButton.setOnAction(e -> musicFacade.stopMusic());
+        vBox.getChildren().add(stopMusicButton);
+
+        // Add progress bar
+        progressBar = new Slider();
+        progressBar.setMin(0);
+        progressBar.setMax(100);
+        progressBar.setValue(0);
+        vBox.getChildren().add(progressBar);
+    }
+
+    private void updateProgressBar() {
+        if (musicFacade != null) {
+            Duration totalDuration = musicFacade.getTotalDuration();
+            progressBar.setMax(totalDuration.toSeconds());
+
+            musicFacade.getMediaPlayer().currentTimeProperty().addListener((observable, oldValue, newValue) -> {
+                progressBar.setValue(newValue.toSeconds());
+            });
         }
     }
 
