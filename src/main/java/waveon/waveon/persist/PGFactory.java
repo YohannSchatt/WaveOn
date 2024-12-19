@@ -24,4 +24,9 @@ public class PGFactory extends AbstractFactory {
     public ArtistDAOPG createArtistDAO() {
         return new ArtistDAOPG();
     }
+
+    @Override
+    public MusicDAOPG createMusicDAO() {
+        return new MusicDAOPG();
+    }
 }

@@ -9,6 +9,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import waveon.waveon.bl.LoginFacade;
+import waveon.waveon.core.Artist;
 
 public class MainpageUIJavaFX extends Application {
     private final LoginFacade loginFacade = new LoginFacade();
@@ -39,10 +40,35 @@ public class MainpageUIJavaFX extends Application {
         BorderPane borderPane = new BorderPane();
         borderPane.setTop(topCenterPane);
 
+        VBox centerLayout = new VBox(10);
+        centerLayout.setPadding(new Insets(20));
+
+        if (loginFacade.getCurrentUser() != null && loginFacade.getCurrentUser() instanceof Artist) {
+            Button uploadMusicButton = new Button("Upload Music");
+            uploadMusicButton.setOnAction(e -> navigateToUploadMusicPage());
+            centerLayout.getChildren().add(uploadMusicButton);
+        }
+
+        borderPane.setCenter(centerLayout);
+
         // Créer et afficher la scène
-        Scene scene = new Scene(borderPane, 300, 200);
+        Scene scene = new Scene(borderPane, 400, 300);
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+
+    private void navigateToUploadMusicPage() {
+        if (loginFacade.getCurrentUser() != null && loginFacade.getCurrentUser() instanceof Artist) {
+            UploadMusicUIJavaFX uploadMusicUI = new UploadMusicUIJavaFX();
+            try {
+                uploadMusicUI.start(primaryStage);
+            } catch (Exception e) {
+                e.printStackTrace();
+                showAlert("Error", "Unable to navigate to the Upload Music page.");
+            }
+        } else {
+            showAlert("Access Denied", "Only artists can upload music.");
+        }
     }
 
     private void updateLoginButton() {
@@ -78,6 +104,14 @@ public class MainpageUIJavaFX extends Application {
             });
             vBox.getChildren().add(loginButton);
         }
+    }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     public static void main(String[] args) {
