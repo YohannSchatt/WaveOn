@@ -1,5 +1,6 @@
 package waveon.waveon.ui;
 
+import javafx.animation.PauseTransition;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -8,6 +9,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import waveon.waveon.bl.FilterOption;
 import waveon.waveon.bl.SearchFacade;
 import waveon.waveon.core.Artist;
@@ -24,6 +26,9 @@ public class SearchController extends Application {
     public FilterOption filter;
     public int nbPage;
 
+    // Variable to store the pause transition (used to delay search)
+    private PauseTransition pauseTransition;
+
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Simple Search Page");
@@ -31,6 +36,16 @@ public class SearchController extends Application {
         // Create the search bar
         searchField = new TextField();
         searchField.setPromptText("Search...");
+
+        // Initialize the pause transition with a 500ms delay
+        pauseTransition = new PauseTransition(Duration.millis(500));
+        pauseTransition.setOnFinished(e -> handleSearch()); // Trigger search after delay
+
+        // Create the event handler for key release
+        searchField.setOnKeyReleased(e -> {
+            pauseTransition.playFromStart(); // Restart the pause timer on every key release
+        });
+
         HBox searchBox = new HBox(searchField);
         searchBox.setPadding(new Insets(10));
 
@@ -111,7 +126,7 @@ public class SearchController extends Application {
         ArrayList<Music> searchResults = searchFacade.getCurrentMusicSearch();
         ArrayList<String> searchResultsFormatted = new ArrayList<>();
 
-        // Format the results with the title and artist ID
+        // Format the results with the title and artist name
         for (Music music : searchResults) {
             String formattedResult = music.getName() + "  -  " + music.getArtist_name();
             searchResultsFormatted.add(formattedResult);
@@ -119,9 +134,43 @@ public class SearchController extends Application {
 
         // Display the results in the ListView
         if (!searchResults.isEmpty()) {
-            resultsListView.getItems().addAll(searchResultsFormatted);
+            resultsListView.getItems().setAll(searchResultsFormatted);
             resultLabel.setText("Search successful: " + searchResults.size() + " result(s) found.");
         } else {
+            resultsListView.getItems().clear();
+            resultLabel.setText("No results found.");
+        }
+    }
+
+    // This method will handle the search after a short delay
+    private void handleSearch() {
+        String search = searchField.getText();
+        if (search.length() > 0) {
+            searchFacade.searchMusic(search); // Search music as the user types
+            updateSearchResults();
+        } else {
+            resultsListView.getItems().clear();
+            resultLabel.setText("Start typing to search...");
+        }
+    }
+
+    // Method to update the ListView with the current search results
+    private void updateSearchResults() {
+        ArrayList<Music> searchResults = searchFacade.getCurrentMusicSearch();
+        ArrayList<String> searchResultsFormatted = new ArrayList<>();
+
+        // Format the results with the title and artist name
+        for (Music music : searchResults) {
+            String formattedResult = music.getName() + "  -  " + music.getArtist_name();
+            searchResultsFormatted.add(formattedResult);
+        }
+
+        // Display the results in the ListView
+        if (!searchResults.isEmpty()) {
+            resultsListView.getItems().setAll(searchResultsFormatted);
+            resultLabel.setText("Search successful: " + searchResults.size() + " result(s) found.");
+        } else {
+            resultsListView.getItems().clear();
             resultLabel.setText("No results found.");
         }
     }
