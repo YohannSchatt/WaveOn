@@ -4,6 +4,7 @@ import waveon.waveon.core.Artist;
 import waveon.waveon.core.Music;
 
 import waveon.waveon.persist.AbstractFactory;
+import waveon.waveon.persist.ArtistDAO;
 import waveon.waveon.persist.MusicDAO;
 
 import java.util.*;
@@ -13,6 +14,7 @@ public class SearchFacade {
 
     private AbstractFactory factory;
     private MusicDAO MusicDAO;
+    private ArtistDAO ArtistDAO;
     private static ArrayList<Music> currentMusicSearch = new ArrayList<>();
     private static ArrayList<Artist> currentArtistSearch = new ArrayList<>();
 
@@ -21,22 +23,16 @@ public class SearchFacade {
         factory = AbstractFactory.getInstance();
         assert factory != null;
         MusicDAO = factory.createMusicDAO();
+        ArtistDAO = factory.createArtistDAO();
     }
 
 
     public void searchMusic(String search) {
-        ArrayList<Music> allMusic = MusicDAO.getAllMusics();
-        ArrayList<Music> result = new ArrayList<>();
-        for (Music music : allMusic) {
-            if (music.getName().contains(search)) {
-                result.add(music);
-            }
-        }
-        currentMusicSearch = result;
+        currentMusicSearch = MusicDAO.getMusicsByName(search);
     }
 
     public void searchArtist(String search) {
-        // TODO implement here
+        currentArtistSearch = ArtistDAO.getArtistsByName(search);
     }
 
     private void useFilterMusic(FilterOption filter) {
@@ -46,4 +42,7 @@ public class SearchFacade {
     public ArrayList<Music> getCurrentMusicSearch() {
         return currentMusicSearch;
     }
+
+    public ArrayList<Artist> getCurrentArtistSearch() { return currentArtistSearch; }
+
 }

@@ -12,11 +12,11 @@ public interface MusicDAO {
 
     public abstract Music getMusicById( String id);
 
-    public abstract ArrayList<Music> getMusicByArtist( String artist);
+    public abstract ArrayList<Music> getMusicsByArtist(String artist);
 
     public abstract ArrayList<Music> getAllMusics();
 
-    public abstract Music getMusicByName( String name);
+    public abstract ArrayList<Music> getMusicsByName( String name);
 
     //public abstract void createMusic( File file, String name, File image);
 
