@@ -42,7 +42,7 @@ public class LoginFacade {
         return false;
     }
 
-    public IUser getCurrentUser() {
+    public static IUser getCurrentUser() {
         return currentUser;
     }
 

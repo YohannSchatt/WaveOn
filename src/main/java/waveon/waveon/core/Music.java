@@ -1,84 +1,25 @@
 package waveon.waveon.core;
 
-import java.io.*;
-import java.sql.Time;
-
-/**
- * 
- */
 public class Music {
+    private final String title;
+    private final byte[] fileContent; // Contenu binaire du fichier
+    private final int artistId;
 
-    /**
-     * Default constructor
-     */
-    public Music() {
+    public Music(String title, byte[] fileContent, int artistId) {
+        this.title = title;
+        this.fileContent = fileContent;
+        this.artistId = artistId;
     }
 
-    /**
-     * 
-     */
-    private int id;
-
-    /**
-     * 
-     */
-    private String name;
-
-    /**
-     * 
-     */
-    private waveon.waveon.core.Artist Artist;
-
-    /**
-     * 
-     */
-    private Time Duration;
-
-    /**
-     * 
-     */
-    private File Content;
-
-    /**
-     * 
-     */
-    public void Getters() {
-        // TODO implement here
+    public String getTitle() {
+        return title;
     }
 
-    /**
-     * 
-     */
-    public void Operation2() {
-        // TODO implement here
+    public byte[] getFileContent() {
+        return fileContent;
     }
 
-    /**
-     * 
-     */
-    public void Operation3() {
-        // TODO implement here
+    public int getArtistId() {
+        return artistId;
     }
-
-    /**
-     * 
-     */
-    public void Operation4() {
-        // TODO implement here
-    }
-
-    /**
-     * 
-     */
-    public void Operation5() {
-        // TODO implement here
-    }
-
-    /**
-     * @return
-     */
-    public void AddToQueue() {
-        // TODO implement here
-    }
-
 }
