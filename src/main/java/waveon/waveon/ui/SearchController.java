@@ -16,6 +16,7 @@ import waveon.waveon.core.Artist;
 import waveon.waveon.core.Music;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class SearchController extends Application {
 
@@ -97,7 +98,7 @@ public class SearchController extends Application {
 
     private void handleSearch() {
         String search = searchField.getText();
-        if (search.length() > 0) {
+        if (!search.isEmpty()) {
             searchFacade.searchMusic(search);
             searchFacade.searchArtist(search);
             updateMusicResults();
@@ -168,13 +169,13 @@ public class SearchController extends Application {
                 searchResults.sort((m1, m2) -> m2.getDate().compareTo(m1.getDate()));
                 break;
             case Oldest:
-                searchResults.sort((m1, m2) -> m1.getDate().compareTo(m2.getDate()));
+                searchResults.sort(Comparator.comparing(Music::getDate));
                 break;
             case MostListened:
                 searchResults.sort((m1, m2) -> Integer.compare(m2.getStream_count(), m1.getStream_count()));
                 break;
             case LeastListened:
-                searchResults.sort((m1, m2) -> Integer.compare(m1.getStream_count(), m2.getStream_count()));
+                searchResults.sort(Comparator.comparingInt(Music::getStream_count));
                 break;
         }
 
@@ -186,16 +187,15 @@ public class SearchController extends Application {
         }
 
         musicsListView.getItems().setAll(formattedResults);
-        musicResultLabel.setText("Music Results: " + searchResults.size() + " found (sorted by " + filter + ")");
+        musicResultLabel.setText("Music Results: " + searchResults.size() + " found");
     }
 
     public FilterOption convertToFilterOption(String filter) {
         return switch (filter) {
             case "Time ↓" -> FilterOption.Newest;
             case "Time ↑" -> FilterOption.Oldest;
-            case "Streams count ↓" -> FilterOption.MostListened;
             case "Streams count ↑" -> FilterOption.LeastListened;
-            default -> FilterOption.Newest;
+            default -> FilterOption.MostListened;
         };
     }
 }
