@@ -20,18 +20,19 @@ import java.util.ArrayList;
 public class SearchController extends Application {
 
     public TextField searchField;
-    public Label resultLabel;
-    public ListView<String> resultsListView;
+    public Label musicResultLabel;
+    public Label artistResultLabel;
+    public ListView<String> musicsListView;
+    public ListView<String> artistsListView;
     public SearchFacade searchFacade = new SearchFacade();
-    public FilterOption filter;
-    public int nbPage;
+    public ComboBox<String> filterComboBox;
 
     // Variable to store the pause transition (used to delay search)
     private PauseTransition pauseTransition;
 
     @Override
     public void start(Stage primaryStage) {
-        primaryStage.setTitle("Simple Search Page");
+        primaryStage.setTitle("Search Page with Sorting and Separate Lists");
 
         // Create the search bar
         searchField = new TextField();
@@ -42,43 +43,50 @@ public class SearchController extends Application {
         pauseTransition.setOnFinished(e -> handleSearch()); // Trigger search after delay
 
         // Create the event handler for key release
-        searchField.setOnKeyReleased(e -> {
-            pauseTransition.playFromStart(); // Restart the pause timer on every key release
-        });
+        searchField.setOnKeyReleased(e -> pauseTransition.playFromStart()); // Restart the pause timer
 
         HBox searchBox = new HBox(searchField);
         searchBox.setPadding(new Insets(10));
 
-        // Create a button to search for a music
-        Button searchMusicButton = new Button("Search Music");
-        searchMusicButton.setPadding(new Insets(10));
-        searchMusicButton.setOnAction(e -> SearchMusic());
+        // Create a ComboBox for sorting options
+        filterComboBox = new ComboBox<>();
+        filterComboBox.getItems().addAll("Time ↓", "Time ↑", "Streams count ↓", "Streams count ↑");
+        filterComboBox.setValue("Streams count ↓"); // Default selection
+        filterComboBox.setOnAction(e -> useFilterMusic(convertToFilterOption(filterComboBox.getValue()))); // Apply filter on selection
 
-        // Create a button to search for an artist
-        Button searchArtistButton = new Button("Search Artist");
-        searchArtistButton.setPadding(new Insets(10));
-        searchArtistButton.setOnAction(e -> SearchArtist());
+        // Add the ComboBox to the search bar
+        HBox filterBox = new HBox(10, new Label("Sort by:"), filterComboBox);
+        filterBox.setPadding(new Insets(10));
 
-        // Create a ListView to display the search results
-        resultsListView = new ListView<>();
-        resultsListView.setPrefHeight(150);
+        // Create ListViews for music and artists
+        musicsListView = new ListView<>();
+        musicsListView.setPrefHeight(150);
+        artistsListView = new ListView<>();
+        artistsListView.setPrefHeight(150);
 
-        // Create a label for displaying messages
-        resultLabel = new Label();
+        // Create labels for each ListView
+        musicResultLabel = new Label("Music Results:");
+        artistResultLabel = new Label("Artist Results:");
 
-        // Group the resultsListView and resultLabel in a VBox
-        VBox bottomBox = new VBox(10, resultsListView, resultLabel);
-        bottomBox.setPadding(new Insets(10));
+        // Group the music results in a VBox
+        VBox musicBox = new VBox(10, musicResultLabel, musicsListView);
+        musicBox.setPadding(new Insets(10));
+
+        // Group the artist results in a VBox
+        VBox artistBox = new VBox(10, artistResultLabel, artistsListView);
+        artistBox.setPadding(new Insets(10));
+
+        // Combine the two result sections in an HBox
+        HBox resultsBox = new HBox(10, musicBox, artistBox);
 
         // Set up the layout
+        VBox topBox = new VBox(10, searchBox, filterBox);
         BorderPane borderPane = new BorderPane();
-        borderPane.setTop(searchBox);
-        borderPane.setLeft(searchMusicButton);
-        borderPane.setRight(searchArtistButton);
-        borderPane.setBottom(bottomBox);
+        borderPane.setTop(topBox);
+        borderPane.setCenter(resultsBox);
 
         // Create and display the scene
-        Scene scene = new Scene(borderPane, 400, 300);
+        Scene scene = new Scene(borderPane, 600, 400);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
@@ -87,91 +95,107 @@ public class SearchController extends Application {
         launch(args);
     }
 
-    public void ChangePage() {
-        // TODO implement here
-    }
-
-    public void SearchArtist() {
-        // Clear previous results
-        resultsListView.getItems().clear();
-
-        // Perform the search
-        String search = searchField.getText();
-        searchFacade.searchArtist(search);
-        ArrayList<Artist> searchResults = searchFacade.getCurrentArtistSearch();
-        ArrayList<String> searchResultsFormatted = new ArrayList<>();
-
-        // Format the results with the username
-        for (Artist artist : searchResults) {
-            String formattedResult = artist.getUsername();
-            searchResultsFormatted.add(formattedResult);
-        }
-
-        // Display the results in the ListView
-        if (!searchResults.isEmpty()) {
-            resultsListView.getItems().addAll(searchResultsFormatted);
-            resultLabel.setText("Search successful: " + searchResults.size() + " result(s) found.");
-        } else {
-            resultLabel.setText("No results found.");
-        }
-    }
-
-    public void SearchMusic() {
-        // Clear previous results
-        resultsListView.getItems().clear();
-
-        // Perform the search
-        String search = searchField.getText();
-        searchFacade.searchMusic(search);
-        ArrayList<Music> searchResults = searchFacade.getCurrentMusicSearch();
-        ArrayList<String> searchResultsFormatted = new ArrayList<>();
-
-        // Format the results with the title and artist name
-        for (Music music : searchResults) {
-            String formattedResult = music.getName() + "  -  " + music.getArtist_name();
-            searchResultsFormatted.add(formattedResult);
-        }
-
-        // Display the results in the ListView
-        if (!searchResults.isEmpty()) {
-            resultsListView.getItems().setAll(searchResultsFormatted);
-            resultLabel.setText("Search successful: " + searchResults.size() + " result(s) found.");
-        } else {
-            resultsListView.getItems().clear();
-            resultLabel.setText("No results found.");
-        }
-    }
-
-    // This method will handle the search after a short delay
     private void handleSearch() {
         String search = searchField.getText();
         if (search.length() > 0) {
-            searchFacade.searchMusic(search); // Search music as the user types
-            updateSearchResults();
+            searchFacade.searchMusic(search);
+            searchFacade.searchArtist(search);
+            updateMusicResults();
+            updateArtistResults();
         } else {
-            resultsListView.getItems().clear();
-            resultLabel.setText("Start typing to search...");
+            musicsListView.getItems().clear();
+            artistsListView.getItems().clear();
+            musicResultLabel.setText("Music Results: (Start typing to search)");
+            artistResultLabel.setText("Artist Results: (Start typing to search)");
         }
     }
 
-    // Method to update the ListView with the current search results
-    private void updateSearchResults() {
+    private void updateMusicResults() {
         ArrayList<Music> searchResults = searchFacade.getCurrentMusicSearch();
-        ArrayList<String> searchResultsFormatted = new ArrayList<>();
+        ArrayList<String> formattedResults = new ArrayList<>();
 
-        // Format the results with the title and artist name
+        // Format the music results
         for (Music music : searchResults) {
             String formattedResult = music.getName() + "  -  " + music.getArtist_name();
-            searchResultsFormatted.add(formattedResult);
+            formattedResults.add(formattedResult);
         }
 
-        // Display the results in the ListView
+        // Update the ListView and label
         if (!searchResults.isEmpty()) {
-            resultsListView.getItems().setAll(searchResultsFormatted);
-            resultLabel.setText("Search successful: " + searchResults.size() + " result(s) found.");
+            musicsListView.getItems().setAll(formattedResults);
+            musicResultLabel.setText("Music Results: " + searchResults.size() + " found");
         } else {
-            resultsListView.getItems().clear();
-            resultLabel.setText("No results found.");
+            musicsListView.getItems().clear();
+            musicResultLabel.setText("Music Results: No matches found");
         }
+
+        // Apply the currently selected filter
+        useFilterMusic(convertToFilterOption(filterComboBox.getValue()));
+    }
+
+    private void updateArtistResults() {
+        ArrayList<Artist> searchResults = searchFacade.getCurrentArtistSearch();
+        ArrayList<String> formattedResults = new ArrayList<>();
+
+        // Format the artist results
+        for (Artist artist : searchResults) {
+            String formattedResult = artist.getUsername();
+            formattedResults.add(formattedResult);
+        }
+
+        // Update the ListView and label
+        if (!searchResults.isEmpty()) {
+            artistsListView.getItems().setAll(formattedResults);
+            artistResultLabel.setText("Artist Results: " + searchResults.size() + " found");
+        } else {
+            artistsListView.getItems().clear();
+            artistResultLabel.setText("Artist Results: No matches found");
+        }
+    }
+
+    private void useFilterMusic(FilterOption filter) {
+        ArrayList<Music> searchResults = searchFacade.getCurrentMusicSearch();
+
+        if (searchResults == null || searchResults.isEmpty()) {
+            musicsListView.getItems().clear();
+            musicResultLabel.setText("Music Results: No matches found");
+            return;
+        }
+
+        // Sort the results based on the selected filter
+        switch (filter) {
+            case Newest:
+                searchResults.sort((m1, m2) -> m2.getDate().compareTo(m1.getDate()));
+                break;
+            case Oldest:
+                searchResults.sort((m1, m2) -> m1.getDate().compareTo(m2.getDate()));
+                break;
+            case MostListened:
+                searchResults.sort((m1, m2) -> Integer.compare(m2.getStream_count(), m1.getStream_count()));
+                break;
+            case LeastListened:
+                searchResults.sort((m1, m2) -> Integer.compare(m1.getStream_count(), m2.getStream_count()));
+                break;
+        }
+
+        // Update the ListView with the sorted results
+        ArrayList<String> formattedResults = new ArrayList<>();
+        for (Music music : searchResults) {
+            String formattedResult = music.getName() + "  -  " + music.getArtist_name();
+            formattedResults.add(formattedResult);
+        }
+
+        musicsListView.getItems().setAll(formattedResults);
+        musicResultLabel.setText("Music Results: " + searchResults.size() + " found (sorted by " + filter + ")");
+    }
+
+    public FilterOption convertToFilterOption(String filter) {
+        return switch (filter) {
+            case "Time ↓" -> FilterOption.Newest;
+            case "Time ↑" -> FilterOption.Oldest;
+            case "Streams count ↓" -> FilterOption.MostListened;
+            case "Streams count ↑" -> FilterOption.LeastListened;
+            default -> FilterOption.Newest;
+        };
     }
 }

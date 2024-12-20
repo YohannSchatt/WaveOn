@@ -31,7 +31,10 @@ public class MusicDAOPG implements MusicDAO {
                         rs.getInt("id"),
                         rs.getString("title"),
                         rs.getInt("artist_id"),
-                        rs.getString("artist_name"));
+                        rs.getString("artist_name"),
+                        rs.getDate("release_date"),
+                        rs.getInt("stream_count"));
+
             }
         }
         catch (Exception e) {
@@ -55,7 +58,10 @@ public class MusicDAOPG implements MusicDAO {
                         rs.getInt("id"),
                         rs.getString("title"),
                         rs.getInt("artist_id"),
-                        rs.getString("artist_name"));
+                        rs.getString("artist_name"),
+                        rs.getDate("release_date"),
+                        rs.getInt("stream_count"));
+
                 musics.add(music);
             }
             return musics;
@@ -79,7 +85,10 @@ public class MusicDAOPG implements MusicDAO {
                         rs.getInt("id"),
                         rs.getString("title"),
                         rs.getInt("artist_id"),
-                        rs.getString("artist_name"));
+                        rs.getString("artist_name"),
+                        rs.getDate("release_date"),
+                        rs.getInt("stream_count"));
+
                 musics.add(music);
             }
             return musics;
@@ -102,7 +111,11 @@ public class MusicDAOPG implements MusicDAO {
                         rs.getInt("id"),
                         rs.getString("title"),
                         rs.getInt("artist_id"),
-                        rs.getString("artist_name"));
+                        rs.getString("artist_name"),
+                        rs.getDate("release_date"),
+                        rs.getInt("stream_count"));
+
+
                 musics.add(music);
             }
             return musics;
