@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="waveon.waveon.ui.MainPageController">
+    <padding>
+        <Insets top="5" right="5" bottom="5" left="5"/>
+    </padding>
+    <top>
+        <BorderPane>
+            <center>
+                <HBox fx:id="searchBox">
+                    <padding>
+                        <Insets top="5" right="5" bottom="5" left="5"/>
+                    </padding>
+                    <TextField fx:id="searchField" promptText="Rechercher..." />
+                </HBox>
+            </center>
+            <right>
+                <VBox fx:id="vBox" spacing="10">
+                    <padding>
+                        <Insets top="10" right="10" bottom="10" left="10"/>
+                    </padding>
+                </VBox>
+            </right>
+        </BorderPane>
+    </top>
+</BorderPane>

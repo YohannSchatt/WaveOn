@@ -8,7 +8,12 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import waveon.waveon.bl.LoginFacade;
 
-public class LoginUIJavaFX extends Application implements ILoginController {
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+
+import java.io.IOException;
+
+public class LoginController extends Application implements ILoginController {
     private final LoginFacade loginFacade = new LoginFacade();
 
     @Override
@@ -46,7 +51,7 @@ public class LoginUIJavaFX extends Application implements ILoginController {
             loginFacade.login(email, isArtist);
             if (loginFacade.checkCredentials(email, password)) {
                 resultLabel.setText("Login successful");
-                MainpageUIJavaFX mainPage = new MainpageUIJavaFX();
+                MainPageController mainPage = new MainPageController();
                 try {
                     mainPage.start(primaryStage);
                 } catch (Exception ex) {
@@ -62,6 +67,18 @@ public class LoginUIJavaFX extends Application implements ILoginController {
         Scene scene = new Scene(grid, 300, 200);
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+
+    public void goToRegister() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("register.fxml"));
+            Parent root = loader.load();
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

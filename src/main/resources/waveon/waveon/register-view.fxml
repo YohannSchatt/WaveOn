@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.effect.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Pane layoutX="300.0" layoutY="141.0" prefHeight="600.0" prefWidth="1000.0">
+         <children>
+            <Label layoutX="250.0" layoutY="228.0" text="Password">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <PasswordField layoutX="250.0" layoutY="273.0" prefHeight="55.0" prefWidth="500.0" promptText="Write your password here" />
+            <Button layoutX="250.0" layoutY="395.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="500.0" style="-fx-background-color: black; -fx-region-border: 12px;" stylesheets="@registerPage/register.css" text="Register" textAlignment="CENTER" textFill="WHITE">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Button>
+            <Label layoutX="250.0" layoutY="80.0" text="Email">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <TextField layoutX="250.0" layoutY="115.0" prefHeight="55.0" prefWidth="500.0" promptText="Write your email here" />
+         </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </Pane>
+   </children>
+</AnchorPane>

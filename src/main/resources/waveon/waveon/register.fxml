@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="522.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Pane prefHeight="522.0" prefWidth="600.0">
+         <children>
+            <Label layoutX="27.0" layoutY="111.0" text="Email">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <Label layoutX="31.0" layoutY="208.0" text="Password">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <PasswordField layoutX="27.0" layoutY="243.0" prefHeight="48.0" prefWidth="536.0" promptText="Your password " style="-fx-background-radius: 10;">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </PasswordField>
+            <Button layoutX="35.0" layoutY="319.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="530.0" style="-fx-background-color: Black; -fx-border-width: 3; -fx-border-color: pink; -fx-border-radius: 10; -fx-background-radius: 12;" text="Register" textAlignment="CENTER" textFill="WHITE">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Button>
+            <TextField layoutX="27.0" layoutY="146.0" prefHeight="39.0" prefWidth="536.0" promptText="Your email" style="-fx-background-radius: 10;">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </TextField>
+            <TextField layoutX="27.0" layoutY="49.0" prefHeight="39.0" prefWidth="536.0" promptText="Your username" style="-fx-background-radius: 10;">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </TextField>
+            <Label layoutX="27.0" layoutY="14.0" text="Username">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <Label layoutX="269.0" layoutY="401.0" text="Vous avez déjà un compte ?" textFill="#3355ff" underline="true">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>
