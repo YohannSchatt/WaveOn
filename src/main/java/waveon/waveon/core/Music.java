@@ -1,10 +1,6 @@
 // File: src/main/java/waveon/waveon/core/Music.java
 package waveon.waveon.core;
 
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-import javafx.util.Duration;
-
 import java.io.File;
 import java.sql.Time;
 
@@ -15,7 +11,6 @@ public class Music {
     private Artist artist;
     private Time duration;
     private File content;
-    private MediaPlayer mediaPlayer;
 
     public Music() {
     }
@@ -46,38 +41,5 @@ public class Music {
 
     public File getContent() {
         return content;
-    }
-
-    public void play() {
-        if (mediaPlayer != null) {
-            mediaPlayer.stop();
-        }
-        Media media = new Media(content.toURI().toString());
-        mediaPlayer = new MediaPlayer(media);
-        mediaPlayer.play();
-    }
-
-    public void stop() {
-        if (mediaPlayer != null) {
-            mediaPlayer.stop();
-        }
-    }
-
-    public Duration getCurrentTime() {
-        if (mediaPlayer != null) {
-            return mediaPlayer.getCurrentTime();
-        }
-        return Duration.ZERO;
-    }
-
-    public Duration getTotalDuration() {
-        if (mediaPlayer != null) {
-            return mediaPlayer.getTotalDuration();
-        }
-        return Duration.ZERO;
-    }
-
-    public MediaPlayer getMediaPlayer() {
-        return mediaPlayer;
     }
 }
