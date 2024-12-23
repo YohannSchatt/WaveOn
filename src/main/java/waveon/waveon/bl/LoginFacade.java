@@ -6,27 +6,47 @@ import waveon.waveon.persist.AbstractFactory;
 import waveon.waveon.persist.ArtistDAO;
 import waveon.waveon.persist.OrdUserDAO;
 
+//Singleton pour la gestion de la connexion
+//afin de pouvoir l'utiliser plus facilement entre les pages
 public class LoginFacade {
+
+    static LoginFacade instance;
+
+    public static LoginFacade getInstance() {
+        if (instance == null) {
+            instance = new LoginFacade();
+        }
+        return instance;
+    }
+
     private AbstractFactory factory;
     private OrdUserDAO userDAO;
     private ArtistDAO artistDAO;
     private static IUser currentUser;
-    public LoginFacade() {
+
+    private LoginFacade() {
         factory = AbstractFactory.getInstance();
         assert factory != null;
         userDAO = factory.createOrdUserDAO();
         artistDAO = factory.createArtistDAO();
     }
 
-    public void login(String email, boolean isArtist) {
+    public boolean login(String email, String password) {
 
-        // Utilisez la valeur de isArtist selon vos besoins
-        if (isArtist) {
-            System.out.println("L'utilisateur est un artiste.");
+        currentUser = userDAO.getUserByEmail(email);
+        if (currentUser == null) {
             currentUser = artistDAO.getArtistByEmail(email);
+            if(currentUser == null) {
+                System.out.println("L'utilisateur n'existe pas.");
+                return false;
+            }
+            else {
+                System.out.println("L'utilisateur est un artiste.");
+                return checkCredentials(email, password);
+            }
         } else {
             System.out.println("L'utilisateur n'est pas un artiste.");
-            currentUser = userDAO.getUserByEmail(email);
+            return checkCredentials(email, password);
         }
     }
 

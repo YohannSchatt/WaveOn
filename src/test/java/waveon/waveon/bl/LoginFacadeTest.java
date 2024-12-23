@@ -9,7 +9,7 @@ public class LoginFacadeTest {
 
     @BeforeEach
     public void setUp() {
-        loginFacade = new LoginFacade();
+        loginFacade = LoginFacade.getInstance();
     }
 
     @Test

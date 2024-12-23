@@ -21,8 +21,6 @@ public class StartApplication extends Application {
             System.out.println("FXML Location: " + fxmlLocation);
             FXMLLoader loader = new FXMLLoader(fxmlLocation);
             Parent root = loader.load();
-            MainPageController controller = loader.getController();
-            controller.start(primaryStage);
             primaryStage.setTitle("Main Page");
             primaryStage.setScene(new Scene(root));
             primaryStage.show();

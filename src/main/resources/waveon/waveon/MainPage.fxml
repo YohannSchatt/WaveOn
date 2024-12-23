@@ -1,30 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="waveon.waveon.ui.MainPageController">
-    <padding>
-        <Insets top="5" right="5" bottom="5" left="5"/>
-    </padding>
-    <top>
-        <BorderPane>
-            <center>
-                <HBox fx:id="searchBox">
-                    <padding>
-                        <Insets top="5" right="5" bottom="5" left="5"/>
-                    </padding>
-                    <TextField fx:id="searchField" promptText="Rechercher..." />
-                </HBox>
-            </center>
-            <right>
-                <VBox fx:id="vBox" spacing="10">
-                    <padding>
-                        <Insets top="10" right="10" bottom="10" left="10"/>
-                    </padding>
-                </VBox>
-            </right>
-        </BorderPane>
-    </top>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="waveon.waveon.ui.MainPageController">
+   <center>
+      <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <center>
+            <TextField prefHeight="39.0" prefWidth="361.0" promptText="Rechercher..." BorderPane.alignment="CENTER">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </TextField>
+         </center>
+         <right>
+            <VBox prefHeight="400.0" prefWidth="189.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Button mnemonicParsing="false" prefHeight="55.0" prefWidth="189.0" style="-fx-background-color: black; -fx-background-radius: 14; -fx-border-color: pink; -fx-border-radius: 12; -fx-border-width: 2;" text="Register" textFill="WHITE">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets bottom="20.0" />
+                     </VBox.margin>
+                  </Button>
+                  <Button mnemonicParsing="false" prefHeight="55.0" prefWidth="191.0" style="-fx-background-color: black; -fx-background-radius: 14; -fx-border-color: pink; -fx-border-radius: 12; -fx-border-width: 2;" text="Login" textFill="WHITE">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets bottom="20.0" />
+                     </VBox.margin>
+                  </Button>
+                  <Button mnemonicParsing="false" prefHeight="51.0" prefWidth="200.0" style="-fx-background-color: black; -fx-background-radius: 14; -fx-border-color: pink; -fx-border-radius: 12; -fx-border-width: 2;" text="Logout" textFill="WHITE">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Button>
+               </children>
+            </VBox>
+         </right>
+      </BorderPane>
+   </center>
 </BorderPane>

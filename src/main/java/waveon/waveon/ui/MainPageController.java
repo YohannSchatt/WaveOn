@@ -1,5 +1,6 @@
 package waveon.waveon.ui;
 
+//JavaFX imports
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -7,13 +8,21 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
+//BL imports
 import waveon.waveon.bl.LoginFacade;
 
+//components imports
+import waveon.waveon.ui.components.button.LogoutController;
+import waveon.waveon.ui.components.button.PathLoginButtonController;
+import waveon.waveon.ui.components.button.PathRegisterButtonController;
+
+//Java imports
 import java.io.IOException;
 
 public class MainPageController {
-    private final LoginFacade loginFacade = new LoginFacade();
-    private Stage primaryStage;
+
+    private final LoginFacade loginFacade = LoginFacade.getInstance();
 
     @FXML
     private TextField searchField;
@@ -24,50 +33,32 @@ public class MainPageController {
     @FXML
     private VBox vBox;
 
-    public void start(Stage primaryStage) {
-        this.primaryStage = primaryStage;
-        primaryStage.setTitle("Page d'Accueil");
+    void initialize() {
         updateLoginButton();
     }
+
 
     private void updateLoginButton() {
         vBox.getChildren().clear();
         if (loginFacade.getCurrentUser() != null) {
-            Menu userMenu = new Menu(loginFacade.getCurrentUser().getUsername());
-            MenuItem logoutItem = new MenuItem("Se déconnecter");
-            logoutItem.setOnAction(e -> {
-                loginFacade.logout();
-                updateLoginButton();
-            });
-            userMenu.getItems().add(logoutItem);
-            MenuBar menuBar = new MenuBar();
-            menuBar.getMenus().add(userMenu);
-            vBox.getChildren().add(menuBar);
-        } else {
-            Button loginButton = new Button("Se connecter");
-            loginButton.setOnAction(e -> {
-                LoginController loginPage = new LoginController();
-                try {
-                    loginPage.start(primaryStage);
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            });
-            vBox.getChildren().add(loginButton);
-        }
-    }
-
-    private Button createButton(String text, String fxmlPath) {
-        Button button = new Button(text);
-        button.setOnAction(e -> {
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
-                Scene scene = new Scene(loader.load());
-                primaryStage.setScene(scene);
-            } catch (IOException ex) {
-                ex.printStackTrace();
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/waveon/waveon/Components/button/Logout.fxml"));
+                vBox.getChildren().add(loader.load());
             }
-        });
-        return button;
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/waveon/waveon/Components/button/PathLoginButton.fxml"));
+                vBox.getChildren().add(loader.load());
+
+                FXMLLoader loader2 = new FXMLLoader(getClass().getResource("/waveon/waveon/Components/button/PathRegisterButton.fxml"));
+                vBox.getChildren().add(loader2.load());
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

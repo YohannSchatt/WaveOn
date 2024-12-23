@@ -1,72 +1,55 @@
 package waveon.waveon.ui;
 
-import javafx.application.Application;
-import javafx.geometry.Insets;
+//JavaFX imports
+import javafx.fxml.FXML;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.layout.GridPane;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import waveon.waveon.bl.LoginFacade;
-
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 
+//Java imports
 import java.io.IOException;
 
-public class LoginController extends Application implements ILoginController {
-    private final LoginFacade loginFacade = new LoginFacade();
+public class LoginController implements ILoginController {
 
-    @Override
-    public void start(Stage primaryStage) {
-        primaryStage.setTitle("Login System");
+    private final LoginFacade loginFacade = LoginFacade.getInstance();
 
-        GridPane grid = new GridPane();
-        grid.setPadding(new Insets(10, 10, 10, 10));
-        grid.setVgap(8);
-        grid.setHgap(10);
+    @FXML
+    public TextField emailInput;
 
-        Label emailLabel = new Label("Email:");
-        GridPane.setConstraints(emailLabel, 0, 0);
-        TextField emailInput = new TextField();
-        GridPane.setConstraints(emailInput, 1, 0);
+    @FXML
+    public TextField passwordInput;
 
-        Label passwordLabel = new Label("Password:");
-        GridPane.setConstraints(passwordLabel, 0, 1);
-        PasswordField passwordInput = new PasswordField();
-        GridPane.setConstraints(passwordInput, 1, 1);
+    @FXML
+    public Label resultLabel;
 
-        CheckBox artistCheckBox = new CheckBox("Je suis un Artiste");
-        GridPane.setConstraints(artistCheckBox, 1, 2);
+    public LoginController() {
+        initialize();
+    }
 
-        Button loginButton = new Button("Login");
-        GridPane.setConstraints(loginButton, 1, 3);
+    private void initialize() {}
 
-        Label resultLabel = new Label();
-        GridPane.setConstraints(resultLabel, 1, 4);
-
-        loginButton.setOnAction(event -> {
+    private void login() {
             String email = emailInput.getText();
             String password = passwordInput.getText();
-            boolean isArtist = artistCheckBox.isSelected();
-            loginFacade.login(email, isArtist);
-            if (loginFacade.checkCredentials(email, password)) {
+            if (loginFacade.login(email,password)) {
                 resultLabel.setText("Login successful");
                 MainPageController mainPage = new MainPageController();
                 try {
-                    mainPage.start(primaryStage);
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("MainPage.fxml"));
+                    Parent root = loader.load();
+                    Stage stage = new Stage();
+                    stage.setScene(new Scene(root));
+                    stage.show();
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
             } else {
                 resultLabel.setText("Login failed");
             }
-        });
-
-        grid.getChildren().addAll(emailLabel, emailInput, passwordLabel, passwordInput, artistCheckBox, loginButton, resultLabel);
-
-        Scene scene = new Scene(grid, 300, 200);
-        primaryStage.setScene(scene);
-        primaryStage.show();
     }
 
     public void goToRegister() {
@@ -82,11 +65,6 @@ public class LoginController extends Application implements ILoginController {
     }
 
     @Override
-    public void launch() {
-        launch();
-    }
-
-    @Override
     public void handleLogin() {
         // Already implemented via the JavaFX event handler
     }
@@ -99,9 +77,5 @@ public class LoginController extends Application implements ILoginController {
     @Override
     public void handlePasswordReset() {
         // Implementation for password reset could be added here
-    }
-
-    public static void main(String[] args) {
-        launch(args);
     }
 }
