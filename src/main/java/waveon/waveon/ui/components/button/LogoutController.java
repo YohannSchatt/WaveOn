@@ -9,14 +9,14 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-import waveon.waveon.bl.LoginFacade;
+import waveon.waveon.bl.UserSessionFacade;
 
 public class LogoutController {
 
     @FXML
     public Button logoutButton;
 
-    private final LoginFacade loginFacade = LoginFacade.getInstance();
+    private final UserSessionFacade loginFacade = UserSessionFacade.getInstance();
 
 
     @FXML

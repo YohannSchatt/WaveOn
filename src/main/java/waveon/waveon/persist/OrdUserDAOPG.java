@@ -13,9 +13,7 @@ public class OrdUserDAOPG implements OrdUserDAO {
     /**
      * Default constructor
      */
-    public OrdUserDAOPG() {
-
-    }
+    public OrdUserDAOPG() {}
 
     /**
      * 
@@ -41,5 +39,16 @@ public class OrdUserDAOPG implements OrdUserDAO {
             System.out.println("Error in OrdUserDAOPG.getUserByEmail : " + e);
         }
         return null;
+    }
+
+    public void addUser(String email, String username, String password) throws SQLException {
+        PGconnector pg = PGconnector.getInstance();
+        String sql = "INSERT INTO ordinaryuser (email,username, password) VALUES (?, ?, ?)";
+        try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, email);
+            pstmt.setString(2, username);
+            pstmt.setString(3, password);
+            pstmt.executeUpdate();
+        }
     }
 }

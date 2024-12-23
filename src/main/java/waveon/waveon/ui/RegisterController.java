@@ -1,7 +1,9 @@
 package waveon.waveon.ui;
 
 //JavaFX imports
+import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.PasswordField;
 import javafx.fxml.FXMLLoader;
@@ -13,7 +15,13 @@ import javafx.stage.Stage;
 //Java imports
 import java.io.IOException;
 
+//BL imports
+import javafx.util.Duration;
+import waveon.waveon.bl.UserSessionFacade;
+
 public class RegisterController implements IRegisterController {
+
+    private final UserSessionFacade registerFacade = UserSessionFacade.getInstance();
 
     @FXML
     public PasswordField passwordInput;
@@ -27,9 +35,20 @@ public class RegisterController implements IRegisterController {
     @FXML
     public HBox hbox;
 
+    @FXML
+    public Label resultLabel;
+
     @Override
     public void register() {
-        // TODO Auto-generated method stub
+        boolean sucess = registerFacade.register(usernameInput.getText(), emailInput.getText(), passwordInput.getText());
+        if (sucess) {
+            resultLabel.setText("Registration successful");
+            PauseTransition pause = new PauseTransition(Duration.seconds(0.5));
+            pause.setOnFinished(event -> goToHome());
+            pause.play();
+        } else {
+            resultLabel.setText("Registration failed");
+        }
     }
 
     public void initialize() {
@@ -66,9 +85,15 @@ public class RegisterController implements IRegisterController {
         }
     }
 
+
+
     @Override
     public void goToForgetPassword() {
         // TODO Auto-generated method stub
+    }
+
+    public void handleRegister() {
+        register();
     }
 
 

@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.effect.*?>
-<?import javafx.scene.text.*?>
-<?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="waveon.waveon.ui.RegisterController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="waveon.waveon.ui.RegisterController">
    <children>
       <BorderPane prefHeight="540.0" prefWidth="600.0">
          <center>
@@ -28,7 +25,7 @@
                         <Font size="24.0" />
                      </font>
                   </PasswordField>
-                  <Button layoutX="35.0" layoutY="319.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="530.0" style="-fx-background-color: Black; -fx-border-width: 3; -fx-border-color: pink; -fx-border-radius: 10; -fx-background-radius: 12;" text="Register" textAlignment="CENTER" textFill="WHITE">
+                  <Button layoutX="35.0" layoutY="319.0" onMouseClicked="#handleRegister" mnemonicParsing="false" prefHeight="51.0" prefWidth="530.0" style="-fx-background-color: Black; -fx-border-width: 3; -fx-border-color: pink; -fx-border-radius: 10; -fx-background-radius: 12;" text="Register" textAlignment="CENTER" textFill="WHITE">
                      <font>
                         <Font size="24.0" />
                      </font>
@@ -48,11 +45,21 @@
                         <Font size="24.0" />
                      </font>
                   </Label>
+                  <Label layoutX="41.0" layoutY="395.0">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="resultLabel" layoutX="41.0" layoutY="404.0">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Label>
                </children>
             </Pane>
          </center>
          <top>
-            <HBox fx:id="hbox" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER" alignment="CENTER" spacing="10" >
+            <HBox fx:id="hbox" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10" BorderPane.alignment="CENTER">
                <children>
                   <Button mnemonicParsing="false" onMouseClicked="#goToHome" style="-fx-background-color: black; -fx-background-radius: 12; -fx-border-radius: 10; -fx-border-color: pink; -fx-border-width: 2;" text="Home" textFill="WHITE">
                      <font>

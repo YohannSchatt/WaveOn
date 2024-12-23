@@ -8,7 +8,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 //BL imports
-import waveon.waveon.bl.LoginFacade;
+import waveon.waveon.bl.UserSessionFacade;
 
 //components imports
 
@@ -17,7 +17,7 @@ import waveon.waveon.bl.LoginFacade;
 
 public class MainPageController {
 
-    private final LoginFacade loginFacade = LoginFacade.getInstance();
+    private final UserSessionFacade loginFacade = UserSessionFacade.getInstance();
 
     @FXML
     private TextField searchField;

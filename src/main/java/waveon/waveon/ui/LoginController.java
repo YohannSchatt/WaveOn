@@ -7,7 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
-import waveon.waveon.bl.LoginFacade;
+import waveon.waveon.bl.UserSessionFacade;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.application.Platform;
@@ -21,7 +21,7 @@ import static java.lang.Thread.sleep;
 
 public class LoginController implements ILoginController {
 
-    private final LoginFacade loginFacade = LoginFacade.getInstance();
+    private final UserSessionFacade loginFacade = UserSessionFacade.getInstance();
 
     @FXML
     public TextField emailInput;
@@ -54,7 +54,7 @@ public class LoginController implements ILoginController {
             pause.setOnFinished(event -> goToHome());
             pause.play();
         } else {
-            Platform.runLater(() -> resultLabel.setText("Login failed"));
+            resultLabel.setText("Login failed");
         }
     }
 

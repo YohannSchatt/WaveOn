@@ -12,7 +12,8 @@ public interface IUser {
 
     /**
      * 
-     */public String username = "";
+     */
+    public String username = "";
 
     /**
      * 
@@ -23,6 +24,7 @@ public interface IUser {
      *
      */
     public String password = "";
+
 
     public int getId();
     public void setId(int id);

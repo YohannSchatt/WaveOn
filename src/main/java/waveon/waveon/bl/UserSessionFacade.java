@@ -1,20 +1,21 @@
 package waveon.waveon.bl;
 
 import waveon.waveon.core.IUser;
-import waveon.waveon.core.OrdUser;
 import waveon.waveon.persist.AbstractFactory;
 import waveon.waveon.persist.ArtistDAO;
 import waveon.waveon.persist.OrdUserDAO;
 
+import java.sql.SQLException;
+
 //Singleton pour la gestion de la connexion
 //afin de pouvoir l'utiliser plus facilement entre les pages
-public class LoginFacade {
+public class UserSessionFacade {
 
-    static LoginFacade instance;
+    static UserSessionFacade instance;
 
-    public static LoginFacade getInstance() {
+    public static UserSessionFacade getInstance() {
         if (instance == null) {
-            instance = new LoginFacade();
+            instance = new UserSessionFacade();
         }
         return instance;
     }
@@ -24,14 +25,14 @@ public class LoginFacade {
     private ArtistDAO artistDAO;
     private static IUser currentUser;
 
-    private LoginFacade() {
+    private UserSessionFacade() {}
+
+    public boolean login(String email, String password) {
+
         factory = AbstractFactory.getInstance();
         assert factory != null;
         userDAO = factory.createOrdUserDAO();
         artistDAO = factory.createArtistDAO();
-    }
-
-    public boolean login(String email, String password) {
 
         currentUser = userDAO.getUserByEmail(email);
         if (currentUser == null) {
@@ -47,6 +48,27 @@ public class LoginFacade {
         } else {
             System.out.println("L'utilisateur n'est pas un artiste.");
             return checkCredentials(email, password);
+        }
+    }
+
+    public boolean register(String email, String username,String password) {
+
+        factory = AbstractFactory.getInstance();
+        assert factory != null;
+        userDAO = factory.createOrdUserDAO();
+        artistDAO = factory.createArtistDAO();
+
+        if (userDAO.getUserByEmail(email) != null || artistDAO.getArtistByEmail(email) != null) {
+            return false;
+        } else {
+            try {
+                userDAO.addUser(email,username,password);
+                return true;
+            }
+            catch (SQLException e) {
+                System.out.println("Erreur lors de l'ajout de l'utilisateur : " + e);
+                return false;
+            }
         }
     }
 

@@ -17,7 +17,7 @@ public class PathRegisterButtonController {
     @FXML
     public void initialize() {
         assert registerButton != null;
-        registerButton.setOnMouseClicked(e -> goToRegister());
+        registerButton.setOnAction(event -> goToRegister());
     }
 
     private void goToRegister() {
