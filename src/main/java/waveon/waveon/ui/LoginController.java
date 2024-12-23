@@ -10,9 +10,14 @@ import javafx.stage.Stage;
 import waveon.waveon.bl.LoginFacade;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.application.Platform;
+import javafx.animation.PauseTransition;
+import javafx.util.Duration;
 
 //Java imports
 import java.io.IOException;
+
+import static java.lang.Thread.sleep;
 
 public class LoginController implements ILoginController {
 
@@ -40,35 +45,19 @@ public class LoginController implements ILoginController {
     }
 
     private void login() {
-            String email = emailInput.getText();
-            String password = passwordInput.getText();
-            if (loginFacade.login(email,password)) {
-                resultLabel.setText("Login successful");
-                try {
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("MainPage.fxml"));
-                    Parent root = loader.load();
-                    Stage stage = new Stage();
-                    stage.setScene(new Scene(root));
-                    stage.show();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            } else {
-                resultLabel.setText("Login failed");
-            }
-    }
-
-    public void goToRegister() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("register.fxml"));
-            Parent root = loader.load();
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
+        resultLabel.setText("Logging in...");
+        String email = emailInput.getText();
+        String password = passwordInput.getText();
+        if (loginFacade.login(email, password)) {
+            resultLabel.setText("Login successful");
+            PauseTransition pause = new PauseTransition(Duration.seconds(0.5));
+            pause.setOnFinished(event -> goToHome());
+            pause.play();
+        } else {
+            Platform.runLater(() -> resultLabel.setText("Login failed"));
         }
     }
+
 
     public void goToHome() {
         try {

@@ -6,9 +6,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import waveon.waveon.ui.MainPageController;
-import waveon.waveon.ui.stage.mainStage;
-
 import java.io.IOException;
 import java.net.URL;
 

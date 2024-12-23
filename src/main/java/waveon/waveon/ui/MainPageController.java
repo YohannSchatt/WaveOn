@@ -37,7 +37,7 @@ public class MainPageController {
         vBox.getChildren().clear();
         if (loginFacade.getCurrentUser() != null) {
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/waveon/waveon/components/button/Logout.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/waveon/waveon/components/button/LogoutButton.fxml"));
                 vBox.getChildren().add(loader.load());
             }
             catch (Exception e) {
