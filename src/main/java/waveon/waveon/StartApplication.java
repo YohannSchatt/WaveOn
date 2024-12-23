@@ -18,10 +18,9 @@ public class StartApplication extends Application {
     public void start(Stage primaryStage) {
         try {
             URL fxmlLocation = getClass().getResource("/waveon/waveon/MainPage.fxml");
-            System.out.println("FXML Location: " + fxmlLocation);
             FXMLLoader loader = new FXMLLoader(fxmlLocation);
             Parent root = loader.load();
-            primaryStage.setTitle("Main Page");
+            primaryStage.setTitle("WaveOn");
             primaryStage.setScene(new Scene(root));
             primaryStage.show();
         } catch (IOException e) {

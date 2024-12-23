@@ -16,4 +16,7 @@ module waveon.waveon {
     exports waveon.waveon.ui;
     opens waveon.waveon.bl to javafx.fxml;
     exports waveon.waveon.bl;
+
+    opens waveon.waveon.ui.components.button to javafx.fxml;
+    exports waveon.waveon.ui.components.button;
 }

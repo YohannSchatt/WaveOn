@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import waveon.waveon.bl.LoginFacade;
 import javafx.fxml.FXMLLoader;
@@ -26,18 +27,23 @@ public class LoginController implements ILoginController {
     @FXML
     public Label resultLabel;
 
-    public LoginController() {
-        initialize();
-    }
+    @FXML
+    public HBox hbox;
 
-    private void initialize() {}
+    public void initialize() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/waveon/waveon/components/button/PathRegisterButton.fxml"));
+            hbox.getChildren().add(loader.load());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     private void login() {
             String email = emailInput.getText();
             String password = passwordInput.getText();
             if (loginFacade.login(email,password)) {
                 resultLabel.setText("Login successful");
-                MainPageController mainPage = new MainPageController();
                 try {
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("MainPage.fxml"));
                     Parent root = loader.load();
@@ -64,9 +70,21 @@ public class LoginController implements ILoginController {
         }
     }
 
+    public void goToHome() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/waveon/waveon/MainPage.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) emailInput.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void handleLogin() {
-        // Already implemented via the JavaFX event handler
+        login();
     }
 
     @Override

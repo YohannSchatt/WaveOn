@@ -14,10 +14,6 @@ public class PathRegisterButtonController {
     @FXML
     public Button registerButton;
 
-    public PathRegisterButtonController() {
-        initialize();
-    }
-
     @FXML
     public void initialize() {
         assert registerButton != null;

@@ -16,14 +16,12 @@ public class PathLoginButtonController {
 
     @FXML
     private void initialize() {
-        System.out.println("PathLoginButtonController Initialize");
         assert loginButton != null;
         loginButton.setOnAction(event -> goToLogin());
     }
 
     public void goToLogin() {
         try {
-            System.out.println("Login Button Clicked");
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/waveon/waveon/login.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) loginButton.getScene().getWindow();

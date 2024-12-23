@@ -19,10 +19,6 @@ public class LogoutController {
     private final LoginFacade loginFacade = LoginFacade.getInstance();
 
 
-    public LogoutController() {
-        initialize();
-    }
-
     @FXML
     public void initialize() {
         assert logoutButton != null;
