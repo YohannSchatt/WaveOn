@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="550.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="waveon.waveon.ui.LoginController">
+   <children>
+      <BorderPane prefHeight="550.0" prefWidth="600.0">
+         <center>
+            <Pane prefHeight="400.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Button onMouseClicked="#handleLogin" layoutX="22.0" layoutY="258.0" mnemonicParsing="false" prefHeight="53.0" prefWidth="557.0" style="-fx-background-color: black; -fx-border-radius: 10; -fx-border-color: pink; -fx-background-radius: 12; -fx-border-width: 3;" text="Login" textFill="WHITE">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Button>
+                  <PasswordField fx:id="passwordInput" layoutX="21.0" layoutY="181.0" prefHeight="39.0" prefWidth="557.0" promptText="Your password" style="-fx-background-radius: 10;">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </PasswordField>
+                  <TextField fx:id="emailInput" layoutX="21.0" layoutY="64.0" prefHeight="51.0" prefWidth="557.0" promptText="Your email" style="-fx-background-radius: 10;">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </TextField>
+                  <Label layoutX="21.0" layoutY="29.0" text="Email">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="21.0" layoutY="146.0" text="Password">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="resultLabel" layoutX="36.0" layoutY="340.0">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Label>
+               </children>
+            </Pane>
+         </center>
+         <top>
+            <HBox fx:id="hbox" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER" alignment="CENTER" spacing="10" >
+               <children>
+                  <Button mnemonicParsing="false" onMouseClicked="#goToHome" style="-fx-background-color: black; -fx-background-radius: 12; -fx-border-radius: 10; -fx-border-color: pink; -fx-border-width: 2;" text="Home" textFill="WHITE" BorderPane.alignment="CENTER">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Button>
+               </children>
+            </HBox>
+         </top>
+      </BorderPane>
+   </children>
+</AnchorPane>

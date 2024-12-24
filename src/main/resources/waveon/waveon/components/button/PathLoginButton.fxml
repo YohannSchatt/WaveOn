@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<StackPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="waveon.waveon.ui.components.button.PathLoginButtonController">
+    <children>
+        <Button fx:id="loginButton" style="-fx-background-color: black; -fx-background-radius: 12; -fx-border-radius: 10; -fx-border-color: pink; -fx-border-width: 2;" text="Login" textFill="WHITE">
+            <font>
+                <Font size="24.0" />
+            </font>
+        </Button>
+    </children>
+</StackPane>

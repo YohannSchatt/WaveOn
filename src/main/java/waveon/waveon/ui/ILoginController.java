@@ -2,11 +2,6 @@ package waveon.waveon.ui;
 
 public interface ILoginController {
     /**
-     * Launches the login interface.
-     */
-    void launch();
-
-    /**
      * Handles user login by collecting input and displaying the result.
      */
     void handleLogin();
