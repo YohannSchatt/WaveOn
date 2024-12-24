@@ -2,15 +2,11 @@ package waveon.waveon.persist;
 
 import waveon.waveon.connector.PGconnector;
 import waveon.waveon.core.Artist;
-import waveon.waveon.core.OrdUser;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-/**
- * 
- */
 public class ArtistDAOPG implements ArtistDAO {
 
     /**
@@ -19,14 +15,11 @@ public class ArtistDAOPG implements ArtistDAO {
     public ArtistDAOPG() {
     }
 
-    /**
-     *
-     */
     public Connection connection;
 
     /**
      * @param email
-     * @return
+     * @return Artist
      */
     public Artist getArtistByEmail(String email) {
         PGconnector pg = PGconnector.getInstance();
@@ -35,8 +28,7 @@ public class ArtistDAOPG implements ArtistDAO {
             pstmt.setString(1, email);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                Artist artist = new Artist(rs.getInt("id"), rs.getString("username"), rs.getString("email"), rs.getString("password"));
-                return artist;
+                return new Artist(rs.getInt("id"), rs.getString("username"), rs.getString("email"), rs.getString("password"));
             }
         }
         catch (Exception e) {

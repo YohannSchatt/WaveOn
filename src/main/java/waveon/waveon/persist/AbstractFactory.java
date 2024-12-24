@@ -1,10 +1,5 @@
 package waveon.waveon.persist;
 
-import waveon.waveon.core.OrdUser;
-
-/**
- * 
- */
 public abstract class AbstractFactory {
 
     /**
@@ -14,12 +9,12 @@ public abstract class AbstractFactory {
     }
 
     /**
-     * 
+     *
      */
     private static AbstractFactory Instance;
 
     /**
-     * 
+     *
      */
     public static AbstractFactory getInstance(){
         if (Instance == null) {
@@ -29,13 +24,17 @@ public abstract class AbstractFactory {
     }
 
     /**
-     * @return
+     *
+     * @return OrdUserDAO
      */
     public abstract OrdUserDAO createOrdUserDAO();
 
     /**
-     * @return
+     *
+     * @return ArtistDAO
      */
     public abstract ArtistDAO createArtistDAO();
+
+    public abstract MusicDAO createMusicDAO();
 
 }

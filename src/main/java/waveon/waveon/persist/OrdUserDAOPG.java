@@ -16,13 +16,13 @@ public class OrdUserDAOPG implements OrdUserDAO {
     public OrdUserDAOPG() {}
 
     /**
-     * 
+     *
      */
     public Connection connection;
 
     /**
      * @param email
-     * @return
+     * @return OrduUser
      */
     public OrdUser getUserByEmail(String email) {
         PGconnector pg = PGconnector.getInstance();
@@ -31,8 +31,7 @@ public class OrdUserDAOPG implements OrdUserDAO {
             pstmt.setString(1, email);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                OrdUser user = new OrdUser(rs.getInt("id"), rs.getString("username"), rs.getString("email"), rs.getString("password"));
-                return user;
+                return new OrdUser(rs.getInt("id"), rs.getString("username"), rs.getString("email"), rs.getString("password"));
             }
         }
         catch (Exception e) {

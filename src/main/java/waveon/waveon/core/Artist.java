@@ -60,41 +60,73 @@ public class Artist implements IUser {
         this.events = newEvents;
     }
 
+    /**
+     *
+     * @return int id
+     */
     @Override
     public int getId() {
         return this.id;
     }
 
+    /**
+     *
+     * @param id
+     */
     @Override
     public void setId(int id) {
 
     }
 
+    /**
+     *
+     * @return String username
+     */
     @Override
     public String getUsername() {
         return this.username;
     }
 
+    /**
+     *
+     * @param username
+     */
     @Override
     public void setUsername(String username) {
 
     }
 
+    /**
+     *
+     * @return String email
+     */
     @Override
     public String getEmail() {
         return this.email;
     }
 
+    /**
+     *
+     * @param email
+     */
     @Override
     public void setEmail(String email) {
 
     }
 
+    /**
+     *
+     * @return String password
+     */
     @Override
     public String getPassword() {
         return this.password;
     }
 
+    /**
+     *
+     * @param password
+     */
     @Override
     public void setPassword(String password) {
 

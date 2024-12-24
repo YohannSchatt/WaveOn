@@ -1,84 +1,52 @@
 package waveon.waveon.core;
 
-import java.io.*;
-import java.sql.Time;
+import java.sql.Date;
 
-/**
- * 
- */
 public class Music {
+    private final String title;
+    private final byte[] fileContent; // Contenu binaire du fichier
+    private final byte[] coverMusic; // Contenu binaire de la pochette
+    private final int artistId;
+    private final String artistName;
+    private final Date releaseDate;
+    private int stream_count;
 
-    /**
-     * Default constructor
-     */
-    public Music() {
+    public Music(String title, byte[] fileContent, byte[] coverMusic, int artistId, String artistName, Date releaseDate) {
+        this.title = title;
+        this.fileContent = fileContent;
+        this.coverMusic = coverMusic;
+        this.artistId = artistId;
+        this.artistName = artistName;
+        this.releaseDate = releaseDate;
+        this.stream_count = 0;
     }
 
-    /**
-     * 
-     */
-    private int id;
-
-    /**
-     * 
-     */
-    private String name;
-
-    /**
-     * 
-     */
-    private waveon.waveon.core.Artist Artist;
-
-    /**
-     * 
-     */
-    private Time Duration;
-
-    /**
-     * 
-     */
-    private File Content;
-
-    /**
-     * 
-     */
-    public void Getters() {
-        // TODO implement here
+    public String getTitle() {
+        return title;
     }
 
-    /**
-     * 
-     */
-    public void Operation2() {
-        // TODO implement here
+    public byte[] getFileContent() {
+        return fileContent;
     }
 
-    /**
-     * 
-     */
-    public void Operation3() {
-        // TODO implement here
+    public byte[] getCoverMusic() {
+        return coverMusic;
     }
 
-    /**
-     * 
-     */
-    public void Operation4() {
-        // TODO implement here
+    public int getArtistId() {
+        return artistId;
     }
 
-    /**
-     * 
-     */
-    public void Operation5() {
-        // TODO implement here
+    public String getArtistName() {
+        return artistName;
     }
 
-    /**
-     * @return
-     */
-    public void AddToQueue() {
-        // TODO implement here
+    public Date getReleaseDate() {
+        return releaseDate;
     }
 
+    public int getStreamCount() {
+        return stream_count;
+    }
 }
+

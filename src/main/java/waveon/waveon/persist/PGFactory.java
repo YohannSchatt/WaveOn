@@ -1,9 +1,7 @@
 package waveon.waveon.persist;
 
 
-/**
- * 
- */
+
 public class PGFactory extends AbstractFactory {
 
     /**
@@ -11,18 +9,24 @@ public class PGFactory extends AbstractFactory {
      */
     public PGFactory() {}
 
-
     /**
-     * @return
+     *
+     * @return OrdUserDAO
      */
     public OrdUserDAOPG createOrdUserDAO() {
         return new OrdUserDAOPG();
     }
 
     /**
-     * @return
+     *
+     * @return ArtistDAO
      */
     public ArtistDAOPG createArtistDAO() {
         return new ArtistDAOPG();
+    }
+
+    @Override
+    public MusicDAOPG createMusicDAO() {
+        return new MusicDAOPG();
     }
 }
