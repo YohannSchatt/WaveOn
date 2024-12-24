@@ -44,4 +44,21 @@ public class ArtistDAOPG implements ArtistDAO {
         }
         return null;
     }
+
+    public Artist getArtistById(int id) {
+        PGconnector pg = PGconnector.getInstance();
+        String sql = "SELECT * FROM artist WHERE id = ?";
+        try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                Artist artist = new Artist(rs.getInt("id"), rs.getString("username"), rs.getString("email"), rs.getString("password"));
+                return artist;
+            }
+        }
+        catch (Exception e) {
+            System.out.println("Error in OrdUserDAOPG.getUserByEmail : " + e);
+        }
+        return null;
+    }
 }

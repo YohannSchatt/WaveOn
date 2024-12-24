@@ -5,15 +5,11 @@ import java.io.File;
 import java.sql.Time;
 
 public class Music {
-
     private int id;
     private String name;
     private Artist artist;
     private Time duration;
     private File content;
-
-    public Music() {
-    }
 
     public Music(int id, String name, Artist artist, Time duration, File content) {
         this.id = id;
@@ -41,5 +37,9 @@ public class Music {
 
     public File getContent() {
         return content;
+    }
+
+    public String getContentURI() {
+        return content.toURI().toString();
     }
 }

@@ -9,55 +9,59 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 import waveon.waveon.bl.LoginFacade;
 import waveon.waveon.bl.MusicFacade;
 import waveon.waveon.core.Music;
 
-import java.io.File;
-import java.sql.Time;
-
 public class MainpageUIJavaFX extends Application {
     private final LoginFacade loginFacade = new LoginFacade();
-    private final MusicFacade musicFacade = new MusicFacade(new Music(1, "Sample Music", null, new Time(0), new File("src/music/Zoltraak.mp3")));
+    private final MusicFacade musicFacade = new MusicFacade();
     private Stage primaryStage;
     private VBox TopRightPane;
-    private VBox BottomCenterPane;
-    private Slider progressBar;
-    private Slider volumeSlider;
+    private ListView<String> musicListView;
 
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
         primaryStage.setTitle("Page d'Accueil");
 
-        // Créer la barre de recherche
+        // Create the search bar
         TextField searchField = new TextField();
         searchField.setPromptText("Rechercher...");
         HBox searchBox = new HBox(searchField);
         searchBox.setPadding(new Insets(5, 5, 5, 5));
 
-        // Disposer les éléments dans un layout
+        // Layout elements
         TopRightPane = new VBox(10);
         TopRightPane.setPadding(new Insets(10));
         updateLoginButton();
 
-        // Ajouter la barre de recherche à la barre de navigation
+        // Add the search bar to the navigation bar
         BorderPane topCenterPane = new BorderPane();
         topCenterPane.setCenter(searchBox);
         topCenterPane.setRight(TopRightPane);
 
-        // Initialiser le BottomCenterPane
-        BottomCenterPane = new VBox(10);
-        BottomCenterPane.setPadding(new Insets(10));
-        updateMusicControls();
+        // Create the music list view
+        musicListView = new ListView<>();
+        for (Music music : musicFacade.getMusicList()) {
+            musicListView.getItems().add(music.getName());
+        }
+        musicListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                musicFacade.loadMusicByTitle(newValue);
+            }
+        });
+
+        // Add the MusicPlayerControl component
+        MusicPlayerControl musicPlayerControl = new MusicPlayerControl(musicFacade);
 
         BorderPane borderPane = new BorderPane();
         borderPane.setTop(topCenterPane);
-        borderPane.setBottom(BottomCenterPane);
+        borderPane.setCenter(musicListView);
+        borderPane.setBottom(musicPlayerControl);
 
-        // Créer et afficher la scène
-        Scene scene = new Scene(borderPane, 300, 200);
+        // Create and display the scene
+        Scene scene = new Scene(borderPane, 600, 400);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
@@ -87,55 +91,6 @@ public class MainpageUIJavaFX extends Application {
                 }
             });
             TopRightPane.getChildren().add(loginButton);
-        }
-    }
-
-    private void updateMusicControls() {
-        BottomCenterPane.getChildren().clear();
-
-        // Add buttons to play, pause, skip, and restart music
-        Button playMusicButton = new Button("Play Music");
-        playMusicButton.setOnAction(e -> {
-            musicFacade.playMusic();
-            updateProgressBar();
-        });
-        BottomCenterPane.getChildren().add(playMusicButton);
-
-        Button pauseMusicButton = new Button("Pause Music");
-        pauseMusicButton.setOnAction(e -> musicFacade.pauseMusic());
-        BottomCenterPane.getChildren().add(pauseMusicButton);
-
-        Button skipMusicButton = new Button("Skip 10s");
-        skipMusicButton.setOnAction(e -> musicFacade.skipMusic());
-        BottomCenterPane.getChildren().add(skipMusicButton);
-
-        Button restartMusicButton = new Button("Restart");
-        restartMusicButton.setOnAction(e -> musicFacade.restartMusic());
-        BottomCenterPane.getChildren().add(restartMusicButton);
-
-        // Add progress bar
-        progressBar = new Slider();
-        progressBar.setMin(0);
-        progressBar.setMax(100);
-        progressBar.setValue(0);
-        BottomCenterPane.getChildren().add(progressBar);
-
-        // Add volume slider
-        volumeSlider = new Slider(0, 1, 0.5);
-        volumeSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
-            musicFacade.setVolume(newValue.doubleValue());
-        });
-        BottomCenterPane.getChildren().add(volumeSlider);
-    }
-
-    private void updateProgressBar() {
-        if (musicFacade != null) {
-            Duration totalDuration = musicFacade.getTotalDuration();
-            progressBar.setMax(totalDuration.toSeconds());
-
-            musicFacade.getMediaPlayer().currentTimeProperty().addListener((observable, oldValue, newValue) -> {
-                progressBar.setValue(newValue.toSeconds());
-            });
         }
     }
 

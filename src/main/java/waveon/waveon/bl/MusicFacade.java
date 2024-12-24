@@ -1,21 +1,35 @@
-// File: src/main/java/waveon/waveon/bl/MusicFacade.java
 package waveon.waveon.bl;
 
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 import waveon.waveon.core.Music;
+import waveon.waveon.persist.MusicDAOPG;
+
+import java.util.List;
 
 public class MusicFacade {
-    private Music music;
+    private List<Music> musicList;
     private MediaPlayer mediaPlayer;
+    private MusicDAOPG musicDAOPG;
+    private int currentMusicIndex = -1;
 
-    public MusicFacade(Music music) {
-        this.music = music;
-        initializeMediaPlayer();
+    public MusicFacade() {
+        this.musicDAOPG = new MusicDAOPG();
+        this.musicList = musicDAOPG.getAllMusic();
     }
 
-    private void initializeMediaPlayer() {
+    public void loadMusicByTitle(String title) {
+        for (int i = 0; i < musicList.size(); i++) {
+            if (musicList.get(i).getName().equals(title)) {
+                currentMusicIndex = i;
+                initializeMediaPlayer(musicList.get(i));
+                break;
+            }
+        }
+    }
+
+    private void initializeMediaPlayer(Music music) {
         if (music.getContent() != null) {
             Media media = new Media(music.getContent().toURI().toString());
             mediaPlayer = new MediaPlayer(media);
@@ -23,6 +37,9 @@ public class MusicFacade {
     }
 
     public void playMusic() {
+        if (mediaPlayer == null && !musicList.isEmpty()) {
+            loadMusicByTitle(musicList.get(0).getName());
+        }
         if (mediaPlayer != null) {
             mediaPlayer.play();
         }
@@ -41,8 +58,10 @@ public class MusicFacade {
     }
 
     public void skipMusic() {
-        if (mediaPlayer != null) {
-            mediaPlayer.seek(mediaPlayer.getCurrentTime().add(Duration.seconds(10)));
+        if (currentMusicIndex != -1 && currentMusicIndex < musicList.size() - 1) {
+            currentMusicIndex++;
+            initializeMediaPlayer(musicList.get(currentMusicIndex));
+            playMusic();
         }
     }
 
@@ -74,5 +93,9 @@ public class MusicFacade {
 
     public MediaPlayer getMediaPlayer() {
         return mediaPlayer;
+    }
+
+    public List<Music> getMusicList() {
+        return musicList;
     }
 }
