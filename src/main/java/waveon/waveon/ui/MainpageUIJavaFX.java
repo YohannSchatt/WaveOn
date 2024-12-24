@@ -91,18 +91,6 @@ public class MainpageUIJavaFX extends Application {
             MenuBar menuBar = new MenuBar();
             menuBar.getMenus().add(userMenu);
             vBox.getChildren().add(menuBar);
-        } else {
-            Button loginButton = new Button("Se connecter");
-            loginButton.setOnAction(e -> {
-                // Charger la page de connexion
-                LoginUIJavaFX loginPage = new LoginUIJavaFX();
-                try {
-                    loginPage.start(primaryStage);
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            });
-            vBox.getChildren().add(loginButton);
         }
     }
 
