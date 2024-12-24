@@ -48,18 +48,11 @@ public class MainpageUIJavaFX extends Application {
     private void updateLoginButton() {
         vBox.getChildren().clear();
         if (loginFacade.getCurrentUser() != null) {
-            //Label userEmailLabel = new Label(loginFacade.getCurrentUser().getEmail());
-            //Button logoutButton = new Button("Se déconnecter");
-            //logoutButton.setOnAction(e -> {
-               // loginFacade.logout();
-                //updateLoginButton();
-            //});
-            //vBox.getChildren().addAll(userEmailLabel, logoutButton);
             Menu userMenu = new Menu(loginFacade.getCurrentUser().getUsername());
             MenuItem logoutItem = new MenuItem("Se déconnecter");
             logoutItem.setOnAction(e -> {
-                loginFacade.logout();// permet de mettre à null l'utilisateur courant
-                updateLoginButton(); // met à jour l'affichage et le bouton se connecter
+                loginFacade.logout();
+                updateLoginButton();
             });
             userMenu.getItems().add(logoutItem);
             MenuBar menuBar = new MenuBar();
@@ -68,7 +61,6 @@ public class MainpageUIJavaFX extends Application {
         } else {
             Button loginButton = new Button("Se connecter");
             loginButton.setOnAction(e -> {
-                // Charger la page de connexion
                 LoginUIJavaFX loginPage = new LoginUIJavaFX();
                 try {
                     loginPage.start(primaryStage);
@@ -78,6 +70,18 @@ public class MainpageUIJavaFX extends Application {
             });
             vBox.getChildren().add(loginButton);
         }
+
+        // Ajouter le bouton de recherche
+        Button searchButton = new Button("Search");
+        searchButton.setOnAction(e -> {
+            SearchController searchPage = new SearchController();
+            try {
+                searchPage.start(primaryStage);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
+        vBox.getChildren().add(searchButton);
     }
 
     public static void main(String[] args) {
