@@ -2,6 +2,7 @@
 package waveon.waveon.ui;
 
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
@@ -14,10 +15,12 @@ import java.util.Random;
 public class MusicPlayerControl extends VBox {
     private final MusicFacade musicFacade;
     private final Slider progressBar;
+    private final Label currentMusicLabel;
 
     public MusicPlayerControl(MusicFacade musicFacade) {
         this.musicFacade = musicFacade;
         this.progressBar = new Slider();
+        this.currentMusicLabel = new Label("No music playing");
         initializeUI();
     }
 
@@ -27,6 +30,7 @@ public class MusicPlayerControl extends VBox {
         playMusicButton.setOnAction(e -> {
             musicFacade.playMusic();
             updateProgressBar();
+            updateCurrentMusicLabel();
         });
         this.getChildren().add(playMusicButton);
 
@@ -35,7 +39,10 @@ public class MusicPlayerControl extends VBox {
         this.getChildren().add(pauseMusicButton);
 
         Button skipMusicButton = new Button("Skip");
-        skipMusicButton.setOnAction(e -> musicFacade.skipMusic());
+        skipMusicButton.setOnAction(e -> {
+            musicFacade.skipMusic();
+            updateCurrentMusicLabel();
+        });
         this.getChildren().add(skipMusicButton);
 
         Button restartMusicButton = new Button("Restart");
@@ -55,6 +62,8 @@ public class MusicPlayerControl extends VBox {
         });
         this.getChildren().add(volumeSlider);
 
+        // Add current music label
+        this.getChildren().add(currentMusicLabel);
     }
 
     public void playRandomSong() {
@@ -65,6 +74,7 @@ public class MusicPlayerControl extends VBox {
             musicFacade.loadMusicByTitle(randomMusic.getName());
             musicFacade.playMusic();
             updateProgressBar();
+            updateCurrentMusicLabel();
         }
     }
 
@@ -76,6 +86,15 @@ public class MusicPlayerControl extends VBox {
             musicFacade.getMediaPlayer().currentTimeProperty().addListener((observable, oldValue, newValue) -> {
                 progressBar.setValue(newValue.toSeconds());
             });
+        }
+    }
+
+    private void updateCurrentMusicLabel() {
+        Music currentMusic = musicFacade.getCurrentMusic();
+        if (currentMusic != null) {
+            currentMusicLabel.setText("Now playing: " + currentMusic.getName());
+        } else {
+            currentMusicLabel.setText("No music playing");
         }
     }
 }

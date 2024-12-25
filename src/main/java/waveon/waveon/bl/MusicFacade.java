@@ -13,6 +13,8 @@ public class MusicFacade {
     private MediaPlayer mediaPlayer;
     private MusicDAOPG musicDAOPG;
     private int currentMusicIndex = -1;
+    private boolean isPaused = false;
+    private double volume = 0.5; // Default volume
 
     public MusicFacade() {
         this.musicDAOPG = new MusicDAOPG();
@@ -33,6 +35,7 @@ public class MusicFacade {
         if (music.getContent() != null) {
             Media media = new Media(music.getContent().toURI().toString());
             mediaPlayer = new MediaPlayer(media);
+            mediaPlayer.setVolume(volume); // Set the volume to the stored value
         }
     }
 
@@ -42,24 +45,32 @@ public class MusicFacade {
         }
         if (mediaPlayer != null) {
             mediaPlayer.play();
+            isPaused = false;
         }
     }
 
     public void pauseMusic() {
         if (mediaPlayer != null) {
-            mediaPlayer.pause();
+            if (isPaused) {
+                mediaPlayer.play();
+                isPaused = false;
+            } else {
+                mediaPlayer.pause();
+                isPaused = true;
+            }
         }
     }
 
     public void stopMusic() {
         if (mediaPlayer != null) {
             mediaPlayer.stop();
+            isPaused = false;
         }
     }
 
     public void skipMusic() {
-        if (currentMusicIndex != -1 && currentMusicIndex < musicList.size() - 1) {
-            currentMusicIndex++;
+        if (!musicList.isEmpty()) {
+            currentMusicIndex = (currentMusicIndex + 1) % musicList.size();
             initializeMediaPlayer(musicList.get(currentMusicIndex));
             playMusic();
         }
@@ -72,6 +83,7 @@ public class MusicFacade {
     }
 
     public void setVolume(double volume) {
+        this.volume = volume; // Store the volume
         if (mediaPlayer != null) {
             mediaPlayer.setVolume(volume);
         }
@@ -97,5 +109,12 @@ public class MusicFacade {
 
     public List<Music> getMusicList() {
         return musicList;
+    }
+
+    public Music getCurrentMusic() {
+        if (currentMusicIndex != -1 && currentMusicIndex < musicList.size()) {
+            return musicList.get(currentMusicIndex);
+        }
+        return null;
     }
 }
