@@ -1,3 +1,4 @@
+// File: src/main/java/waveon/waveon/bl/MusicFacade.java
 package waveon.waveon.bl;
 
 import javafx.scene.media.Media;
@@ -6,6 +7,7 @@ import javafx.util.Duration;
 import waveon.waveon.core.Music;
 import waveon.waveon.persist.MusicDAOPG;
 
+import java.io.File;
 import java.util.List;
 
 public class MusicFacade {
@@ -116,5 +118,24 @@ public class MusicFacade {
             return musicList.get(currentMusicIndex);
         }
         return null;
+    }
+
+    public void uninstallMusic(String directoryPath) {
+        // Implement the logic to uninstall music here
+        // Delete all files in the specified directory
+        File directory = new File(directoryPath);
+        if (directory.exists() && directory.isDirectory()) {
+            for (File file : directory.listFiles()) {
+                if (file.isFile()) {
+                    file.delete();
+                }
+            }
+        }
+        musicList.clear();
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+            mediaPlayer.dispose();
+            mediaPlayer = null;
+        }
     }
 }

@@ -66,6 +66,11 @@ public class MainpageUIJavaFX extends Application {
         primaryStage.show();
     }
 
+    @Override
+    public void stop() {
+        musicFacade.uninstallMusic("music");
+    }
+
     private void updateLoginButton() {
         TopRightPane.getChildren().clear();
         if (loginFacade.getCurrentUser() != null) {
