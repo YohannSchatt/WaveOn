@@ -2,6 +2,7 @@
 package waveon.waveon.ui;
 
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -12,6 +13,8 @@ import javafx.stage.Stage;
 import waveon.waveon.bl.LoginFacade;
 import waveon.waveon.bl.MusicFacade;
 import waveon.waveon.core.Music;
+
+import java.io.IOException;
 
 public class MainpageUIJavaFX extends Application {
     private final LoginFacade loginFacade = new LoginFacade();
@@ -52,8 +55,18 @@ public class MainpageUIJavaFX extends Application {
             }
         });
 
-        // Add the MusicPlayerControl component
-        MusicPlayerControl musicPlayerControl = new MusicPlayerControl(musicFacade);
+        // Load the MusicPlayerControl FXML
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("MusicPlayerControl.fxml"));
+        VBox musicPlayerControl = null;
+        try {
+            musicPlayerControl = loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Set the MusicFacade to the controller
+        MusicPlayerControl controller = loader.getController();
+        controller.setMusicFacade(musicFacade);
 
         BorderPane borderPane = new BorderPane();
         borderPane.setTop(topCenterPane);

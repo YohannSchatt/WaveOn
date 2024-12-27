@@ -1,6 +1,7 @@
 // File: src/main/java/waveon/waveon/ui/MusicPlayerControl.java
 package waveon.waveon.ui;
 
+import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
@@ -15,38 +16,39 @@ import java.util.List;
 import java.util.Random;
 
 public class MusicPlayerControl extends VBox {
-    private final MusicFacade musicFacade;
-    private final Slider progressBar;
-    private final Label currentMusicLabel;
-    private final Button playPauseButton;
-    private final Label timerLabel;
+    private MusicFacade musicFacade;
 
-    public MusicPlayerControl(MusicFacade musicFacade) {
-        this.musicFacade = musicFacade;
-        this.progressBar = new Slider();
-        this.currentMusicLabel = new Label("No music playing");
-        this.playPauseButton = new Button("Play Music");
-        this.timerLabel = new Label("00:00/00:00");
-        initializeUI();
+    @FXML
+    private Slider progressBar;
+
+    @FXML
+    private Label currentMusicLabel;
+
+    @FXML
+    private Button playPauseButton;
+
+    @FXML
+    private Label timerLabel;
+
+    public MusicPlayerControl() {
+        // Default constructor
     }
 
-    private void initializeUI() {
+    public void setMusicFacade(MusicFacade musicFacade) {
+        this.musicFacade = musicFacade;
+    }
+
+    @FXML
+    private void initialize() {
         // Add play/pause button
         playPauseButton.setOnAction(e -> togglePlayPause());
-        this.getChildren().add(playPauseButton);
 
         // Add skip and restart buttons
         Button skipMusicButton = new Button("Skip");
-        skipMusicButton.setOnAction(e -> {
-            musicFacade.skipMusic();
-            updateCurrentMusicLabel();
-            updateProgressBar();
-        });
-        this.getChildren().add(skipMusicButton);
+        skipMusicButton.setOnAction(e -> skipMusic());
 
         Button restartMusicButton = new Button("Restart");
-        restartMusicButton.setOnAction(e -> musicFacade.restartMusic());
-        this.getChildren().add(restartMusicButton);
+        restartMusicButton.setOnAction(e -> restartMusic());
 
         // Add progress bar and timer label
         HBox progressBarContainer = new HBox(10);
@@ -54,19 +56,18 @@ public class MusicPlayerControl extends VBox {
         progressBar.setMax(100);
         progressBar.setValue(0);
         progressBarContainer.getChildren().addAll(progressBar, timerLabel);
-        this.getChildren().add(progressBarContainer);
 
         // Add volume slider
         Slider volumeSlider = new Slider(0, 1, 0.5);
         volumeSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
             musicFacade.setVolume(newValue.doubleValue());
         });
-        this.getChildren().add(volumeSlider);
 
         // Add current music label
-        this.getChildren().add(currentMusicLabel);
+        this.getChildren().addAll(playPauseButton, skipMusicButton, restartMusicButton, progressBarContainer, volumeSlider, currentMusicLabel);
     }
 
+    @FXML
     private void togglePlayPause() {
         if (musicFacade.getMediaPlayer() != null && musicFacade.getMediaPlayer().getStatus() == MediaPlayer.Status.PLAYING) {
             musicFacade.pauseMusic();
@@ -79,16 +80,16 @@ public class MusicPlayerControl extends VBox {
         updateCurrentMusicLabel();
     }
 
-    public void playRandomSong() {
-        List<Music> musicList = musicFacade.getMusicList();
-        if (!musicList.isEmpty()) {
-            Random random = new Random();
-            Music randomMusic = musicList.get(random.nextInt(musicList.size()));
-            musicFacade.loadMusicByTitle(randomMusic.getName());
-            musicFacade.playMusic();
-            updateProgressBar();
-            updateCurrentMusicLabel();
-        }
+    @FXML
+    private void skipMusic() {
+        musicFacade.skipMusic();
+        updateCurrentMusicLabel();
+        updateProgressBar();
+    }
+
+    @FXML
+    private void restartMusic() {
+        musicFacade.restartMusic();
     }
 
     private void updateProgressBar() {
