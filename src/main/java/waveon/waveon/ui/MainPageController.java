@@ -26,7 +26,7 @@ public class MainPageController {
     private HBox searchBox;
 
     @FXML
-    private VBox vBox;
+    private HBox hBox;
 
     public void initialize() {
         updateLoginButton();
@@ -34,11 +34,10 @@ public class MainPageController {
 
 
     private void updateLoginButton() {
-        vBox.getChildren().clear();
         if (loginFacade.getCurrentUser() != null) {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/waveon/waveon/components/button/LogoutButton.fxml"));
-                vBox.getChildren().add(loader.load());
+                hBox.getChildren().add(loader.load());
             }
             catch (Exception e) {
                 e.printStackTrace();
@@ -46,10 +45,10 @@ public class MainPageController {
         } else {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/waveon/waveon/components/button/PathLoginButton.fxml"));
-                vBox.getChildren().add(loader.load());
+                hBox.getChildren().add(loader.load());
 
                 FXMLLoader loader2 = new FXMLLoader(getClass().getResource("/waveon/waveon/components/button/PathRegisterButton.fxml"));
-                vBox.getChildren().add(loader2.load());
+                hBox.getChildren().add(loader2.load());
             }
             catch (Exception e) {
                 e.printStackTrace();
