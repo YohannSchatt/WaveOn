@@ -40,7 +40,7 @@ public class OrdUserDAOPG implements OrdUserDAO {
         return null;
     }
 
-    public void addUser(String email, String username, String password) throws SQLException {
+    public void addUser(String username,String email, String password) throws SQLException {
         PGconnector pg = PGconnector.getInstance();
         String sql = "INSERT INTO ordinaryuser (email,username, password) VALUES (?, ?, ?)";
         try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
