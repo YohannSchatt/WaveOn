@@ -84,8 +84,12 @@ public class UserSessionFacade {
         return false;
     }
 
-    public IUser getCurrentUser() {
+    public static IUser getCurrentUser() {
         return currentUser;
+    }
+
+    public static void setCurrentUser(IUser user) {
+        currentUser = user;
     }
 
     public void logout() {

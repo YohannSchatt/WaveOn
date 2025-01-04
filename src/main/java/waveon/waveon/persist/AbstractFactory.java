@@ -14,6 +14,10 @@ public abstract class AbstractFactory {
         return Instance;
     }
 
+    public static void setInstance(AbstractFactory factory){
+        Instance = factory;
+    }
+
     public abstract OrdUserDAO createOrdUserDAO();
 
     public abstract ArtistDAO createArtistDAO();

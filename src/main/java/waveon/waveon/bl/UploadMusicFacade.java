@@ -16,8 +16,7 @@ public class UploadMusicFacade {
     }
 
     public boolean uploadMusic(String title, byte[] fileContent, byte[] coverImage) {
-        if (LoginFacade.getCurrentUser() != null && LoginFacade.getCurrentUser() instanceof Artist) {
-            Artist currentArtist = (Artist) LoginFacade.getCurrentUser();
+        if (UserSessionFacade.getCurrentUser() != null && UserSessionFacade.getCurrentUser() instanceof Artist currentArtist) {
             int artistId = currentArtist.getId();
             String artistName = currentArtist.getUsername(); // Récupérer le nom de l'artiste
             Date releaseDate = new Date(System.currentTimeMillis()); // Date actuelle
