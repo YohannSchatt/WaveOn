@@ -13,16 +13,17 @@ public class Music {
     private final int artistId;
     private final String artistName;
     private final Date releaseDate;
-    private int stream_count;
+    private final int streamCount;
 
-    public Music(String title, byte[] fileContent, byte[] coverMusic, int artistId, String artistName, Date releaseDate) {
+    public Music(int id, String title, byte[] fileContent, byte[] coverMusic, int artistId, String artistName, Date releaseDate, int streamCount) {
+        this.id = id;
         this.title = title;
         this.fileContent = fileContent;
         this.coverMusic = coverMusic;
         this.artistId = artistId;
         this.artistName = artistName;
         this.releaseDate = releaseDate;
-        this.stream_count = 0;
+        this.streamCount = streamCount;
     }
 
 
@@ -54,6 +55,6 @@ public class Music {
     }
 
     public int getStreamCount() {
-        return stream_count;
+        return streamCount;
     }
 }

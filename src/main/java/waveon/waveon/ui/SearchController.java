@@ -117,7 +117,7 @@ public class SearchController extends Application {
 
         // Format the music results
         for (Music music : searchResults) {
-            String formattedResult = music.getName() + "  -  " + music.getArtist_name();
+            String formattedResult = music.getTitle() + "  -  " + music.getArtistName();
             formattedResults.add(formattedResult);
         }
 
@@ -166,23 +166,23 @@ public class SearchController extends Application {
         // Sort the results based on the selected filter
         switch (filter) {
             case Newest:
-                searchResults.sort((m1, m2) -> m2.getDate().compareTo(m1.getDate()));
+                searchResults.sort((m1, m2) -> m2.getReleaseDate().compareTo(m1.getReleaseDate()));
                 break;
             case Oldest:
-                searchResults.sort(Comparator.comparing(Music::getDate));
+                searchResults.sort(Comparator.comparing(Music::getReleaseDate));
                 break;
             case MostListened:
-                searchResults.sort((m1, m2) -> Integer.compare(m2.getStream_count(), m1.getStream_count()));
+                searchResults.sort((m1, m2) -> Integer.compare(m2.getStreamCount(), m1.getStreamCount()));
                 break;
             case LeastListened:
-                searchResults.sort(Comparator.comparingInt(Music::getStream_count));
+                searchResults.sort(Comparator.comparingInt(Music::getStreamCount));
                 break;
         }
 
         // Update the ListView with the sorted results
         ArrayList<String> formattedResults = new ArrayList<>();
         for (Music music : searchResults) {
-            String formattedResult = music.getName() + "  -  " + music.getArtist_name();
+            String formattedResult = music.getTitle() + "  -  " + music.getArtistName();
             formattedResults.add(formattedResult);
         }
 

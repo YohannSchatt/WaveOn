@@ -1,24 +1,34 @@
 package waveon.waveon.persist;
 
-
 import waveon.waveon.connector.PGconnector;
 import waveon.waveon.core.Music;
-import waveon.waveon.core.OrdUser;
 
-import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class MusicDAOPG implements MusicDAO {
+    public boolean saveMusic(Music music) {
+        PGconnector pg = PGconnector.getInstance();
+        String sql = "INSERT INTO music (title, file_content, cover_image, artist_id, artist_name, release_date, stream_count) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-
-    public MusicDAOPG() {
+        try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, music.getTitle());
+            pstmt.setBytes(2, music.getFileContent()); // Insertion du contenu binaire
+            pstmt.setBytes(3, music.getCoverMusic()); // Insertion du contenu binaire
+            pstmt.setInt(4, music.getArtistId());
+            pstmt.setString(5, music.getArtistName());
+            pstmt.setDate(6, music.getReleaseDate());
+            pstmt.setInt(7, music.getStreamCount());
+            pstmt.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            System.out.println("Error in MusicDAOPG.saveMusic: " + e);
+            return false;
+        }
     }
-
-
-    //public Connection connection;
 
     public Music getMusicById(String id) {
         PGconnector pg = PGconnector.getInstance();
@@ -30,10 +40,11 @@ public class MusicDAOPG implements MusicDAO {
                 return new Music(
                         rs.getInt("id"),
                         rs.getString("title"),
+                        null,null,
                         rs.getInt("artist_id"),
-                        rs.getString("artist_name"),
-                        rs.getDate("release_date"),
-                        rs.getInt("stream_count"));
+                        rs.getString("artistName"),
+                        rs.getDate("releaseDate"),
+                        rs.getInt("streamCount"));
 
             }
         }
@@ -45,7 +56,7 @@ public class MusicDAOPG implements MusicDAO {
 
     public ArrayList<Music> getMusicsByName(String name) {
         PGconnector pg = PGconnector.getInstance();
-        String sql = "SELECT * FROM music WHERE LOWER(title) LIKE LOWER(?)"; // Corrigé ici
+        String sql = "SELECT id,title,artist_id,artist_name,release_date,stream_count FROM music WHERE LOWER(title) LIKE LOWER(?)"; // Corrigé ici
         try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
             // Ajoutez les % pour faire une recherche par sous-chaîne
             pstmt.setString(1, "%" + name.toLowerCase() + "%");
@@ -57,6 +68,7 @@ public class MusicDAOPG implements MusicDAO {
                 Music music = new Music(
                         rs.getInt("id"),
                         rs.getString("title"),
+                        null,null,
                         rs.getInt("artist_id"),
                         rs.getString("artist_name"),
                         rs.getDate("release_date"),
@@ -71,10 +83,20 @@ public class MusicDAOPG implements MusicDAO {
         return null;
     }
 
+    @Override
+    public void deleteMusic(String id) {
+
+    }
+
+    @Override
+    public void modifyMusic(String id, Music musicInfo) {
+
+    }
+
 
     public ArrayList<Music> getMusicsByArtist(String artist) {
         PGconnector pg = PGconnector.getInstance();
-        String sql = "SELECT * FROM music WHERE artist_id = ?";
+        String sql = "SELECT id,title,artist_id,artist_name,release_date,stream_count FROM music WHERE artist_id = ?";
         try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, artist);
             ResultSet rs = pstmt.executeQuery();
@@ -84,6 +106,7 @@ public class MusicDAOPG implements MusicDAO {
                 Music music = new Music(
                         rs.getInt("id"),
                         rs.getString("title"),
+                        null,null,
                         rs.getInt("artist_id"),
                         rs.getString("artist_name"),
                         rs.getDate("release_date"),
@@ -101,7 +124,7 @@ public class MusicDAOPG implements MusicDAO {
 
     public ArrayList<Music> getAllMusics() {
         PGconnector pg = PGconnector.getInstance();
-        String sql = "SELECT * FROM music";
+        String sql = "SELECT id,title,artist_id,artist_name,release_date,stream_count FROM music";
         try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
             ResultSet rs = pstmt.executeQuery();
             // recuperer les musiques dans une liste
@@ -110,6 +133,7 @@ public class MusicDAOPG implements MusicDAO {
                 Music music = new Music(
                         rs.getInt("id"),
                         rs.getString("title"),
+                        null,null,
                         rs.getInt("artist_id"),
                         rs.getString("artist_name"),
                         rs.getDate("release_date"),
@@ -126,16 +150,19 @@ public class MusicDAOPG implements MusicDAO {
         return null;
     }
 
-    public void createMusic(File file, String name, File image) {
-        // TODO implement here
+    public static int getLastId() {
+        PGconnector pg = PGconnector.getInstance();
+        String sql = "SELECT MAX(id) FROM music";
+        try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        }
+        catch (Exception e) {
+            System.out.println("Error in MusicDAOPG.getLastId : " + e);
+        }
+        return 0;
     }
-
-    public void deleteMusic(String id) {
-        // TODO implement here
-    }
-
-    public void modifyMusic(String id, Music musicInfo) {
-        // TODO implement here
-    }
-
 }
+
