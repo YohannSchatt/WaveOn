@@ -1,32 +1,16 @@
 package waveon.waveon.core;
 
-/**
- * 
- */
+
 public class Artist implements IUser {
 
-    /**
-     *
-     */
     public int id;
 
-    /**
-     *
-     */public String username = "";
+    public String username = "";
 
-    /**
-     *
-     */
     public String email = "";
 
-    /**
-     *
-     */
     public String password = "";
 
-    /**
-     * Default constructor
-     */
     public Artist(int id, String username, String email, String password) {
         this.id = id;
         this.username = username;

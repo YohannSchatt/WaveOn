@@ -2,7 +2,11 @@ package waveon.waveon.core;
 
 import java.sql.Date;
 
+/**
+ * 
+ */
 public class Music {
+    private int id;
     private final String title;
     private final byte[] fileContent; // Contenu binaire du fichier
     private final byte[] coverMusic; // Contenu binaire de la pochette
@@ -20,6 +24,10 @@ public class Music {
         this.releaseDate = releaseDate;
         this.stream_count = 0;
     }
+
+
+
+    public int getId() {return id;}
 
     public String getTitle() {
         return title;
@@ -41,7 +49,7 @@ public class Music {
         return artistName;
     }
 
-    public Date getReleaseDate() {
+      public Date getReleaseDate() {
         return releaseDate;
     }
 
@@ -49,4 +57,3 @@ public class Music {
         return stream_count;
     }
 }
-

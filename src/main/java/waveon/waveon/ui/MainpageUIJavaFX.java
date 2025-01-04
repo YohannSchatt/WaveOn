@@ -74,13 +74,6 @@ public class MainpageUIJavaFX extends Application {
     private void updateLoginButton() {
         vBox.getChildren().clear();
         if (loginFacade.getCurrentUser() != null) {
-            //Label userEmailLabel = new Label(loginFacade.getCurrentUser().getEmail());
-            //Button logoutButton = new Button("Se déconnecter");
-            //logoutButton.setOnAction(e -> {
-               // loginFacade.logout();
-                //updateLoginButton();
-            //});
-            //vBox.getChildren().addAll(userEmailLabel, logoutButton);
             Menu userMenu = new Menu(loginFacade.getCurrentUser().getUsername());
             MenuItem logoutItem = new MenuItem("Se déconnecter");
             logoutItem.setOnAction(e -> {
@@ -92,6 +85,18 @@ public class MainpageUIJavaFX extends Application {
             menuBar.getMenus().add(userMenu);
             vBox.getChildren().add(menuBar);
         }
+
+        // Ajouter le bouton de recherche
+        Button searchButton = new Button("Search");
+        searchButton.setOnAction(e -> {
+            SearchController searchPage = new SearchController();
+            try {
+                searchPage.start(primaryStage);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        });
+        vBox.getChildren().add(searchButton);
     }
 
     private void showAlert(String title, String message) {
