@@ -8,8 +8,8 @@ import waveon.waveon.persist.OrdUserDAO;
 
 public class LoginFacade {
     private AbstractFactory factory;
-    private OrdUserDAO userDAO;
-    private ArtistDAO artistDAO;
+    OrdUserDAO userDAO;
+    ArtistDAO artistDAO;
     private static IUser currentUser;
     public LoginFacade() {
         factory = AbstractFactory.getInstance();
