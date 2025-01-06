@@ -1,4 +1,3 @@
-// File: src/main/java/waveon/waveon/ui/MusicPlayerControl.java
 package waveon.waveon.ui;
 
 import javafx.fxml.FXML;
@@ -11,9 +10,6 @@ import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 import waveon.waveon.bl.MusicFacade;
 import waveon.waveon.core.Music;
-
-import java.util.List;
-import java.util.Random;
 
 public class MusicPlayerControl extends VBox {
     private MusicFacade musicFacade;
@@ -30,6 +26,9 @@ public class MusicPlayerControl extends VBox {
     @FXML
     private Label timerLabel;
 
+    @FXML
+    private Slider volumeSlider;
+
     public MusicPlayerControl() {
         // Default constructor
     }
@@ -40,31 +39,13 @@ public class MusicPlayerControl extends VBox {
 
     @FXML
     private void initialize() {
-        // Add play/pause button
-        playPauseButton.setOnAction(e -> togglePlayPause());
+        // Set the initial text for the play/pause button
+        playPauseButton.setText("Play Music");
 
-        // Add skip and restart buttons
-        Button skipMusicButton = new Button("Skip");
-        skipMusicButton.setOnAction(e -> skipMusic());
-
-        Button restartMusicButton = new Button("Restart");
-        restartMusicButton.setOnAction(e -> restartMusic());
-
-        // Add progress bar and timer label
-        HBox progressBarContainer = new HBox(10);
-        progressBar.setMin(0);
-        progressBar.setMax(100);
-        progressBar.setValue(0);
-        progressBarContainer.getChildren().addAll(progressBar, timerLabel);
-
-        // Add volume slider
-        Slider volumeSlider = new Slider(0, 1, 0.5);
+        // Add volume slider listener
         volumeSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
             musicFacade.setVolume(newValue.doubleValue());
         });
-
-        // Add current music label
-        this.getChildren().addAll(playPauseButton, skipMusicButton, restartMusicButton, progressBarContainer, volumeSlider, currentMusicLabel);
     }
 
     @FXML
@@ -78,13 +59,14 @@ public class MusicPlayerControl extends VBox {
             updateProgressBar();
         }
         updateCurrentMusicLabel();
+        updateProgressBar();
     }
 
     @FXML
     private void skipMusic() {
         musicFacade.skipMusic();
-        updateCurrentMusicLabel();
         updateProgressBar();
+        updateCurrentMusicLabel();
     }
 
     @FXML

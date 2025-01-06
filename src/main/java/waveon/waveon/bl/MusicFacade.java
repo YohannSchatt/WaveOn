@@ -71,6 +71,10 @@ public class MusicFacade {
     }
 
     public void skipMusic() {
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+            isPaused = false;
+        }
         if (!musicList.isEmpty()) {
             currentMusicIndex = (currentMusicIndex + 1) % musicList.size();
             initializeMediaPlayer(musicList.get(currentMusicIndex));
