@@ -4,7 +4,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
@@ -45,6 +44,18 @@ public class MusicPlayerControl extends VBox {
         // Add volume slider listener
         volumeSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
             musicFacade.setVolume(newValue.doubleValue());
+        });
+
+        // Add progress bar listener for value changes
+        progressBar.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (progressBar.isValueChanging()) {
+                musicFacade.seekMusic(Duration.seconds(newValue.doubleValue()));
+            }
+        });
+
+        // Add progress bar listener for mouse released event
+        progressBar.setOnMouseReleased(event -> {
+            musicFacade.seekMusic(Duration.seconds(progressBar.getValue()));
         });
     }
 

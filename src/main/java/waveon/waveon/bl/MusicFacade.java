@@ -95,6 +95,12 @@ public class MusicFacade {
         }
     }
 
+    public void seekMusic(Duration time) {
+        if (mediaPlayer != null) {
+            mediaPlayer.seek(time);
+        }
+    }
+
     public Duration getCurrentTime() {
         if (mediaPlayer != null) {
             return mediaPlayer.getCurrentTime();
