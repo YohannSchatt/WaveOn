@@ -1,12 +1,10 @@
+// File: src/main/java/waveon/waveon/persist/MusicDAOPG.java
 package waveon.waveon.persist;
 
 import waveon.waveon.connector.PGconnector;
 import waveon.waveon.core.Music;
 import waveon.waveon.core.Artist;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -38,10 +36,7 @@ public class MusicDAOPG implements MusicDAO {
                 Artist artist = artistDAOPG.getArtistById(artistId);
                 byte[] fileContent = resultSet.getBytes("file_content");
 
-                // Save the bytea data as a file in the local music directory
-                File content = saveMusicFile(fileContent, name);
-
-                Music music = new Music(id, name, artist, null, content);
+                Music music = new Music(id, name, artist, null, fileContent);
                 musicList.add(music);
             }
         } catch (SQLException e) {
@@ -49,19 +44,5 @@ public class MusicDAOPG implements MusicDAO {
         }
 
         return musicList;
-    }
-
-    private File saveMusicFile(byte[] fileContent, String fileName) {
-        File musicDir = new File("music");
-        if (!musicDir.exists()) {
-            musicDir.mkdirs();
-        }
-        File localFile = new File(musicDir, fileName + ".mp3");
-        try (FileOutputStream out = new FileOutputStream(localFile)) {
-            out.write(fileContent);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return localFile;
     }
 }

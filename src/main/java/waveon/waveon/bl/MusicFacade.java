@@ -1,4 +1,3 @@
-// File: src/main/java/waveon/waveon/bl/MusicFacade.java
 package waveon.waveon.bl;
 
 import javafx.scene.media.Media;
@@ -8,6 +7,8 @@ import waveon.waveon.core.Music;
 import waveon.waveon.persist.MusicDAOPG;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 public class MusicFacade {
@@ -35,9 +36,23 @@ public class MusicFacade {
 
     private void initializeMediaPlayer(Music music) {
         if (music.getContent() != null) {
-            Media media = new Media(music.getContent().toURI().toString());
-            mediaPlayer = new MediaPlayer(media);
-            mediaPlayer.setVolume(volume); // Set the volume to the stored value
+            try {
+                // Create a temporary file
+                File tempFile = File.createTempFile("music", ".mp3");
+                tempFile.deleteOnExit();
+
+                // Write the byte array to the temporary file
+                try (FileOutputStream fos = new FileOutputStream(tempFile)) {
+                    fos.write(music.getContent());
+                }
+
+                // Create a Media object from the temporary file
+                Media media = new Media(tempFile.toURI().toString());
+                mediaPlayer = new MediaPlayer(media);
+                mediaPlayer.setVolume(volume); // Set the volume to the stored value
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
