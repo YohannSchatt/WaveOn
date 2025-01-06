@@ -40,6 +40,8 @@ public class MainpageUIJavaFX extends Application {
     // Variable to store the pause transition (used to delay search)
     private PauseTransition pauseTransition;
 
+    // File: src/main/java/waveon/waveon/ui/MainpageUIJavaFX.java
+
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
@@ -101,11 +103,6 @@ public class MainpageUIJavaFX extends Application {
         TopRightPane.setPadding(new Insets(10));
         updateLoginButton();
 
-        // Ajouter la barre de recherche à la barre de navigation
-        //BorderPane topCenterPane = new BorderPane();
-        //topCenterPane.setCenter(searchBox);
-        //topCenterPane.setRight(TopRightPane);
-
         // Create the music list view
         musicListView = new ListView<>();
         for (Music music : musicFacade.getMusicList()) {
@@ -114,6 +111,15 @@ public class MainpageUIJavaFX extends Application {
         musicsListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 musicFacade.loadMusicByTitle(newValue);
+            }
+        });
+
+        // Add mouse click event to play music on click
+        musicsListView.setOnMouseClicked(event -> {
+            String selectedMusic = musicsListView.getSelectionModel().getSelectedItem();
+            if (selectedMusic != null) {
+                musicFacade.loadMusicByTitle(selectedMusic);
+                musicFacade.playMusic();
             }
         });
 
@@ -130,9 +136,6 @@ public class MainpageUIJavaFX extends Application {
         MusicPlayerControl controller = loader.getController();
         controller.setMusicFacade(musicFacade);
 
-        //BorderPane borderPane = new BorderPane();
-        //borderPane.setTop(topCenterPane);
-        //borderPane.setCenter(musicListView);
         borderPane.setBottom(musicPlayerControl);
 
         VBox centerLayout = new VBox(10);
@@ -144,9 +147,7 @@ public class MainpageUIJavaFX extends Application {
             centerLayout.getChildren().add(uploadMusicButton);
         }
 
-        //borderPane.setCenter(centerLayout);
-
-        // Créer et afficher la scène
+        // Create and display the scene
         Scene scene = new Scene(borderPane, 600, 400);
         primaryStage.setScene(scene);
         primaryStage.show();
