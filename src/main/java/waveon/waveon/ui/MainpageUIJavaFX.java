@@ -10,11 +10,17 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import waveon.waveon.bl.LoginFacade;
 import waveon.waveon.core.Artist;
+import waveon.waveon.bl.MusicFacade;
+import waveon.waveon.core.Music;
+
+import java.io.IOException;
 
 public class MainpageUIJavaFX extends Application {
     private final LoginFacade loginFacade = new LoginFacade();
+    private final MusicFacade musicFacade = new MusicFacade();
     private Stage primaryStage;
-    private VBox vBox;
+    private VBox TopRightPane;
+    private ListView<String> musicListView;
 
     @Override
     public void start(Stage primaryStage) {
@@ -27,18 +33,44 @@ public class MainpageUIJavaFX extends Application {
         HBox searchBox = new HBox(searchField);
         searchBox.setPadding(new Insets(5, 5, 5, 5));
 
-        // Disposer les éléments dans un layout
-        vBox = new VBox(10);
-        vBox.setPadding(new Insets(10));
+        // Layout elements
+        TopRightPane = new VBox(10);
+        TopRightPane.setPadding(new Insets(10));
         updateLoginButton();
 
         // Ajouter la barre de recherche à la barre de navigation
         BorderPane topCenterPane = new BorderPane();
         topCenterPane.setCenter(searchBox);
-        topCenterPane.setRight(vBox);
+        topCenterPane.setRight(TopRightPane);
+
+        // Create the music list view
+        musicListView = new ListView<>();
+        for (Music music : musicFacade.getMusicList()) {
+            musicListView.getItems().add(music.getTitle());
+        }
+        musicListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                musicFacade.loadMusicByTitle(newValue);
+            }
+        });
+
+        // Load the MusicPlayerControl FXML
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/waveon/waveon/MusicPlayerControl.fxml"));
+        VBox musicPlayerControl = null;
+        try {
+            musicPlayerControl = loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Set the MusicFacade to the controller
+        MusicPlayerControl controller = loader.getController();
+        controller.setMusicFacade(musicFacade);
 
         BorderPane borderPane = new BorderPane();
         borderPane.setTop(topCenterPane);
+        borderPane.setCenter(musicListView);
+        borderPane.setBottom(musicPlayerControl);
 
         VBox centerLayout = new VBox(10);
         centerLayout.setPadding(new Insets(20));
@@ -71,40 +103,56 @@ public class MainpageUIJavaFX extends Application {
         }
     }
 
+    @Override
+    public void stop() {
+        musicFacade.uninstallMusic("music");
+    }
+
     private void updateLoginButton() {
-        vBox.getChildren().clear();
+        TopRightPane.getChildren().clear();
         if (loginFacade.getCurrentUser() != null) {
             Menu userMenu = new Menu(loginFacade.getCurrentUser().getUsername());
             MenuItem logoutItem = new MenuItem("Se déconnecter");
             logoutItem.setOnAction(e -> {
-                loginFacade.logout();// permet de mettre à null l'utilisateur courant
-                updateLoginButton(); // met à jour l'affichage et le bouton se connecter
+                loginFacade.logout();
+                updateLoginButton();
             });
             userMenu.getItems().add(logoutItem);
             MenuBar menuBar = new MenuBar();
             menuBar.getMenus().add(userMenu);
-            vBox.getChildren().add(menuBar);
+            TopRightPane.getChildren().add(menuBar);
+        } else {
+            Button loginButton = new Button("Se connecter");
+            loginButton.setOnAction(e -> {
+                // Charger la page de connexion
+                LoginUIJavaFX loginPage = new LoginUIJavaFX();
+                try {
+                    loginPage.start(primaryStage);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            });
+
+            // Ajouter le bouton de recherche
+            Button searchButton = new Button("Search");
+            searchButton.setOnAction(e -> {
+                SearchController searchPage = new SearchController();
+                try {
+                    searchPage.start(primaryStage);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            });
+            TopRightPane.getChildren().add(searchButton);
+            TopRightPane.getChildren().add(loginButton);
         }
 
-        // Ajouter le bouton de recherche
-        Button searchButton = new Button("Search");
-        searchButton.setOnAction(e -> {
-            SearchController searchPage = new SearchController();
-            try {
-                searchPage.start(primaryStage);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        });
-        vBox.getChildren().add(searchButton);
-    }
-
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
+        private void showAlert(String title, String message) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle(title);
+            alert.setHeaderText(null);
+            alert.setContentText(message);
+            alert.showAndWait();
     }
 
     public static void main(String[] args) {

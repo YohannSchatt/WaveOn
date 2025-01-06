@@ -5,6 +5,7 @@ module waveon.waveon {
     requires org.kordamp.bootstrapfx.core;
     requires java.sql;
     requires java.desktop;
+    requires javafx.media;
 
     opens waveon.waveon to javafx.fxml;
     exports waveon.waveon;

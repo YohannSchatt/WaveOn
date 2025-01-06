@@ -2,6 +2,8 @@ package waveon.waveon.persist;
 
 import waveon.waveon.connector.PGconnector;
 import waveon.waveon.core.Artist;
+import waveon.waveon.core.OrdUser;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

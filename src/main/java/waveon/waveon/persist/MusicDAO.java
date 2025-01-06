@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.util.ArrayList;
 
 public interface MusicDAO {
+     ArrayList<Music> getAllMusic();
 
 
     Connection connection = null;

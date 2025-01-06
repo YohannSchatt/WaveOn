@@ -1,7 +1,6 @@
 package waveon.waveon.core;
 
 import java.sql.Date;
-
 /**
  * 
  */
