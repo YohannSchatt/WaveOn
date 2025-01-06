@@ -1,6 +1,7 @@
 package waveon.waveon.ui;
 
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -125,12 +126,12 @@ public class MainpageUIJavaFX extends Application {
             Button loginButton = new Button("Se connecter");
             loginButton.setOnAction(e -> {
                 // Charger la page de connexion
-                LoginUIJavaFX loginPage = new LoginUIJavaFX();
-                try {
-                    loginPage.start(primaryStage);
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
+                //LoginUIJavaFX loginPage = new LoginUIJavaFX();
+                //try {
+                  //  loginPage.start(primaryStage);
+                //} catch (Exception ex) {
+                  //  ex.printStackTrace();
+                //}
             });
 
             // Ajouter le bouton de recherche
@@ -146,7 +147,7 @@ public class MainpageUIJavaFX extends Application {
             TopRightPane.getChildren().add(searchButton);
             TopRightPane.getChildren().add(loginButton);
         }
-
+    }
         private void showAlert(String title, String message) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle(title);
