@@ -56,7 +56,7 @@ public class MainpageUIJavaFX extends Application {
         });
 
         // Load the MusicPlayerControl FXML
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("MusicPlayerControl.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/waveon/waveon/MusicPlayerControl.fxml"));
         VBox musicPlayerControl = null;
         try {
             musicPlayerControl = loader.load();
