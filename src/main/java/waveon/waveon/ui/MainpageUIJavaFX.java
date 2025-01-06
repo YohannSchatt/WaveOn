@@ -47,7 +47,7 @@ public class MainpageUIJavaFX extends Application {
         // Create the music list view
         musicListView = new ListView<>();
         for (Music music : musicFacade.getMusicList()) {
-            musicListView.getItems().add(music.getName());
+            musicListView.getItems().add(music.getTitle());
         }
         musicListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {

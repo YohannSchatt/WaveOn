@@ -112,7 +112,7 @@ public class MusicPlayerControl extends VBox {
     private void updateCurrentMusicLabel() {
         Music currentMusic = musicFacade.getCurrentMusic();
         if (currentMusic != null) {
-            currentMusicLabel.setText("Now playing: " + currentMusic.getName());
+            currentMusicLabel.setText("Now playing: " + currentMusic.getTitle());
         } else {
             currentMusicLabel.setText("No music playing");
         }

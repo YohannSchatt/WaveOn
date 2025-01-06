@@ -3,8 +3,8 @@ package waveon.waveon.persist;
 
 import waveon.waveon.core.Music;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public interface MusicDAO {
-     List<Music> getAllMusic();
+     ArrayList<Music> getAllMusic();
 }

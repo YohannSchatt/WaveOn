@@ -26,7 +26,7 @@ public class MusicFacade {
 
     public void loadMusicByTitle(String title) {
         for (int i = 0; i < musicList.size(); i++) {
-            if (musicList.get(i).getName().equals(title)) {
+            if (musicList.get(i).getTitle().equals(title)) {
                 currentMusicIndex = i;
                 initializeMediaPlayer(musicList.get(i));
                 break;
@@ -35,7 +35,7 @@ public class MusicFacade {
     }
 
     private void initializeMediaPlayer(Music music) {
-        if (music.getContent() != null) {
+        if (music.getFileContent() != null) {
             try {
                 // Create a temporary file
                 File tempFile = File.createTempFile("music", ".mp3");
@@ -43,7 +43,7 @@ public class MusicFacade {
 
                 // Write the byte array to the temporary file
                 try (FileOutputStream fos = new FileOutputStream(tempFile)) {
-                    fos.write(music.getContent());
+                    fos.write(music.getFileContent());
                 }
 
                 // Create a Media object from the temporary file
@@ -58,7 +58,7 @@ public class MusicFacade {
 
     public void playMusic() {
         if (mediaPlayer == null && !musicList.isEmpty()) {
-            loadMusicByTitle(musicList.get(0).getName());
+            loadMusicByTitle(musicList.get(0).getTitle());
         }
         if (mediaPlayer != null) {
             mediaPlayer.play();
