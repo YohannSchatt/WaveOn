@@ -1,6 +1,6 @@
 package waveon.waveon.ui;
 
-//JavaFX imports
+// JavaFX imports
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -8,9 +8,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-
-//BL imports
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -20,11 +17,7 @@ import waveon.waveon.core.Music;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-
-//components imports
-
-//Java imports
-
+import java.util.List;
 
 public class MainPageController {
 
@@ -32,10 +25,8 @@ public class MainPageController {
     private final MusicFacade musicFacade = new MusicFacade();
     private final SearchFacade searchFacade = new SearchFacade();
     private PauseTransition pauseTransition;
+    private List<Music> searchResults;
 
-
-    @FXML
-    private VBox TopRightPane;
     @FXML
     private TextField searchField;
     @FXML
@@ -52,51 +43,69 @@ public class MainPageController {
     private Label currentMusicLabel;
     @FXML
     private Button playPauseButton;
-
     @FXML
     private HBox hBox;
-
     @FXML
     private Slider progressBar;
-
     @FXML
     private Label timerLabel;
-
     @FXML
     private Slider volumeSlider;
+    @FXML
+    private Button skipMusicButton;
+    @FXML
+    private Button restartMusicButton;
+
     public void initialize() {
-        // Initialize the pause transition with a 500ms delay
-        pauseTransition = new PauseTransition(Duration.millis(500));
-        pauseTransition.setOnFinished(e -> handleSearch());
-
-        // Create the event handler for key release
-        searchField.setOnKeyReleased(e -> pauseTransition.playFromStart());
-
-        filterComboBox.setOnAction(e -> useFilterMusic(convertToFilterOption(filterComboBox.getValue())));
-
-        musicsListView.setOnMouseClicked(event -> {
-            String selectedMusic = musicsListView.getSelectionModel().getSelectedItem();
-            if (selectedMusic != null) {
-                musicFacade.loadMusicByTitle(selectedMusic);
-                musicFacade.playMusic();
-                updateCurrentMusicLabel(selectedMusic);
-                updatePlayPauseButton();
+        updateProgressBar();
+        filterComboBox.setOnAction(event -> applyFilter());
+        pauseTransition = new PauseTransition(Duration.seconds(0.5));
+        pauseTransition.setOnFinished(event -> handleSearch());
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> pauseTransition.playFromStart());
+        musicsListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> playSelectedMusic(newValue));
+        volumeSlider.valueProperty().addListener((observable, oldValue, newValue) -> musicFacade.setVolume(newValue.doubleValue()));
+        skipMusicButton.setOnAction(event -> skipMusic());
+        restartMusicButton.setOnAction(event -> restartMusic());
+        // Add progress bar listener for value changes
+        progressBar.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (progressBar.isValueChanging()) {
+                musicFacade.seekMusic(Duration.seconds(newValue.doubleValue()));
             }
         });
-
-        playPauseButton.setOnAction(e -> {
-            if (musicFacade.getMediaPlayer() != null) {
-                if (musicFacade.getMediaPlayer().getStatus() == MediaPlayer.Status.PLAYING) {
-                    musicFacade.pauseMusic();
-                    playPauseButton.setText("Play");
-                } else {
-                    musicFacade.playMusic();
-                    playPauseButton.setText("Pause");
-                }
-            }
+        // Add progress bar listener for mouse click event
+        progressBar.setOnMouseClicked(event -> {
+            musicFacade.seekMusic(Duration.seconds(progressBar.getValue()));
         });
-
         updateLoginButton();
+    }
+
+    private void applyFilter() {
+        String selectedFilter = filterComboBox.getValue();
+        if (selectedFilter != null && searchResults != null) {
+            switch (selectedFilter) {
+                case "Time ↓":
+                    searchResults.sort(Comparator.comparing(Music::getReleaseDate).reversed());
+                    break;
+                case "Time ↑":
+                    searchResults.sort(Comparator.comparing(Music::getReleaseDate));
+                    break;
+                case "Streams count ↑":
+                    searchResults.sort((m1, m2) -> Integer.compare(m2.getStreamCount(), m1.getStreamCount()));
+                    break;
+                case "Streams count ↓":
+                    searchResults.sort(Comparator.comparingInt(Music::getStreamCount));
+                    break;
+            }
+
+            ArrayList<String> formattedResults = new ArrayList<>();
+            for (Music music : searchResults) {
+                String formattedResult = music.getTitle();
+                formattedResults.add(formattedResult);
+            }
+
+            musicsListView.getItems().setAll(formattedResults);
+            musicResultLabel.setText("Music Results: " + searchResults.size() + " found");
+        }
     }
 
     private void handleSearch() {
@@ -109,8 +118,8 @@ public class MainPageController {
         } else {
             musicsListView.getItems().clear();
             artistsListView.getItems().clear();
-            musicResultLabel.setText("Music Results: (Start typing to search)");
-            artistResultLabel.setText("Artist Results: (Start typing to search)");
+            musicResultLabel.setText("Music Results: ");
+            artistResultLabel.setText("Artist Results: ");
         }
     }
 
@@ -125,13 +134,18 @@ public class MainPageController {
 
         if (!searchResults.isEmpty()) {
             musicsListView.getItems().setAll(formattedResults);
+            musicsListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> playSelectedMusic(newValue));
+
             musicResultLabel.setText("Music Results: " + searchResults.size() + " found");
         } else {
             musicsListView.getItems().clear();
             musicResultLabel.setText("Music Results: No matches found");
         }
 
-        useFilterMusic(convertToFilterOption(filterComboBox.getValue()));
+        String selectedFilter = filterComboBox.getValue();
+        if (selectedFilter != null) {
+            useFilterMusic(convertToFilterOption(selectedFilter));
+        }
     }
 
     private void updateArtistResults() {
@@ -159,6 +173,16 @@ public class MainPageController {
             case "Streams count ↑" -> FilterOption.LeastListened;
             default -> FilterOption.MostListened;
         };
+    }
+
+    private void playSelectedMusic(String musicTitle) {
+        //if (musicTitle != null) {
+        musicFacade.loadMusicByTitle(musicTitle);
+        musicFacade.playMusic();
+        updateCurrentMusicLabel(musicTitle);
+        updatePlayPauseButton();
+        updateProgressBar();
+        //}
     }
 
     private void updateCurrentMusicLabel(String musicTitle) {
@@ -243,8 +267,6 @@ public class MainPageController {
             }
         }
     }
-
-
 
     @FXML
     private void togglePlayPause() {
