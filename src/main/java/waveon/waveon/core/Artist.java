@@ -115,4 +115,9 @@ public class Artist implements IUser {
     public void setPassword(String password) {
 
     }
+
+    @Override
+    public boolean isArtist() {
+        return true;  // Cette classe est un artiste, donc retourne true
+    }
 }

@@ -1,6 +1,9 @@
 package waveon.waveon.ui;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
@@ -18,10 +21,10 @@ public class UploadMusicUIJavaFX {
     private TextField musicTitleField;
 
     @FXML
-    private TextField musicArtistField;
+    private TextField musicFileField;
 
     @FXML
-    private TextField musicFileField;
+    private TextField coverImageFileField;  // Champ pour le fichier d'image
 
     @FXML
     private Label uploadStatusLabel;
@@ -36,8 +39,8 @@ public class UploadMusicUIJavaFX {
     @FXML
     private void handleUploadMusic() {
         String title = musicTitleField.getText();
-        String artist = musicArtistField.getText();  // Cette information n'est plus nécessaire, car l'artiste est récupéré automatiquement
         String filePath = musicFileField.getText();
+        String coverImagePath = coverImageFileField.getText();
 
         if (title.isEmpty() || filePath.isEmpty()) {
             uploadStatusLabel.setText("Please fill all fields.");
@@ -52,7 +55,15 @@ public class UploadMusicUIJavaFX {
 
                 // Si l'utilisateur a téléchargé une image de couverture
                 byte[] coverImage = null;
-                // Vous pourriez ajouter un champ ou un FileChooser pour la couverture si nécessaire
+                if (!coverImagePath.isEmpty()) {
+                    File coverFile = new File(coverImagePath);
+                    if (coverFile.exists() && coverFile.isFile()) {
+                        coverImage = Files.readAllBytes(coverFile.toPath());
+                    } else {
+                        uploadStatusLabel.setText("Invalid cover image file.");
+                        return;
+                    }
+                }
 
                 // Utilisation de la façade pour uploader la musique
                 boolean success = uploadMusicFacade.uploadMusic(title, fileContent, coverImage);
@@ -65,12 +76,12 @@ public class UploadMusicUIJavaFX {
                 uploadStatusLabel.setText("Error reading file.");
             }
         } else {
-            uploadStatusLabel.setText("Invalid file path.");
+            uploadStatusLabel.setText("Invalid music file path.");
         }
     }
 
     @FXML
-    private void handleSelectFile() {
+    private void handleSelectMusicFile() {
         Stage stage = (Stage) musicTitleField.getScene().getWindow();
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Audio Files", "*.mp3", "*.wav"));
@@ -80,7 +91,32 @@ public class UploadMusicUIJavaFX {
         }
     }
 
+    @FXML
+    private void handleSelectCoverImage() {
+        Stage stage = (Stage) musicTitleField.getScene().getWindow();
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.jpg", "*.png", "*.jpeg"));
+        File selectedFile = fileChooser.showOpenDialog(stage);
+        if (selectedFile != null) {
+            coverImageFileField.setText(selectedFile.getAbsolutePath());
+        }
+    }
+
+    @FXML
     public void goToHome(MouseEvent mouseEvent) {
-        // Vous pouvez ajouter une méthode pour retourner à la page d'accueil si nécessaire
+        try {
+            // Charger le fichier FXML de la page d'accueil
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/waveon/waveon/MainPage.fxml"));
+            Parent root = loader.load();
+
+            // Obtenir la fenêtre actuelle
+            Stage stage = (Stage) musicTitleField.getScene().getWindow();
+
+            // Définir la nouvelle scène
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
