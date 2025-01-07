@@ -140,7 +140,7 @@ public class MainpageUIJavaFX extends Application {
 
         if (loginFacade.getCurrentUser() != null && loginFacade.getCurrentUser() instanceof Artist) {
             Button uploadMusicButton = new Button("Upload Music");
-            uploadMusicButton.setOnAction(e -> navigateToUploadMusicPage());
+            //uploadMusicButton.setOnAction(e -> navigateToUploadMusicPage());
             centerLayout.getChildren().add(uploadMusicButton);
         }
 
@@ -152,19 +152,6 @@ public class MainpageUIJavaFX extends Application {
         primaryStage.show();
     }
 
-    private void navigateToUploadMusicPage() {
-        if (loginFacade.getCurrentUser() != null && loginFacade.getCurrentUser() instanceof Artist) {
-            UploadMusicUIJavaFX uploadMusicUI = new UploadMusicUIJavaFX();
-            try {
-                uploadMusicUI.start(primaryStage);
-            } catch (Exception e) {
-                e.printStackTrace();
-                showAlert("Error", "Unable to navigate to the Upload Music page.");
-            }
-        } else {
-            showAlert("Access Denied", "Only artists can upload music.");
-        }
-    }
 
     @Override
     public void stop() {

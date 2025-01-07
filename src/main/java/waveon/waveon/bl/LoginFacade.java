@@ -11,6 +11,7 @@ public class LoginFacade {
     OrdUserDAO userDAO;
     ArtistDAO artistDAO;
     private static IUser currentUser;
+
     public LoginFacade() {
         factory = AbstractFactory.getInstance();
         assert factory != null;
