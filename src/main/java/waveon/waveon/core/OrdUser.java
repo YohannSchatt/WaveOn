@@ -123,4 +123,9 @@ public class OrdUser implements IUser {
     public void setIsModerator(Boolean IsModerator) {
         this.IsModerator = IsModerator;
     }
+
+    @Override
+    public boolean isArtist() {
+        return false;  // Ce n'est pas un artiste
+    }
 }

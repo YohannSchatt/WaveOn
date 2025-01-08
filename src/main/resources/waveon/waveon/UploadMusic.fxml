@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="waveon.waveon.ui.UploadMusicUIJavaFX">
+    <children>
+        <BorderPane prefHeight="400.0" prefWidth="600.0">
+            <top>
+                <HBox fx:id="hbox" prefHeight="50.0" prefWidth="600.0" BorderPane.alignment="CENTER" alignment="CENTER" spacing="10">
+                    <children>
+                        <Button mnemonicParsing="false" onMouseClicked="#goToHome" style="-fx-background-color: black; -fx-background-radius: 12; -fx-border-radius: 10; -fx-border-color: pink; -fx-border-width: 2;" text="Home" textFill="WHITE" BorderPane.alignment="CENTER">
+                            <font>
+                                <Font size="24.0" />
+                            </font>
+                        </Button>
+                    </children>
+                </HBox>
+            </top>
+            <center>
+                <VBox spacing="20" alignment="CENTER" BorderPane.alignment="CENTER">
+                    <Label text="Upload Your Music" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+                    <TextField fx:id="musicTitleField" promptText="Enter music title" prefWidth="300.0" style="-fx-background-radius: 10;"/>
+                    <TextField fx:id="musicFileField" promptText="Select music file" prefWidth="300.0" style="-fx-background-radius: 10;"/>
+                    <Button text="Browse Music" onAction="#handleSelectMusicFile" style="-fx-background-color: lightgrey; -fx-background-radius: 10;"/>
+                    <TextField fx:id="coverImageFileField" promptText="Select cover image" prefWidth="300.0" style="-fx-background-radius: 10;"/>
+                    <Button text="Browse Cover Image" onAction="#handleSelectCoverImage" style="-fx-background-color: lightgrey; -fx-background-radius: 10;"/>
+                    <Button text="Upload Music" onAction="#handleUploadMusic" style="-fx-background-color: pink; -fx-background-radius: 12; -fx-border-radius: 10; -fx-border-color: black; -fx-border-width: 2;"/>
+                    <Label fx:id="uploadStatusLabel" text="Please fill out the fields and upload your music." style="-fx-font-size: 14px;"/>
+                </VBox>
+            </center>
+        </BorderPane>
+    </children>
+</AnchorPane>

@@ -25,6 +25,9 @@ public class MusicFacade {
     }
 
     public void loadMusicByTitle(String title) {
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+        }
         for (int i = 0; i < musicList.size(); i++) {
             if (musicList.get(i).getTitle().equals(title)) {
                 currentMusicIndex = i;
