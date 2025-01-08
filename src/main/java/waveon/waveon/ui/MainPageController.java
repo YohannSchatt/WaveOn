@@ -14,7 +14,6 @@ import javafx.util.Duration;
 import waveon.waveon.bl.*;
 import waveon.waveon.core.Artist;
 import waveon.waveon.core.Music;
-import waveon.waveon.bl.LoginFacade;
 import waveon.waveon.bl.UserSessionFacade;
 import waveon.waveon.core.IUser;
 
@@ -95,7 +94,7 @@ public class MainPageController {
                     searchResults.sort(Comparator.comparing(Music::getReleaseDate));
                     break;
                 case "Streams count ↑":
-                    searchResults.sort((m1, m2) -> Integer.compare(m2.getStreamCount(), m1.getStreamCount()));
+                    searchResults.sort(Comparator.comparingInt(Music::getStreamCount).reversed());
                     break;
                 case "Streams count ↓":
                     searchResults.sort(Comparator.comparingInt(Music::getStreamCount));
@@ -126,10 +125,11 @@ public class MainPageController {
             musicResultLabel.setText("Music Results: ");
             artistResultLabel.setText("Artist Results: ");
         }
+
     }
 
     private void updateMusicResults() {
-        ArrayList<Music> searchResults = searchFacade.getCurrentMusicSearch();
+        searchResults = searchFacade.getCurrentMusicSearch();
         ArrayList<String> formattedResults = new ArrayList<>();
 
         for (Music music : searchResults) {
@@ -139,8 +139,6 @@ public class MainPageController {
 
         if (!searchResults.isEmpty()) {
             musicsListView.getItems().setAll(formattedResults);
-            musicsListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> playSelectedMusic(newValue));
-
             musicResultLabel.setText("Music Results: " + searchResults.size() + " found");
         } else {
             musicsListView.getItems().clear();
@@ -149,8 +147,9 @@ public class MainPageController {
 
         String selectedFilter = filterComboBox.getValue();
         if (selectedFilter != null) {
-            useFilterMusic(convertToFilterOption(selectedFilter));
+            applyFilter();
         }
+
     }
 
     private void updateArtistResults() {
