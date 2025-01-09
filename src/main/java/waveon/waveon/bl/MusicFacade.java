@@ -39,8 +39,8 @@ public class MusicFacade {
         return playlistDAOPG.getPlaylistsByUserId(userId);
     }
 
-    public void addMusicToPlaylist(int playlistId, int musicId) {
-        playlistDAOPG.addMusicToPlaylist(playlistId, musicId);
+    public boolean addMusicToPlaylist(Music music, Playlist playlist) {
+        return playlistDAOPG.addMusicToPlaylist(music.getId(), playlist.getId());
     }
 
     public void loadMusicByTitle(String title) {
@@ -186,5 +186,7 @@ public class MusicFacade {
         }
     }
 
-
+    public List<Music> getAllMusic() {
+        return musicList;
+    }
 }

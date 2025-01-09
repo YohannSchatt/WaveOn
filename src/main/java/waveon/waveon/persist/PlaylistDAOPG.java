@@ -25,8 +25,7 @@ public class PlaylistDAOPG implements PlaylistDAO {
         }
     }
 
-    @Override
-    public boolean addMusicToPlaylist(int playlistId, int musicId) {
+    public boolean addMusicToPlaylist(int musicId, int playlistId) {
         String sql = "INSERT INTO playlist_music (playlist_id, music_id) VALUES (?, ?)";
         try (Connection conn = PGconnector.getInstance().getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -39,6 +38,7 @@ public class PlaylistDAOPG implements PlaylistDAO {
             return false;
         }
     }
+
 
     @Override
     public List<Playlist> getPlaylistsByUserId(int userId) {

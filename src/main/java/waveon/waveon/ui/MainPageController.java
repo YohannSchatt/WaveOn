@@ -35,6 +35,7 @@ public class MainPageController {
     private final SearchFacade searchFacade = new SearchFacade();
     private PauseTransition pauseTransition;
     private List<Music> searchResults;
+    private Music selectedMusic;
 
     @FXML
     private TextField searchField;
@@ -73,7 +74,10 @@ public class MainPageController {
         pauseTransition = new PauseTransition(Duration.seconds(0.5));
         pauseTransition.setOnFinished(event -> handleSearch());
         searchField.textProperty().addListener((observable, oldValue, newValue) -> pauseTransition.playFromStart());
-        musicsListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> playSelectedMusic(newValue));
+        musicsListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            selectedMusic = getMusicByName(newValue);  // Assurez-vous de récupérer l'objet Music à partir de son nom
+            playSelectedMusic(newValue);  // Jouer la musique si nécessaire
+        });
         volumeSlider.valueProperty().addListener((observable, oldValue, newValue) -> musicFacade.setVolume(newValue.doubleValue()));
         skipMusicButton.setOnAction(event -> skipMusic());
         restartMusicButton.setOnAction(event -> restartMusic());
@@ -88,7 +92,7 @@ public class MainPageController {
             musicFacade.seekMusic(Duration.seconds(progressBar.getValue()));
         });
         updateLoginButton();
-        populateAddToPlaylistMenu();
+        addToPlaylistMenu();
     }
 
     private void applyFilter() {
@@ -343,7 +347,7 @@ public class MainPageController {
     }
 
     @FXML
-    private void populateAddToPlaylistMenu() {
+    private void addToPlaylistMenu() {
         IUser currentUser = loginFacade.getCurrentUser();
         if (currentUser == null) {
             System.err.println("Error: No user is logged in. Cannot populate playlists.");
@@ -360,7 +364,13 @@ public class MainPageController {
             MenuItem playlistItem = new MenuItem(playlist.getName());
             playlistItem.setOnAction(event -> {
                 System.out.println("Selected playlist: " + playlist.getName());
-                // Logic to add music to this playlist
+                boolean success = musicFacade.addMusicToPlaylist(selectedMusic, playlist);  // add the music to the playlist
+
+                if (success) {
+                    currentMusicLabel.setText("Musique a été ajoutée à " + playlist.getName());
+                } else {
+                    currentMusicLabel.setText("Erreur lors de l'ajout de la musique à " + playlist.getName());
+                }
             });
             addToPlaylistMenu.getItems().add(playlistItem);
         }
@@ -382,11 +392,13 @@ public class MainPageController {
         saveButton.setOnAction(e -> {
             String playlistName = playlistNameField.getText();
             int userId = UserSessionFacade.getCurrentUser().getId();
-            if (playlistName != null && !playlistName.isEmpty() && userId > 0) {
+            if (playlistName != null && !playlistName.isEmpty() && userId >= 0) {
                 // Utilisation de MusicFacade pour créer la playlist et la sauvegarder dans la base de données
                 boolean isCreated = musicFacade.createPlaylist(playlistName, userId);
                 if (isCreated) {
                     System.out.println("Playlist saved: " + playlistName);
+                    // Mettre à jour le menu "Add to Playlist" avec la nouvelle playlist
+                    addToPlaylistMenu();
                 } else {
                     System.out.println("Failed to save playlist.");
                 }
@@ -414,4 +426,14 @@ public class MainPageController {
         // Afficher la boîte de dialogue
         dialog.showAndWait();
     }
+
+    private Music getMusicByName(String musicName) {
+        for (Music music : musicFacade.getAllMusic()) {
+            if (music.getTitle().equals(musicName)) {
+                return music;
+            }
+        }
+        return null;  // Retourne null si aucune musique n'a été trouvée
+    }
+
 }
