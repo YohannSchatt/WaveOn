@@ -50,4 +50,42 @@ public class OrdUserDAOPG implements OrdUserDAO {
             pstmt.executeUpdate();
         }
     }
+
+    public void updateUser(int id, String username, String email, String password) {
+        if (password == null || password.trim().isEmpty()) {
+            updateWithOutPassword(id, username, email);
+        } else {
+            updateWithPassword(id, username, email, password);
+        }
+
+    }
+
+    private void updateWithPassword(int id, String username, String email, String password) {
+        PGconnector pg = PGconnector.getInstance();
+        String sql = "UPDATE ordinaryuser SET username = ?, email = ?, password = ? WHERE id = ?";
+        try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, username);
+            pstmt.setString(2, email);
+            pstmt.setString(3, password);
+            pstmt.setInt(4, id);
+            pstmt.executeUpdate();
+        }
+        catch (Exception e) {
+            System.out.println("Error in OrdUserDAOPG.updateUser : " + e);
+        }
+    }
+
+    private void updateWithOutPassword(int id, String username, String email) {
+        PGconnector pg = PGconnector.getInstance();
+        String sql = "UPDATE ordinaryuser SET username = ?, email = ? WHERE id = ?";
+        try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, username);
+            pstmt.setString(2, email);
+            pstmt.setInt(3, id);
+            pstmt.executeUpdate();
+        }
+        catch (Exception e) {
+            System.out.println("Error in OrdUserDAOPG.updateUser : " + e);
+        }
+    }
 }

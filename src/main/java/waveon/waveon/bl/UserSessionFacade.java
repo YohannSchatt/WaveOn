@@ -36,7 +36,7 @@ public class UserSessionFacade {
 
         currentUser = userDAO.getUserByEmail(email);
         if (currentUser == null) {
-            currentUser = artistDAO.getArtistByEmail(email);
+            UserSessionFacade.setCurrentUser(artistDAO.getArtistByEmail(email));
             if(currentUser == null) {
                 System.out.println("L'utilisateur n'existe pas.");
                 return false;
@@ -94,5 +94,47 @@ public class UserSessionFacade {
 
     public void logout() {
         currentUser = null;
+    }
+
+    public boolean isArtist() {
+        return currentUser.isArtist();
+    }
+
+    public boolean enregistrerModification(String username, String email, String password) {
+        System.out.println("Enregistrement des modifications...");
+        System.out.println("Username : " + username);
+        System.out.println("Email : " + email);
+        System.out.println("Password : " + password);
+
+        if (username == null || username.trim().isEmpty() || email == null || email.trim().isEmpty()) {
+            return false;
+        }
+
+        if (currentUser != null  && (!username.equals(currentUser.getUsername()) || !email.equals(currentUser.getEmail()) || !password.isEmpty())) {
+            System.out.println("COUCOU");
+            factory = AbstractFactory.getInstance();
+            assert factory != null;
+            if(currentUser.isArtist()) {
+                ArtistDAO artistDAO = factory.createArtistDAO();
+                artistDAO.updateArtist(currentUser.getId(), username, email, password);
+                updatePersonalInfo(username, email, password);
+                return true;
+            }
+            else {
+                OrdUserDAO userDAO = factory.createOrdUserDAO();
+                userDAO.updateUser(currentUser.getId(), username, email, password);
+                updatePersonalInfo(username, email, password);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void updatePersonalInfo(String username, String email, String password) {
+        currentUser.setUsername(username);
+        currentUser.setEmail(email);
+        if (password != null && !password.trim().isEmpty()) {
+            currentUser.setPassword(password);
+        }
     }
 }

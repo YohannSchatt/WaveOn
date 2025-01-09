@@ -21,4 +21,5 @@ public interface ArtistDAO {
      abstract Artist getArtistByMusicId(int musicId);
 
 
+    void updateArtist(int id, String username, String email, String password);
 }

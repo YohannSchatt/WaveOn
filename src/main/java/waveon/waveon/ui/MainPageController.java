@@ -238,7 +238,7 @@ public class MainPageController {
     private void updateLoginButton() {
         if (UserSessionFacade.getCurrentUser() != null) {
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/waveon/waveon/components/button/LogoutButton.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/waveon/waveon/components/button/MyProfileButton.fxml"));
                 hBox.getChildren().add(loader.load());
                 // Si l'utilisateur est un artiste
                 IUser currentUser = UserSessionFacade.getCurrentUser();

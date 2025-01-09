@@ -95,7 +95,7 @@ public class Artist implements IUser {
      */
     @Override
     public void setEmail(String email) {
-
+        this.email = email;
     }
 
     /**
@@ -113,7 +113,7 @@ public class Artist implements IUser {
      */
     @Override
     public void setPassword(String password) {
-
+        this.password = password;
     }
 
     @Override

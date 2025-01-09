@@ -49,11 +49,6 @@
          <top>
             <HBox fx:id="hbox" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER" alignment="CENTER" spacing="10" >
                <children>
-                  <Button mnemonicParsing="false" onMouseClicked="#goToHome" style="-fx-background-color: black; -fx-background-radius: 12; -fx-border-radius: 10; -fx-border-color: pink; -fx-border-width: 2;" text="Home" textFill="WHITE" BorderPane.alignment="CENTER">
-                     <font>
-                        <Font size="24.0" />
-                     </font>
-                  </Button>
                </children>
             </HBox>
          </top>

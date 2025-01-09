@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="waveon.waveon.ui.MyProfilePageController">
+   <children>
+      <BorderPane prefHeight="400.0" prefWidth="600.0">
+         <top>
+            <HBox fx:id="nav" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10" BorderPane.alignment="CENTER" />
+         </top>
+         <center>
+            <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <bottom>
+                  <Button onAction="#saveModification" mnemonicParsing="false" style="-fx-background-color: black; -fx-background-radius: 12; -fx-border-radius: 10; -fx-border-color: pink; -fx-border-width: 2;" text="Enregistrer" textFill="WHITE" BorderPane.alignment="CENTER">
+                     <font>
+                        <Font size="18.0" />
+                     </font></Button>
+               </bottom>
+               <center>
+                  <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <Label text="Username" />
+                        <TextField fx:id="usernameField" />
+                        <Label text="Email" />
+                        <TextField fx:id="emailField" />
+                        <Label text="Password" />
+                        <PasswordField fx:id="passwordField" />
+                        <Label fx:id="result" text="" />
+                     </children>
+                  </VBox>
+               </center>
+            </BorderPane>
+         </center>
+         <left>
+            <Accordion BorderPane.alignment="CENTER">
+              <panes>
+                <TitledPane fx:id="myMusic" animated="false" text="My music">
+                     <content>
+                        <ListView prefHeight="200.0" prefWidth="200.0" />
+                     </content>
+                </TitledPane>
+                <TitledPane fx:id="myFollowers" animated="false" text="My followers">
+                   <content>
+                      <ListView prefHeight="200.0" prefWidth="200.0" />
+                   </content>
+                </TitledPane>
+              </panes>
+            </Accordion>
+         </left>
+      </BorderPane>
+   </children>
+</AnchorPane>
