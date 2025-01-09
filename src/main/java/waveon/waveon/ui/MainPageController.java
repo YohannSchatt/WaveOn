@@ -2,12 +2,15 @@ package waveon.waveon.ui;
 
 // JavaFX imports
 import javafx.animation.PauseTransition;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -16,9 +19,11 @@ import waveon.waveon.core.Artist;
 import waveon.waveon.core.Music;
 import waveon.waveon.bl.UserSessionFacade;
 import waveon.waveon.core.IUser;
+import waveon.waveon.core.Playlist;
 
 //components imports
 
+import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -59,6 +64,8 @@ public class MainPageController {
     private Button skipMusicButton;
     @FXML
     private Button restartMusicButton;
+    @FXML
+    private MenuButton addToPlaylistMenu;
 
     public void initialize() {
         updateProgressBar();
@@ -81,6 +88,7 @@ public class MainPageController {
             musicFacade.seekMusic(Duration.seconds(progressBar.getValue()));
         });
         updateLoginButton();
+        populateAddToPlaylistMenu();
     }
 
     private void applyFilter() {
@@ -332,5 +340,78 @@ public class MainPageController {
         } else {
             currentMusicLabel.setText("No music playing");
         }
+    }
+
+    @FXML
+    private void populateAddToPlaylistMenu() {
+        IUser currentUser = loginFacade.getCurrentUser();
+        if (currentUser == null) {
+            System.err.println("Error: No user is logged in. Cannot populate playlists.");
+            return;
+        }
+        // Clear existing items in the menu
+        addToPlaylistMenu.getItems().clear();
+
+        // Fetch playlists for the current user
+        List<Playlist> playlists = musicFacade.getPlaylistsByUserId(currentUser.getId());
+
+        // Create menu items for each playlist
+        for (Playlist playlist : playlists) {
+            MenuItem playlistItem = new MenuItem(playlist.getName());
+            playlistItem.setOnAction(event -> {
+                System.out.println("Selected playlist: " + playlist.getName());
+                // Logic to add music to this playlist
+            });
+            addToPlaylistMenu.getItems().add(playlistItem);
+        }
+    }
+
+
+    public void handleCreatePlaylist(javafx.event.ActionEvent actionEvent) {
+        // Création du champ de texte pour le nom de la playlist
+        TextField playlistNameField = new TextField();
+        playlistNameField.setPromptText("Enter Playlist Name");
+
+        // Création d'une boîte de dialogue personnalisée
+        Dialog<Void> dialog = new Dialog<>();
+        dialog.setTitle("Create Playlist");
+        dialog.setHeaderText("Enter a name for your new playlist:");
+
+        // Définir un bouton "Save" personnalisé
+        Button saveButton = new Button("Save");
+        saveButton.setOnAction(e -> {
+            String playlistName = playlistNameField.getText();
+            int userId = UserSessionFacade.getCurrentUser().getId();
+            if (playlistName != null && !playlistName.isEmpty() && userId > 0) {
+                // Utilisation de MusicFacade pour créer la playlist et la sauvegarder dans la base de données
+                boolean isCreated = musicFacade.createPlaylist(playlistName, userId);
+                if (isCreated) {
+                    System.out.println("Playlist saved: " + playlistName);
+                } else {
+                    System.out.println("Failed to save playlist.");
+                }
+            }
+            dialog.close(); // Fermer la fenêtre de dialogue après la sauvegarde
+        });
+
+        // Créer un bouton "Cancel"
+        Button cancelButton = new Button("Cancel");
+        cancelButton.setOnAction(e -> {
+            System.out.println("Playlist creation canceled.");
+            dialog.close(); // Fermer la fenêtre de dialogue après annulation
+        });
+
+        // Ajouter des boutons à la boîte de dialogue
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
+
+        // Ajouter le champ de texte et les boutons dans un VBox
+        VBox vbox = new VBox(10, playlistNameField, saveButton, cancelButton);
+        vbox.setSpacing(10);
+
+        // Définir le contenu du dialogue
+        dialog.getDialogPane().setContent(vbox);
+
+        // Afficher la boîte de dialogue
+        dialog.showAndWait();
     }
 }

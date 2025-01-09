@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="waveon.waveon.ui.PlaylistController">
+    <VBox spacing="10" padding="20">
+        <Text text="Playlists" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+        <ListView fx:id="playlistsListView" prefHeight="200" prefWidth="300"/>
+
+        <HBox spacing="10">
+            <Button fx:id="addPlaylistButton" text="Add Playlist"/>
+            <Button fx:id="addMusicToPlaylistButton" text="Add Music to Playlist"/>
+            <Button fx:id="removeMusicFromPlaylistButton" text="Remove Music from Playlist"/>
+        </HBox>
+
+        <Text fx:id="playlistDetailsText" style="-fx-font-size: 16px;"/>
+    </VBox>
+</AnchorPane>

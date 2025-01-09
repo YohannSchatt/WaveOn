@@ -18,9 +18,11 @@
                 <children>
                   <HBox alignment="CENTER" prefHeight="0.0" prefWidth="600.0">
                      <children>
-                          <Button fx:id="playPauseButton" onAction="#togglePlayPause" text="Play Music" />
+                         <Button fx:id="createPlaylistButton" text="Create Playlist" onAction="#handleCreatePlaylist"/>
+                         <Button fx:id="playPauseButton" onAction="#togglePlayPause" text="Play Music" />
                           <Button fx:id="skipMusicButton" onAction="#skipMusic" text="Skip" />
-                          <Button fx:id="restartMusicButton" onAction="#restartMusic" text="Restart" />
+                         <Button fx:id="restartMusicButton" onAction="#restartMusic" text="Restart" />
+                         <MenuButton fx:id="addToPlaylistMenu" text="Add to Playlist" />
                      </children>
                   </HBox>
                     <HBox spacing="10">

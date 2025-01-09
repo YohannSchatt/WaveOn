@@ -1,93 +1,53 @@
 package waveon.waveon.core;
 
+import java.util.ArrayList;
+
+import java.util.*;
+
 /**
  * 
  */
 public class Playlist {
 
-    /**
-     * Default constructor
-     */
-    public Playlist() {
+    private String name;
+    private List<Music> musics;
+    private int id;
+    private int userId;
+
+    public Playlist(int id, String name, int userId) {
+        this.id = id;
+        this.name = name;
+        this.userId = userId;
+        this.musics = new ArrayList<>();
     }
 
-    /**
-     * 
-     */
-    public int id;
-
-    /**
-     * 
-     */
-    public String name;
-
-    /**
-     * 
-     */
-    public User Creator;
-
-    /**
-     * 
-     */
-    public Music[] Musics;
-
-    /**
-     * 
-     */
-    public PlaylistFollower[] UsersList;
-
-    /**
-     * 
-     */
-    public int Attribute6;
-
-    /**
-     * 
-     */
-    public Boolean IsRandom;
-
-    /**
-     * 
-     */
-    public void Getters() {
-        // TODO implement here
+    public int getId() {
+        return id;
     }
 
-    /**
-     * @param musicid  
-     * @return
-     */
-    public void AddMusic(int musicid ) {
-        // TODO implement here
+    public String getName() {
+        return name;
     }
 
-    /**
-     * @param musicid 
-     * @return
-     */
-    public void RemoveMusic(int musicid) {
-        // TODO implement here
+    public int getUserId() {
+        return userId;
     }
 
-    /**
-     * @return
-     */
-    public void DeletePlaylist() {
-        // TODO implement here
+    public List<Music> getMusics() {
+        return musics;
     }
 
-    /**
-     * @return
-     */
-    public void ChangeRandom() {
-        // TODO implement here
+    public void addMusic(Music music) {
+        if (!musics.contains(music)) {
+            musics.add(music);
+        }
     }
 
-    /**
-     * @return
-     */
-    public void AddToQueue() {
-        // TODO implement here
+    public void removeMusic(Music music) {
+        musics.remove(music);
     }
 
+    public void modifyPlaylist(String name) {
+        this.name = name;
+    }
 }
