@@ -99,15 +99,13 @@ public class MainPageController {
     @FXML
     private void toggleNotificationCenter() {
         if (Objects.equals(toggleNotificationButton.getText(), "Open Notifications")) {
+            if (UserSessionFacade.getCurrentUser() == null) {
+                return;
+            }
             notificationBand.setVisible(true);
             notificationFacade.loadNotifications();
-            notificationFacade.loadNotifications();
             notificationListView.getItems().clear();
-            System.out.println("Notification list size: ");
-            System.out.println(notificationFacade.getNotificationsList());
-            System.out.println(notificationFacade.getNotificationsList().size());
             for (int i = 0; i < notificationFacade.getNotificationsList().size(); i++) {
-                System.out.println(notificationFacade.getNotificationsList().get(i).getContent());
                 notificationListView.getItems().add(notificationFacade.getNotificationsList().get(i).getContent());
             }
             toggleNotificationButton.setText("Close Notifications");

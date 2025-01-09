@@ -60,4 +60,76 @@ public class NotificationDAOPG implements NotificationDAO {
         }
         return null;
     }
+
+    @Override
+    public void createNotification(String title, String content, String link) {
+        PGconnector pg = PGconnector.getInstance();
+        String sql = "INSERT INTO notification (title, content, link) VALUES (?, ?, ?)";
+        try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, title);
+            pstmt.setString(2, content);
+            pstmt.setString(3, link);
+            pstmt.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("Error in NotificationDAO.createNotification: " + e);
+        }
+    }
+
+    @Override
+    public ArrayList<Integer> getUserIdsFollowingArtist(int artistId) {
+        PGconnector pg = PGconnector.getInstance();
+        String sql = "SELECT user_id FROM ordinaryuser";
+        ArrayList<Integer> followersId = new ArrayList<>();
+        try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                followersId.add(rs.getInt("user_id"));
+            }
+        } catch (Exception e) {
+            System.out.println("Error in NotificationDAO.getUserIdsFollowingArtist: " + e);
+        }
+        return followersId;
+    }
+
+    @Override
+    public void linkNotificationToUser(int notificationId, int userId) {
+        PGconnector pg = PGconnector.getInstance();
+        String sql = "INSERT INTO user_notification (user_id, notification_id) VALUES (?, ?)";
+        try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, userId);
+            pstmt.setInt(2, notificationId);
+            pstmt.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("Error in NotificationDAO.linkNotificationToUser: " + e);
+        }
+    }
+
+    @Override
+    public void linkNotificationToArtist(int notificationId, int artistId) {
+        PGconnector pg = PGconnector.getInstance();
+        String sql = "INSERT INTO artist_notification (artist_id, notification_id) VALUES (?, ?)";
+        try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, artistId);
+            pstmt.setInt(2, notificationId);
+            pstmt.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("Error in NotificationDAO.linkNotificationToArtist: " + e);
+        }
+    }
+
+    @Override
+    public int getLastId() {
+        PGconnector pg = PGconnector.getInstance();
+        String sql = "SELECT MAX(id) FROM notification";
+        try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        }
+        catch (Exception e) {
+            System.out.println("Error in MusicDAOPG.getLastId : " + e);
+        }
+        return 0;
+    }
 }
