@@ -18,4 +18,9 @@ public interface OrdUserDAO {
     void addUser(String username, String email, String password) throws SQLException;
 
     void updateUser(int id, String username, String email, String password);
+
+
+    void addFollow(int id, int idToFollow);
+
+    void removeFollow(int id, int idToUnfollow);
 }

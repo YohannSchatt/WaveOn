@@ -137,4 +137,20 @@ public class UserSessionFacade {
             currentUser.setPassword(password);
         }
     }
+
+    public boolean addFollow(int id) {
+        if (currentUser != null) {
+            userDAO.addFollow(id, currentUser.getId());
+            return true;
+        }
+        return false;
+    }
+
+    public boolean removeFollow(int id) {
+        if (currentUser != null) {
+            userDAO.removeFollow(id, currentUser.getId());
+            return true;
+        }
+        return false;
+    }
 }

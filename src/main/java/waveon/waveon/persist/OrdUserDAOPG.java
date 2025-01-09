@@ -88,4 +88,30 @@ public class OrdUserDAOPG implements OrdUserDAO {
             System.out.println("Error in OrdUserDAOPG.updateUser : " + e);
         }
     }
+
+    public void addFollow(int id, int idUser) {
+        PGconnector pg = PGconnector.getInstance();
+        String sql = "INSERT INTO subscriber (artist_id, user_id) VALUES (?, ?)";
+        try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, id);
+            pstmt.setInt(2, idUser);
+            pstmt.executeUpdate();
+        }
+        catch (Exception e) {
+            System.out.println("Error in OrdUserDAOPG.addFollow : " + e);
+        }
+    }
+
+    public void removeFollow(int id, int idUser) {
+        PGconnector pg = PGconnector.getInstance();
+        String sql = "DELETE FROM subscriber WHERE artist_id = ? AND user_id = ?";
+        try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, id);
+            pstmt.setInt(2, idUser);
+            pstmt.executeUpdate();
+        }
+        catch (Exception e) {
+            System.out.println("Error in OrdUserDAOPG.removeFollow : " + e);
+        }
+    }
 }

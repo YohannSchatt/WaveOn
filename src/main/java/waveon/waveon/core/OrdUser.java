@@ -33,6 +33,10 @@ public class OrdUser implements IUser {
         this.email = email;
         this.password = password;
     }
+
+    public OrdUser(int id ) {
+        this.id = id;
+    }
     /**
      * 
      */
@@ -127,5 +131,14 @@ public class OrdUser implements IUser {
     @Override
     public boolean isArtist() {
         return false;  // Ce n'est pas un artiste
+    }
+
+    public boolean isSubscribe(Artist artist) {
+        for (OrdUser subscriber : artist.getSubscribers()) {
+            if (subscriber.getId() == this.id) {
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -2,17 +2,19 @@ package waveon.waveon.persist;
 
 import waveon.waveon.connector.PGconnector;
 import waveon.waveon.core.Artist;
+import waveon.waveon.core.IUser;
+import waveon.waveon.core.Music;
 import waveon.waveon.core.OrdUser;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ArtistDAOPG implements ArtistDAO {
 
-    public ArtistDAOPG() {
-    }
+    public ArtistDAOPG() {}
 
     public Connection connection;
 
@@ -44,10 +46,75 @@ public class ArtistDAOPG implements ArtistDAO {
             }
         }
         catch (Exception e) {
-            System.out.println("Error in ArtistDAOPG.getUserByEmail : " + e);
+            System.out.println("Error in ArtistDAOPG.getArtistById : " + e);
         }
         return null;
     }
+
+    public List<OrdUser> getSubscribers(int id) {
+        PGconnector pg = PGconnector.getInstance();
+        String sql = "SELECT ordinaryuser.id, ordinaryuser.username " +
+                "FROM subscriber " +
+                "JOIN ordinaryuser ON ordinaryuser.id = subscriber.user_id " +
+                "WHERE subscriber.artist_id = ?";
+        try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+            List<OrdUser> subscribers = new ArrayList<>();
+            while (rs.next()) {
+                OrdUser user = new OrdUser(rs.getInt("id"));
+                user.setUsername(rs.getString("username"));
+                subscribers.add(user);
+            }
+            return subscribers;
+        } catch (Exception e) {
+            System.out.println("Error in ArtistDAOPG.getSubscribers : " + e);
+        }
+        return null;
+    }
+
+    public Artist getAllInfoArtistById(int id) {
+        PGconnector pg = PGconnector.getInstance();
+        String sql = "SELECT a.id AS artist_id, a.username AS artist_username, a.email AS artist_email, a.password AS artist_password, u.username as user_username, " +
+                "m.id AS music_id, m.title AS music_title, " +
+                "u.id AS user_id " +
+                "FROM artist a " +
+                "LEFT JOIN music m ON a.id = m.artist_id " +
+                "LEFT JOIN subscriber s ON a.id = s.artist_id " +
+                "LEFT JOIN ordinaryuser u ON s.user_id = u.id " +
+                "WHERE a.id = ?";
+        try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            System.out.println("id : " + id);
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+            Artist artist = null;
+            List<OrdUser> subscriber = new ArrayList<>();
+            List<Music> musics = new ArrayList<>();
+            while (rs.next()) {
+                System.out.println("music_id : " + rs.getInt("music_id"));
+                if (artist == null) {
+                    artist = new Artist(rs.getInt("artist_id"), rs.getString("artist_username"), rs.getString("artist_email"), rs.getString("artist_password"));
+                }
+                if (rs.getInt("user_id") != 0) {
+                    OrdUser user = new OrdUser(rs.getInt("user_id"));
+                    user.setUsername(rs.getString("user_username"));
+                    subscriber.add(user);
+                }
+                if (rs.getInt("music_id") != 0) {
+                    musics.add(new Music(rs.getInt("music_id"), rs.getString("music_title"), artist.getId()));
+                }
+            }
+            if (artist != null) {
+                artist.setSubscribers(subscriber);
+                artist.setMusics(musics);
+            }
+            return artist;
+        } catch (Exception e) {
+            System.out.println("Error in ArtistDAOPG.getArtistById : " + e);
+        }
+        return null;
+    }
+
 
     @Override
     public ArrayList<Artist> getArtistsByName(String name) {

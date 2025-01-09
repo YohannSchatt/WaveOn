@@ -25,6 +25,17 @@ public class Music {
         this.streamCount = streamCount;
     }
 
+    public Music(int id, String title, int artistId){
+        this.id = id;
+        this.title = title;
+        this.artistName = "";
+        this.fileContent = null;
+        this.coverMusic = null;
+        this.artistId = artistId;
+        this.releaseDate = null;
+        this.streamCount = 0;
+    }
+
 
 
     public int getId() {return id;}

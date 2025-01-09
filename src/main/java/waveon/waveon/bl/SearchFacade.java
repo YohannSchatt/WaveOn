@@ -1,6 +1,7 @@
 package waveon.waveon.bl;
 
 import waveon.waveon.core.Artist;
+import waveon.waveon.core.IUser;
 import waveon.waveon.core.Music;
 
 import waveon.waveon.persist.AbstractFactory;
@@ -17,6 +18,8 @@ public class SearchFacade {
     private ArtistDAO ArtistDAO;
     private static ArrayList<Music> currentMusicSearch = new ArrayList<>();
     private static ArrayList<Artist> currentArtistSearch = new ArrayList<>();
+
+    public static Artist profilePageInfo;
 
 
     public SearchFacade() {
@@ -44,5 +47,24 @@ public class SearchFacade {
     }
 
     public ArrayList<Artist> getCurrentArtistSearch() { return currentArtistSearch; }
+
+    public static void setProfilePageInfo(Artist profilePageInfo) {
+        SearchFacade.profilePageInfo = profilePageInfo;
+    }
+
+    public static Artist getProfilePageInfo() {
+        return profilePageInfo;
+    }
+
+    public void getArtistById(int ArtistId){
+        profilePageInfo = ArtistDAO.getArtistById(ArtistId);
+    }
+
+    public boolean getAllInfoArtistById(int ArtistId){
+        profilePageInfo = ArtistDAO.getArtistById(ArtistId);
+        profilePageInfo.setSubscribers(ArtistDAO.getSubscribers(ArtistId));
+        profilePageInfo.setMusics(MusicDAO.getListMusicsByidArtist(ArtistId));
+        return profilePageInfo != null;
+    }
 
 }
