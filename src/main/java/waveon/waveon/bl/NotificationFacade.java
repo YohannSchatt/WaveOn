@@ -19,8 +19,12 @@ public class NotificationFacade {
 
     public void loadNotifications() {
         System.out.println("load Notifs Facade");
-        notificationsList = notificationDAO.getNotificationsByUserId(UserSessionFacade.getCurrentUser().getId());
-        System.out.println("load Notifs Facade : " + notificationsList.size());
+        if (UserSessionFacade.getCurrentUser() != null) {
+            notificationsList = notificationDAO.getNotificationsByUserId(UserSessionFacade.getCurrentUser().getId());
+        }
+        else {
+            System.out.println("User not connected");
+        }
     }
 
     public ArrayList<Notification> getNotificationsList() {
