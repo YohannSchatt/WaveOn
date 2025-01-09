@@ -7,7 +7,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -22,12 +25,14 @@ import waveon.waveon.core.IUser;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 public class MainPageController {
 
     private final UserSessionFacade loginFacade = UserSessionFacade.getInstance();
     private final MusicFacade musicFacade = new MusicFacade();
     private final SearchFacade searchFacade = new SearchFacade();
+    private final NotificationFacade notificationFacade = new NotificationFacade();
     private PauseTransition pauseTransition;
     private List<Music> searchResults;
 
@@ -59,6 +64,13 @@ public class MainPageController {
     private Button skipMusicButton;
     @FXML
     private Button restartMusicButton;
+    @FXML
+    private VBox notificationBand;
+    @FXML
+    private Button toggleNotificationButton;
+    @FXML
+    private ListView<String> notificationListView;
+
 
     public void initialize() {
         updateProgressBar();
@@ -81,6 +93,28 @@ public class MainPageController {
             musicFacade.seekMusic(Duration.seconds(progressBar.getValue()));
         });
         updateLoginButton();
+    }
+
+
+    @FXML
+    private void toggleNotificationCenter() {
+        if (Objects.equals(toggleNotificationButton.getText(), "Open Notifications")) {
+            notificationBand.setVisible(true);
+            notificationFacade.loadNotifications();
+            notificationFacade.loadNotifications();
+            notificationListView.getItems().clear();
+            System.out.println("Notification list size: ");
+            System.out.println(notificationFacade.getNotificationsList());
+            System.out.println(notificationFacade.getNotificationsList().size());
+            for (int i = 0; i < notificationFacade.getNotificationsList().size(); i++) {
+                System.out.println(notificationFacade.getNotificationsList().get(i).getContent());
+                notificationListView.getItems().add(notificationFacade.getNotificationsList().get(i).getContent());
+            }
+            toggleNotificationButton.setText("Close Notifications");
+        } else {
+            notificationBand.setVisible(false);
+            toggleNotificationButton.setText("Open Notifications");
+        }
     }
 
     private void applyFilter() {
@@ -332,5 +366,8 @@ public class MainPageController {
         } else {
             currentMusicLabel.setText("No music playing");
         }
+    }
+
+    public void openNotification(MouseEvent mouseEvent) {
     }
 }

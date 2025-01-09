@@ -6,71 +6,84 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.collections.FXCollections?>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="waveon.waveon.ui.MainPageController">
+    <center>
+        <BorderPane prefHeight="200.0" prefWidth="400.0" BorderPane.alignment="CENTER">
+            <top>
+                <HBox fx:id="hBox" prefHeight="100.0" prefWidth="200.0" alignment="CENTER">
+                </HBox>
+            </top>
+            <bottom>
+                <VBox BorderPane.alignment="CENTER">
+                    <children>
+                        <HBox alignment="CENTER" prefHeight="0.0" prefWidth="600.0">
+                            <children>
+                                <Button fx:id="toggleNotificationButton" text="Open Notifications" onAction="#toggleNotificationCenter"/>
+                                <Button fx:id="playPauseButton" onAction="#togglePlayPause" text="Play Music" />
+                                <Button fx:id="skipMusicButton" onAction="#skipMusic" text="Skip" />
+                                <Button fx:id="restartMusicButton" onAction="#restartMusic" text="Restart" />
+                            </children>
+                        </HBox>
+                        <HBox spacing="10">
+                            <children>
+                                <Slider fx:id="progressBar" min="0" max="1" value="0" prefHeight="18.0" prefWidth="496.0" />
+                                <Label fx:id="timerLabel" text="00:00/00:00" />
+                            </children>
+                        </HBox>
+                        <Slider fx:id="volumeSlider" max="1" prefHeight="55.0" prefWidth="497.0" value="0.5" />
+                        <Label fx:id="currentMusicLabel" alignment="TOP_CENTER" contentDisplay="TOP" prefHeight="21.0" prefWidth="601.0" text="No music playing" />
+                    </children>
+                </VBox>
+            </bottom>
+            <center>
+                <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+                    <children>
+                        <HBox alignment="CENTER" prefHeight="57.0" prefWidth="600.0">
+                            <children>
+                                <TextField fx:id="searchField" />
+                                <ComboBox fx:id="filterComboBox" prefWidth="150.0" promptText="Streams count ↓">
+                                    <items>
+                                        <FXCollections fx:factory="observableArrayList">
+                                            <String fx:value="Time ↓" />
+                                            <String fx:value="Time ↑" />
+                                            <String fx:value="Streams count ↓" />
+                                            <String fx:value="Streams count ↑" />
+                                        </FXCollections>
+                                    </items>
+                                </ComboBox>
+                            </children>
+                        </HBox>
+                        <HBox alignment="TOP_CENTER" prefHeight="117.0" prefWidth="600.0">
+                            <children>
+                                <VBox prefHeight="117.0" prefWidth="183.0">
+                                    <children>
+                                        <Label fx:id="musicResultLabel" text="Label" />
+                                        <ListView fx:id="musicsListView" prefHeight="200.0" prefWidth="200.0" />
+                                    </children>
+                                </VBox>
+                                <VBox prefHeight="117.0" prefWidth="183.0">
+                                    <children>
+                                        <Label fx:id="artistResultLabel" text="Label" />
+                                        <ListView fx:id="artistsListView" prefHeight="200.0" prefWidth="200.0" />
+                                    </children>
+                                </VBox>
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+            </center>
+        </BorderPane>
+    </center>
+    <right>
+        <VBox fx:id="notificationBand" prefWidth="200.0" visible="false" BorderPane.alignment="CENTER">
+            <children>
+                <ListView fx:id="notificationListView" onMouseClicked="#openNotification"/>
+            </children>
+        </VBox>
+    </right>
+    <left>
+        <VBox prefWidth="150.0" visible="false" BorderPane.alignment="CENTER">
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="waveon.waveon.ui.MainPageController">
-   <center>
-      <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-         <top>
-            <HBox fx:id="hBox" alignment="CENTER" prefHeight="67.0" prefWidth="600.0" spacing="10" BorderPane.alignment="CENTER" />
-         </top>
-         <bottom>
-            <VBox BorderPane.alignment="CENTER">
-                <children>
-                  <HBox alignment="CENTER" prefHeight="0.0" prefWidth="600.0">
-                     <children>
-                          <Button fx:id="playPauseButton" onAction="#togglePlayPause" text="Play Music" />
-                          <Button fx:id="skipMusicButton" onAction="#skipMusic" text="Skip" />
-                          <Button fx:id="restartMusicButton" onAction="#restartMusic" text="Restart" />
-                     </children>
-                  </HBox>
-                    <HBox spacing="10">
-                        <children>
-                            <Slider fx:id="progressBar" min="0" max="1" value="0" prefHeight="18.0" prefWidth="496.0" />
-                            <Label fx:id="timerLabel" text="00:00/00:00" />
-                        </children>
-                    </HBox>
-                    <Slider fx:id="volumeSlider" max="1" prefHeight="55.0" prefWidth="497.0" value="0.5" />
-                    <Label fx:id="currentMusicLabel" alignment="TOP_CENTER" contentDisplay="TOP" prefHeight="21.0" prefWidth="601.0" text="No music playing" />
-                </children>
-            </VBox>
-         </bottom>
-         <center>
-            <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
-               <children>
-                  <HBox alignment="CENTER" prefHeight="57.0" prefWidth="600.0">
-                     <children>
-                        <TextField fx:id="searchField" />
-                         <ComboBox fx:id="filterComboBox" prefWidth="150.0" promptText="Streams count ↓">
-                             <items>
-                                 <FXCollections fx:factory="observableArrayList">
-                                     <String fx:value="Time ↓" />
-                                     <String fx:value="Time ↑" />
-                                     <String fx:value="Streams count ↓" />
-                                     <String fx:value="Streams count ↑" />
-                                 </FXCollections>
-                             </items>
-                         </ComboBox>
-                     </children>
-                  </HBox>
-                  <HBox alignment="TOP_CENTER" prefHeight="117.0" prefWidth="600.0">
-                     <children>
-                        <VBox prefHeight="117.0" prefWidth="183.0">
-                           <children>
-                              <Label fx:id="musicResultLabel" text="Label" />
-                              <ListView fx:id="musicsListView" prefHeight="200.0" prefWidth="200.0" />
-                           </children>
-                        </VBox>
-                        <VBox prefHeight="117.0" prefWidth="183.0">
-                           <children>
-                              <Label fx:id="artistResultLabel" text="Label" />
-                              <ListView fx:id="artistsListView" prefHeight="200.0" prefWidth="200.0" />
-                           </children>
-                        </VBox>
-                     </children>
-                  </HBox>
-               </children>
-            </VBox>
-         </center>
-      </BorderPane>
-   </center>
+        </VBox>
+    </left>
 </BorderPane>
