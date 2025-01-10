@@ -105,6 +105,7 @@ public class MainPageController {
         if (playlistController != null) {
             playlistController.setMainPageController(this);
         }
+        updateAddToPlaylistMenu();
     }
 
     private void applyFilter() {
