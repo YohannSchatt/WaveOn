@@ -2,6 +2,7 @@ package waveon.waveon.ui;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -22,6 +23,7 @@ public class MusicCommentsPageController {
     private TextField commentTextField;
 
     private MusicCommentaryFacade musicCommentaryFacade = new MusicCommentaryFacade();
+    private int userId = 2; // Assuming userId is available, here we use a dummy userId (e.g., 1)
 
     @FXML
     public void initialize() {
@@ -47,6 +49,16 @@ public class MusicCommentsPageController {
                     HBox hBox = new HBox();
                     Text commentText = new Text(comment.getContent());
                     hBox.getChildren().add(commentText);
+
+                    if (comment.getIDUser() == userId) {
+                        Button deleteButton = new Button("Delete");
+                        deleteButton.setOnAction(event -> {
+                            musicCommentaryFacade.deleteCommentary(comment.getId());
+                            loadComments(); // Reload comments to reflect the deletion
+                        });
+                        hBox.getChildren().add(deleteButton);
+                    }
+
                     commentsListView.getItems().add(hBox);
                 }
             }
@@ -60,8 +72,6 @@ public class MusicCommentsPageController {
         if (selectedMusicTitle != null && commentContent != null && !commentContent.trim().isEmpty()) {
             Music selectedMusic = musicCommentaryFacade.getMusicByTitle(selectedMusicTitle);
             if (selectedMusic != null) {
-                // Assuming userId is available, here we use a dummy userId (e.g., 1)
-                int userId = 1;
                 musicCommentaryFacade.addCommentary(commentContent, userId, selectedMusic.getId());
                 loadComments(); // Reload comments to show the new comment
                 commentTextField.clear(); // Clear the text field after adding the comment

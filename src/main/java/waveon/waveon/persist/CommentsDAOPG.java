@@ -82,7 +82,7 @@ public class CommentsDAOPG implements CommentsDAO {
 
     @Override
     public void deleteComment(int commentId) {
-        String sql = "DELETE FROM comments WHERE id = ?";
+        String sql = "DELETE FROM comments WHERE idcomment = ?";
         try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, commentId);
             pstmt.executeUpdate();
