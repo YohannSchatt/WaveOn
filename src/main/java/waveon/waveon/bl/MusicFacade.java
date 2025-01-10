@@ -30,29 +30,6 @@ public class MusicFacade {
         this.playlistDAOPG = new PlaylistDAOPG();
     }
 
-    public boolean createPlaylist(String name, int userId) {
-        playlistDAOPG.createPlaylist(name, userId);
-        return true;
-    }
-
-    public List<Playlist> getPlaylistsByUserId(int userId) {
-        return playlistDAOPG.getPlaylistsByUserId(userId);
-    }
-
-    public boolean addMusicToPlaylist(Music music, Playlist playlist) {
-        return playlistDAOPG.addMusicToPlaylist(music.getId(), playlist.getId());
-    }
-
-    public List<Music> getMusicByPlaylistId(int playlistId) {
-        List<Music> musicList = new ArrayList<>();
-        try {
-            musicList = playlistDAOPG.getMusicByPlaylistId(playlistId);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return musicList;
-    }
-
     public void loadMusicByTitle(String title) {
         if (mediaPlayer != null) {
             mediaPlayer.stop();
@@ -198,5 +175,36 @@ public class MusicFacade {
 
     public List<Music> getAllMusic() {
         return musicList;
+    }
+
+    public boolean createPlaylist(String name, int userId) {
+        playlistDAOPG.createPlaylist(name, userId);
+        return true;
+    }
+
+    public List<Playlist> getPlaylistsByUserId(int userId) {
+        return playlistDAOPG.getPlaylistsByUserId(userId);
+    }
+
+    public boolean addMusicToPlaylist(Music music, Playlist playlist) {
+        return playlistDAOPG.addMusicToPlaylist(music.getId(), playlist.getId());
+    }
+
+    public List<Music> getMusicByPlaylistId(int playlistId) {
+        List<Music> musicList = new ArrayList<>();
+        try {
+            musicList = playlistDAOPG.getMusicByPlaylistId(playlistId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return musicList;
+    }
+
+    public boolean deletePlaylist(int playlistId) {
+        return playlistDAOPG.deletePlaylist(playlistId);
+    }
+
+    public boolean deleteMusicFromPlaylist(int playlistId, int musicId) {
+        return playlistDAOPG.deleteMusicFromPlaylist(playlistId, musicId);
     }
 }

@@ -9,6 +9,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.MediaPlayer;
@@ -69,6 +70,8 @@ public class MainPageController {
     private MenuButton addToPlaylistMenu;
     @FXML
     private MenuButton playlistMenuButton;
+    @FXML
+    private Button deletePlaylistButton;
 
 
     public void initialize() {
@@ -458,21 +461,123 @@ public class MainPageController {
 
         // Create menu items for each playlist
         for (Playlist playlist : playlists) {
-            Menu playlistSubMenu = new Menu(playlist.getName());
-            List<Music> musics = musicFacade.getMusicByPlaylistId(playlist.getId());
+            // Create a Button (or Label) inside the MenuItem for the playlist
+            Button playlistButton = new Button(playlist.getName());
 
-            // Add music items to the playlist submenu
-            for (Music music : musics) {
-                MenuItem musicItem = new MenuItem(music.getTitle());
-                musicItem.setOnAction(event -> {
-                    System.out.println("Selected music: " + music.getTitle());
-                    playSelectedMusic(music.getTitle());
+            // Create the ContextMenu for the playlist
+            ContextMenu playlistContextMenu = new ContextMenu();
+
+            // Create the "Delete Playlist" item in the playlist context menu
+            MenuItem deletePlaylistItem = new MenuItem("Delete Playlist");
+            deletePlaylistItem.setOnAction(event -> {
+                // Delete the playlist when the "Delete Playlist" option is selected
+                deletePlaylist(playlist);
+                // Remove the MenuItem from the menu using the playlist reference
+                playlistMenuButton.getItems().removeIf(item -> {
+                    Button btn = (Button) item.getGraphic();
+                    return btn != null && btn.getText().equals(playlist.getName());
                 });
+            });
+
+            // Add the "Delete Playlist" item to the playlist ContextMenu
+            playlistContextMenu.getItems().add(deletePlaylistItem);
+
+            // Create a submenu for the songs in the playlist
+            Menu playlistSubMenu = new Menu("Songs");
+
+            // Fetch all the songs in the playlist
+            List<Music> songs = musicFacade.getMusicByPlaylistId(playlist.getId());
+
+            for (Music music : songs) {
+                // Créer un CustomMenuItem avec un Label à la place d'un MenuItem simple
+                Label musicLabel = new Label(music.getTitle());
+                CustomMenuItem musicItem = new CustomMenuItem(musicLabel);
+                musicItem.setHideOnClick(false); // Empêcher le menu de se fermer au clic
+
+                // Créer un ContextMenu pour chaque élément de musique
+                ContextMenu musicContextMenu = new ContextMenu();
+
+                // Créer l'option "Delete Music" dans le menu contextuel
+                MenuItem deleteMusicItem = new MenuItem("Delete Music");
+                deleteMusicItem.setOnAction(event -> {
+                    deleteMusicFromPlaylist(playlist, music);
+                    playlistSubMenu.getItems().remove(musicItem);
+                });
+
+                // Ajouter l'option "Delete Music" au ContextMenu
+                musicContextMenu.getItems().add(deleteMusicItem);
+
+                // Gérer le clic droit sur le Label
+                musicLabel.setOnContextMenuRequested(event -> {
+                    musicContextMenu.show(musicLabel, event.getScreenX(), event.getScreenY());
+                    event.consume();
+                });
+
+                // Gérer le clic gauche sur le Label
+                musicLabel.setOnMouseClicked(event -> {
+                    if (event.getButton() == MouseButton.PRIMARY) {
+                        selectedMusic = music;
+                        playSelectedMusic(music.getTitle());
+                    }
+                });
+
+                // Ajouter le CustomMenuItem au sous-menu de la playlist
                 playlistSubMenu.getItems().add(musicItem);
             }
 
-            // Add the playlist submenu to the main menu
-            playlistMenuButton.getItems().add(playlistSubMenu);
+                // Add the submenu (Songs) to the playlist's ContextMenu
+                playlistContextMenu.getItems().add(playlistSubMenu);
+
+                // Use setOnContextMenuRequested to handle right-click on playlist item
+                playlistButton.setOnContextMenuRequested(event -> {
+                    // Show the playlist context menu when right-clicking
+                    playlistContextMenu.show(playlistButton, event.getScreenX(), event.getScreenY());
+                });
+
+                // Add a normal click handler to the Button for selecting the playlist
+                playlistButton.setOnAction(event -> {
+                    System.out.println("Selected playlist: " + playlist.getName());
+                });
+
+                // Add the Button as the content of a MenuItem for the playlist
+                MenuItem playlistItem = new MenuItem();
+                playlistItem.setGraphic(playlistButton);
+
+                // Add the MenuItem to the dropdown menu
+                playlistMenuButton.getItems().add(playlistItem);
+        }
+    }
+
+    private void deletePlaylist(Playlist playlist) {
+        if (playlist == null) {
+            System.err.println("Error: Playlist is null.");
+            return;
+        }
+
+        // Supprimer la playlist de la base de données via MusicFacade
+        boolean isDeleted = musicFacade.deletePlaylist(playlist.getId());
+        if (isDeleted) {
+            System.out.println("Playlist deleted: " + playlist.getName());
+            setupPlaylistMenu();  // Rafraîchir le menu des playlists après suppression
+            addToPlaylistMenu();  // Rafraîchir le menu "Add to Playlist" après suppression
+        } else {
+            System.err.println("Failed to delete playlist: " + playlist.getName());
+        }
+    }
+
+    private void deleteMusicFromPlaylist(Playlist playlist, Music music) {
+        if (playlist == null || music == null) {
+            System.err.println("Error: Playlist or music is null.");
+            return;
+        }
+
+        // Supprimer la musique de la playlist via MusicFacade
+        boolean isDeleted = musicFacade.deleteMusicFromPlaylist(playlist.getId(), music.getId());
+        if (isDeleted) {
+            System.out.println("Music deleted from playlist: " + music.getTitle());
+            setupPlaylistMenu();  // Rafraîchir le menu des playlists après suppression
+        } else {
+            System.err.println("Failed to delete music from playlist: " + music.getTitle());
         }
     }
 

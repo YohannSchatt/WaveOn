@@ -18,4 +18,10 @@ public interface PlaylistDAO {
 
     // Récupérer toutes les musiques d'une playlist
     List<Music> getMusicByPlaylistId(int playlistId) throws Exception;
+
+    // Supprimer une playlist
+    boolean deletePlaylist(int playlistId);
+
+    // Supprimer une musique d'une playlist
+    boolean deleteMusicFromPlaylist(int playlistId, int musicId);
 }

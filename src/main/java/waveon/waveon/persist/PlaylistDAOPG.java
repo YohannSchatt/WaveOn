@@ -91,4 +91,33 @@ public class PlaylistDAOPG implements PlaylistDAO {
             return musics;
         }
     }
+
+    @Override
+    public boolean deletePlaylist(int playlistId) {
+        String sql = "DELETE FROM playlist WHERE id = ?";
+        try (Connection conn = PGconnector.getInstance().getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, playlistId);
+            pstmt.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            System.out.println("Error in PlaylistDAOPG.deletePlaylist: " + e);
+            return false;
+        }
+    }
+
+    @Override
+    public boolean deleteMusicFromPlaylist(int playlistId, int musicId) {
+        String sql = "DELETE FROM playlist_music WHERE playlist_id = ? AND music_id = ?";
+        try (Connection conn = PGconnector.getInstance().getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, playlistId);
+            pstmt.setInt(2, musicId);
+            pstmt.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            System.out.println("Error in PlaylistDAOPG.deleteMusicFromPlaylist: " + e);
+            return false;
+        }
+    }
 }
