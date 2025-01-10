@@ -35,4 +35,5 @@ public interface IUser {
     public String getPassword();
     public void setPassword(String password);
     public boolean isArtist();
+    public boolean isSubscribe(Artist artist);
 }

@@ -25,9 +25,7 @@ import waveon.waveon.core.Playlist;
 //components imports
 
 import java.awt.event.ActionEvent;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 public class MainPageController {
 
@@ -72,6 +70,8 @@ public class MainPageController {
     private MenuButton addToPlaylistMenu;
 
 
+    private Map<String, Integer> artistNameToIdMap = new HashMap<>();
+
     public void initialize() {
         updateProgressBar();
         filterComboBox.setOnAction(event -> applyFilter());
@@ -81,6 +81,12 @@ public class MainPageController {
         musicsListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             selectedMusic = getMusicByName(newValue);  // Assurez-vous de récupérer l'objet Music à partir de son nom
             playSelectedMusic(newValue);  // Jouer la musique si nécessaire
+        });
+        artistsListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                int artistId = artistNameToIdMap.get(newValue);
+                goToArtistPage(artistId);
+            }
         });
         volumeSlider.valueProperty().addListener((observable, oldValue, newValue) -> musicFacade.setVolume(newValue.doubleValue()));
         skipMusicButton.setOnAction(event -> skipMusic());
@@ -170,13 +176,32 @@ public class MainPageController {
 
     }
 
+    private void goToArtistPage(int idArtist) {
+        System.out.println("Going to artist page with id: " + idArtist);
+        try {
+            if(searchFacade.getAllInfoArtistById(idArtist)){
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/waveon/waveon/profilePage.fxml"));
+                Parent root = loader.load();
+                Stage stage = (Stage) hBox.getScene().getWindow();
+                stage.setScene(new Scene(root));
+                stage.show();
+            } else {
+                System.out.println("Artist not found");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private void updateArtistResults() {
         ArrayList<Artist> searchResults = searchFacade.getCurrentArtistSearch();
         ArrayList<String> formattedResults = new ArrayList<>();
+        artistNameToIdMap.clear();
 
         for (Artist artist : searchResults) {
             String formattedResult = artist.getUsername();
             formattedResults.add(formattedResult);
+            artistNameToIdMap.put(formattedResult, artist.getId());
         }
 
         if (!searchResults.isEmpty()) {
@@ -256,7 +281,7 @@ public class MainPageController {
     private void updateLoginButton() {
         if (UserSessionFacade.getCurrentUser() != null) {
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/waveon/waveon/components/button/LogoutButton.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/waveon/waveon/components/button/MyProfileButton.fxml"));
                 hBox.getChildren().add(loader.load());
                 // Si l'utilisateur est un artiste
                 IUser currentUser = UserSessionFacade.getCurrentUser();

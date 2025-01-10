@@ -1,6 +1,9 @@
 package waveon.waveon.core;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Artist implements IUser {
 
     public int id;
@@ -10,6 +13,10 @@ public class Artist implements IUser {
     public String email = "";
 
     public String password = "";
+
+    public List<OrdUser> subscribers = new ArrayList<OrdUser>();
+
+    public List<Music> musics = new ArrayList<Music>();
 
     public Artist(int id, String username, String email, String password) {
         this.id = id;
@@ -95,7 +102,7 @@ public class Artist implements IUser {
      */
     @Override
     public void setEmail(String email) {
-
+        this.email = email;
     }
 
     /**
@@ -113,11 +120,36 @@ public class Artist implements IUser {
      */
     @Override
     public void setPassword(String password) {
-
+        this.password = password;
     }
 
     @Override
     public boolean isArtist() {
         return true;  // Cette classe est un artiste, donc retourne true
     }
+
+    public List<OrdUser> getSubscribers() {
+        return this.subscribers;
+    }
+
+    public void setSubscribers(List<OrdUser> subscribers) {
+        this.subscribers = subscribers;
+    }
+
+    public List<Music> getMusics() {
+        return this.musics;
+    }
+
+    public void setMusics(List<Music> musics) {
+        this.musics = musics;
+    }
+
+    public int getNbSubscribers() {
+        return this.subscribers.size();
+    }
+
+    public boolean isSubscribe(Artist artist) {
+        return false;
+    }
+
 }

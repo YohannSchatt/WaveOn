@@ -3,6 +3,7 @@ package waveon.waveon.ui;
 //JavaFX imports
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -35,10 +36,14 @@ public class LoginController implements ILoginController {
     @FXML
     public HBox hbox;
 
+    @FXML
+    public CheckBox isArtist;
+
     public void initialize() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/waveon/waveon/components/button/PathRegisterButton.fxml"));
             hbox.getChildren().add(loader.load());
+            isArtist.setSelected(false);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -48,7 +53,8 @@ public class LoginController implements ILoginController {
         resultLabel.setText("Logging in...");
         String email = emailInput.getText();
         String password = passwordInput.getText();
-        if (loginFacade.login(email, password)) {
+        boolean artist = isArtist.isSelected();
+        if (loginFacade.login(email,password,artist)) {
             resultLabel.setText("Login successful");
             PauseTransition pause = new PauseTransition(Duration.seconds(0.5));
             pause.setOnFinished(event -> goToHome());
