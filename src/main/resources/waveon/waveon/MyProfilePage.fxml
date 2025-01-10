@@ -34,16 +34,16 @@
             </BorderPane>
          </center>
          <left>
-            <Accordion BorderPane.alignment="CENTER">
+            <Accordion fx:id="information" BorderPane.alignment="CENTER">
               <panes>
-                <TitledPane fx:id="myMusic" animated="false" text="My music">
+                <TitledPane  animated="false" text="My music">
                      <content>
-                        <ListView prefHeight="200.0" prefWidth="200.0" />
+                        <ListView fx:id="myMusic" prefHeight="200.0" prefWidth="200.0" />
                      </content>
                 </TitledPane>
-                <TitledPane fx:id="myFollowers" animated="false" text="My followers">
+                <TitledPane animated="false" text="My followers">
                    <content>
-                      <ListView prefHeight="200.0" prefWidth="200.0" />
+                      <ListView fx:id="myFollowers" prefHeight="200.0" prefWidth="200.0" />
                    </content>
                 </TitledPane>
               </panes>

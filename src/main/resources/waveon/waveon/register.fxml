@@ -25,7 +25,7 @@
                         <Font size="24.0" />
                      </font>
                   </PasswordField>
-                  <Button layoutX="35.0" layoutY="319.0" onMouseClicked="#handleRegister" mnemonicParsing="false" prefHeight="51.0" prefWidth="530.0" style="-fx-background-color: Black; -fx-border-width: 3; -fx-border-color: pink; -fx-border-radius: 10; -fx-background-radius: 12;" text="Register" textAlignment="CENTER" textFill="WHITE">
+                  <Button layoutX="35.0" layoutY="337.0" mnemonicParsing="false" onMouseClicked="#handleRegister" prefHeight="51.0" prefWidth="530.0" style="-fx-background-color: Black; -fx-border-width: 3; -fx-border-color: pink; -fx-border-radius: 10; -fx-background-radius: 12;" text="Register" textAlignment="CENTER" textFill="WHITE">
                      <font>
                         <Font size="24.0" />
                      </font>
@@ -55,6 +55,10 @@
                         <Font size="24.0" />
                      </font>
                   </Label>
+                  <CheckBox fx:id="isArtist" layoutX="35.0" layoutY="301.0" mnemonicParsing="false" text="Je suis un artiste">
+                     <font>
+                        <Font size="18.0" />
+                     </font></CheckBox>
                </children>
             </Pane>
          </center>

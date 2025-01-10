@@ -2,14 +2,11 @@ package waveon.waveon.ui;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TitledPane;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import waveon.waveon.bl.UserSessionFacade;
-import waveon.waveon.core.IUser;
-import waveon.waveon.core.User;
+import waveon.waveon.core.*;
+import waveon.waveon.bl.SearchFacade;
 
 
 import java.io.IOException;
@@ -29,11 +26,16 @@ public class MyProfilePageController {
     public PasswordField passwordField;
 
     @FXML
-    public TitledPane myMusic;
+    public ListView<String> myMusic;
 
     @FXML
-    public TitledPane myFollowers;
+    public ListView<String> myFollowers;
+
+    @FXML
     public Label result;
+
+    @FXML
+    public Accordion information;
 
     @FXML
     public void initialize() throws IOException {
@@ -47,11 +49,25 @@ public class MyProfilePageController {
 
 
             IUser currentUser = UserSessionFacade.getCurrentUser();
+
             if(currentUser != null) {
                 usernameField.setText(currentUser.getUsername());
                 emailField.setText(currentUser.getEmail());
                 if (!currentUser.isArtist()) {
-                    myMusic.setVisible(false);
+                    information.setVisible(false);
+                }
+                else {
+                    Artist artist = (Artist) currentUser;
+                    SearchFacade searchFacade = new SearchFacade();
+                    if(searchFacade.getAllInfoArtistById(artist.getId())) {
+                        for (Music music : artist.getMusics()) {
+                            myMusic.getItems().add(music.getTitle());
+                        }
+                        for (OrdUser follower : artist.getSubscribers()) {
+                            myFollowers.getItems().add(follower.getUsername());
+                        }
+                    };
+
                 }
             }
         } catch (IOException e) {

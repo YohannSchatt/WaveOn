@@ -27,7 +27,7 @@ public class UserSessionFacade {
 
     private UserSessionFacade() {}
 
-    public boolean login(String email, String password) {
+    public boolean login(String email, String password, boolean isArtist) {
 
         factory = AbstractFactory.getInstance();
         assert factory != null;
@@ -35,40 +35,41 @@ public class UserSessionFacade {
         artistDAO = factory.createArtistDAO();
 
         currentUser = userDAO.getUserByEmail(email);
-        if (currentUser == null) {
-            UserSessionFacade.setCurrentUser(artistDAO.getArtistByEmail(email));
-            if(currentUser == null) {
-                System.out.println("L'utilisateur n'existe pas.");
-                return false;
-            }
-            else {
-                System.out.println("L'utilisateur est un artiste.");
-                return checkCredentials(email, password);
-            }
-        } else {
-            System.out.println("L'utilisateur n'est pas un artiste.");
+
+        if(isArtist) {
+            currentUser = artistDAO.getArtistByEmail(email);
+            return checkCredentials(email, password);
+        }
+        else{
+            currentUser = userDAO.getUserByEmail(email);
             return checkCredentials(email, password);
         }
     }
 
-    public boolean register(String email, String username,String password) {
+    public boolean register(String email, String username,String password, boolean isArtist) {
 
         factory = AbstractFactory.getInstance();
         assert factory != null;
         userDAO = factory.createOrdUserDAO();
         artistDAO = factory.createArtistDAO();
 
-        if (userDAO.getUserByEmail(email) != null || artistDAO.getArtistByEmail(email) != null) {
-            return false;
-        } else {
-            try {
+        try {
+            if(isArtist && artistDAO.getArtistByEmail(email) == null) {
+                System.out.println("Ajout de l'artiste...");
+                artistDAO.addUser(email,username,password);
+                return true;
+            } else if (!isArtist && userDAO.getUserByEmail(email) == null) {
+                System.out.println("Ajout de l'utilisateur...");
                 userDAO.addUser(email,username,password);
                 return true;
-            }
-            catch (SQLException e) {
-                System.out.println("Erreur lors de l'ajout de l'utilisateur : " + e);
+            } else {
+                System.out.println("Ajout de l'utilisateur échoué : email déjà utilisé.");
                 return false;
             }
+        }
+        catch (SQLException e) {
+            System.out.println("Erreur lors de l'ajout de l'utilisateur : " + e);
+            return false;
         }
     }
 

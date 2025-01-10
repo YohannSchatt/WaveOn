@@ -18,6 +18,21 @@ public class ArtistDAOPG implements ArtistDAO {
 
     public Connection connection;
 
+    @Override
+    public void addUser(String email, String username, String password) {
+        PGconnector pg = PGconnector.getInstance();
+        String sql = "INSERT INTO artist (email, username, password) VALUES (?, ?, ?)";
+        try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, email);
+            pstmt.setString(2, username);
+            pstmt.setString(3, password);
+            pstmt.executeUpdate();
+        }
+        catch (Exception e) {
+            System.out.println("Error in ArtistDAOPG.addUser : " + e);
+        }
+    }
+
     public Artist getArtistByEmail(String email) {
         PGconnector pg = PGconnector.getInstance();
         String sql = "SELECT * FROM artist WHERE email = ?";
