@@ -62,6 +62,34 @@ public class NotificationDAOPG implements NotificationDAO {
     }
 
     @Override
+    public ArrayList<Notification> getNotificationsByArtistId(int artistId) {
+        System.out.println("getNotificationsByArtistId DAO PG");
+        PGconnector pg = PGconnector.getInstance();
+        String sql = "SELECT n.id, n.title, n.content, n.link " +
+                "FROM notification n " +
+                "JOIN artist_notification an ON n.id = an.notification_id " +
+                "WHERE an.artist_id = ?";
+        try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, artistId);
+
+            ResultSet rs = pstmt.executeQuery();
+            ArrayList<Notification> notifications = new ArrayList<>();
+            while (rs.next()) {
+                Notification notification = new Notification(
+                        rs.getInt("id"),
+                        rs.getString("title"),
+                        rs.getString("content"),
+                        rs.getString("link"));
+                notifications.add(notification);
+            }
+            return notifications;
+        } catch (Exception e) {
+            System.out.println("Error in NotificationDAO.getNotificationsByUserId: " + e);
+        }
+        return null;
+    }
+
+    @Override
     public void createNotification(String title, String content, String link) {
         PGconnector pg = PGconnector.getInstance();
         String sql = "INSERT INTO notification (title, content, link) VALUES (?, ?, ?)";
@@ -95,10 +123,12 @@ public class NotificationDAOPG implements NotificationDAO {
     public void linkNotificationToUser(int notificationId, int userId) {
         PGconnector pg = PGconnector.getInstance();
         String sql = "INSERT INTO user_notification (user_id, notification_id) VALUES (?, ?)";
+        System.out.println("INSERT INTO user_notification (" + userId + ", " + notificationId + ")");
         try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, userId);
             pstmt.setInt(2, notificationId);
             pstmt.executeUpdate();
+
         } catch (Exception e) {
             System.out.println("Error in NotificationDAO.linkNotificationToUser: " + e);
         }

@@ -2,10 +2,8 @@ package waveon.waveon.bl;
 
 import waveon.waveon.core.Artist;
 import waveon.waveon.core.Music;
-import waveon.waveon.persist.MusicDAO;
-import waveon.waveon.persist.AbstractFactory;
-import waveon.waveon.persist.MusicDAOPG;
-import waveon.waveon.persist.NotificationDAO;
+import waveon.waveon.core.OrdUser;
+import waveon.waveon.persist.*;
 
 import javax.swing.*;
 import java.sql.Date;
@@ -14,12 +12,14 @@ import java.util.ArrayList;
 public class UploadMusicFacade {
     private final MusicDAO musicDAO;
     private final NotificationDAO notificationDAO;
+    private final ArtistDAO artistDAO;
 
     public UploadMusicFacade() {
         AbstractFactory factory = AbstractFactory.getInstance();
         assert factory != null;
         this.musicDAO = factory.createMusicDAO();
         this.notificationDAO = factory.createNotificationDAO();
+        this.artistDAO = factory.createArtistDAO();
     }
 
     public boolean uploadMusic(String title, byte[] fileContent, byte[] coverImage) {
@@ -36,19 +36,19 @@ public class UploadMusicFacade {
             musicDAO.saveMusic(music);
 
             // Créer une notification pour l'artiste
-            int notifId = notificationDAO.getLastId();
+            int notifId = notificationDAO.getLastId()+1;
             notificationDAO.createNotification("Music uploaded", title + " has been uploaded successfully", "/artist/"+artistId);
             notificationDAO.linkNotificationToArtist(notifId, artistId);
 
             // Créer une notification pour les followers de l'artiste
-            ArrayList<Integer> followerIds = notificationDAO.getUserIdsFollowingArtist(artistId);
-            notifId = notificationDAO.getLastId();
+            ArrayList<OrdUser> followers = artistDAO.getSubscribers(artistId);
+            notifId = notificationDAO.getLastId()+1;
             notificationDAO.createNotification("New music from " + artistName, artistName + " has uploaded a new music: " + title, "/artist/"+artistId);
-            System.out.println("nb : " + followerIds.size());
+            System.out.println("nb : " + followers.size());
 
-            for (int followerId : followerIds) {
-                System.out.println("followerId: " + followerId);
-                notificationDAO.linkNotificationToUser(notifId, followerId);
+            for (OrdUser follower : followers) {
+                System.out.println("followerId: " + follower);
+                notificationDAO.linkNotificationToUser(notifId, follower.getId());
             }
             return true;
 

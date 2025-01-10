@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ArtistDAOPG implements ArtistDAO {
 
@@ -45,6 +46,32 @@ public class ArtistDAOPG implements ArtistDAO {
         }
         catch (Exception e) {
             System.out.println("Error in ArtistDAOPG.getUserByEmail : " + e);
+        }
+        return null;
+    }
+
+    public ArrayList<OrdUser> getSubscribers(int id) {
+        System.out.println("getSubscribers DAO PG");
+        PGconnector pg = PGconnector.getInstance();
+        String sql = "SELECT ordinaryuser.id, ordinaryuser.username, ordinaryuser.email, ordinaryuser.password " +
+                "FROM subscriber " +
+                "JOIN ordinaryuser ON ordinaryuser.id = subscriber.user_id " +
+                "WHERE subscriber.artist_id = ?";
+        try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+            ArrayList<OrdUser> subscribers = new ArrayList<>();
+            while (rs.next()) {
+                OrdUser user = new OrdUser(rs.getInt("id"),
+                        rs.getString("username"),
+                        rs.getString("email"),
+                        rs.getString("password")
+                        );
+                subscribers.add(user);
+            }
+            return subscribers;
+        } catch (Exception e) {
+            System.out.println("Error in ArtistDAOPG.getSubscribers : " + e);
         }
         return null;
     }

@@ -11,6 +11,8 @@ public interface NotificationDAO {
 
     ArrayList<Notification> getNotificationsByUserId(int userId);
 
+    ArrayList<Notification> getNotificationsByArtistId(int artistId);
+
     void createNotification(String title, String content, String link);
 
     ArrayList<Integer> getUserIdsFollowingArtist(int artistId);

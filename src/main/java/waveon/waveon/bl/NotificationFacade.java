@@ -1,5 +1,6 @@
 package waveon.waveon.bl;
 
+import waveon.waveon.core.Artist;
 import waveon.waveon.core.Notification;
 import waveon.waveon.persist.AbstractFactory;
 import waveon.waveon.persist.NotificationDAO;
@@ -20,7 +21,12 @@ public class NotificationFacade {
     public void loadNotifications() {
         System.out.println("load Notifs Facade");
         if (UserSessionFacade.getCurrentUser() != null) {
-            notificationsList = notificationDAO.getNotificationsByUserId(UserSessionFacade.getCurrentUser().getId());
+            if (UserSessionFacade.getCurrentUser() instanceof Artist) {
+                notificationsList = notificationDAO.getNotificationsByArtistId(UserSessionFacade.getCurrentUser().getId());
+            }
+            else {
+                notificationsList = notificationDAO.getNotificationsByUserId(UserSessionFacade.getCurrentUser().getId());
+            }
         }
         else {
             System.out.println("User not connected");
