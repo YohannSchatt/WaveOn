@@ -67,6 +67,9 @@ public class MainPageController {
     private Button restartMusicButton;
     @FXML
     private MenuButton addToPlaylistMenu;
+    @FXML
+    private MenuButton playlistMenuButton;
+
 
     public void initialize() {
         updateProgressBar();
@@ -93,6 +96,7 @@ public class MainPageController {
         });
         updateLoginButton();
         addToPlaylistMenu();
+        setupPlaylistMenu();
     }
 
     private void applyFilter() {
@@ -368,6 +372,7 @@ public class MainPageController {
 
                 if (success) {
                     currentMusicLabel.setText("Musique a été ajoutée à " + playlist.getName());
+                    setupPlaylistMenu();
                 } else {
                     currentMusicLabel.setText("Erreur lors de l'ajout de la musique à " + playlist.getName());
                 }
@@ -399,6 +404,7 @@ public class MainPageController {
                     System.out.println("Playlist saved: " + playlistName);
                     // Mettre à jour le menu "Add to Playlist" avec la nouvelle playlist
                     addToPlaylistMenu();
+                    setupPlaylistMenu();
                 } else {
                     System.out.println("Failed to save playlist.");
                 }
@@ -434,6 +440,40 @@ public class MainPageController {
             }
         }
         return null;  // Retourne null si aucune musique n'a été trouvée
+    }
+
+    @FXML
+    private void setupPlaylistMenu() {
+        IUser currentUser = loginFacade.getCurrentUser();
+        if (currentUser == null) {
+            System.err.println("Error: No user is logged in. Cannot populate playlists.");
+            return;
+        }
+
+        // Clear existing items in the menu
+        playlistMenuButton.getItems().clear();
+
+        // Fetch playlists for the current user
+        List<Playlist> playlists = musicFacade.getPlaylistsByUserId(currentUser.getId());
+
+        // Create menu items for each playlist
+        for (Playlist playlist : playlists) {
+            Menu playlistSubMenu = new Menu(playlist.getName());
+            List<Music> musics = musicFacade.getMusicByPlaylistId(playlist.getId());
+
+            // Add music items to the playlist submenu
+            for (Music music : musics) {
+                MenuItem musicItem = new MenuItem(music.getTitle());
+                musicItem.setOnAction(event -> {
+                    System.out.println("Selected music: " + music.getTitle());
+                    playSelectedMusic(music.getTitle());
+                });
+                playlistSubMenu.getItems().add(musicItem);
+            }
+
+            // Add the playlist submenu to the main menu
+            playlistMenuButton.getItems().add(playlistSubMenu);
+        }
     }
 
 }

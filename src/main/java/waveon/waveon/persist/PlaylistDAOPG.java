@@ -59,5 +59,36 @@ public class PlaylistDAOPG implements PlaylistDAO {
             System.out.println("Error in PlaylistDAOPG.getPlaylistsByUserId: " + e);
         }
         return playlists;
-}
     }
+
+    @Override
+    public List<Music> getMusicByPlaylistId(int playlistId) throws SQLException{
+        String query = """
+            SELECT m.id, m.title, m.file_content, m.cover_image, m.artist_id, a.username AS artist_name, 
+                   m.release_date, m.stream_count
+            FROM music m
+            JOIN playlist_music pm ON m.id = pm.music_id
+            JOIN artist a ON m.artist_id = a.id
+            WHERE pm.playlist_id = ?
+        """;
+        try (Connection conn = PGconnector.getInstance().getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setInt(1, playlistId);
+            ResultSet rs = pstmt.executeQuery();
+            List<Music> musics = new ArrayList<>();
+            while (rs.next()) {
+                Music music = new Music(
+                        rs.getInt("id"),
+                        rs.getString("title"),
+                        rs.getBytes("file_content"),
+                        rs.getBytes("cover_image"),
+                        rs.getInt("artist_id"),
+                        rs.getString("artist_name"),
+                        rs.getDate("release_date"),
+                        rs.getInt("stream_count"));
+                musics.add(music);
+            }
+            return musics;
+        }
+    }
+}

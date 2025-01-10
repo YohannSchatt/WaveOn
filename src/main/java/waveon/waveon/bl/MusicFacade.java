@@ -43,6 +43,16 @@ public class MusicFacade {
         return playlistDAOPG.addMusicToPlaylist(music.getId(), playlist.getId());
     }
 
+    public List<Music> getMusicByPlaylistId(int playlistId) {
+        List<Music> musicList = new ArrayList<>();
+        try {
+            musicList = playlistDAOPG.getMusicByPlaylistId(playlistId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return musicList;
+    }
+
     public void loadMusicByTitle(String title) {
         if (mediaPlayer != null) {
             mediaPlayer.stop();

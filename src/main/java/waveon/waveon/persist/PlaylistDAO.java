@@ -15,4 +15,7 @@ public interface PlaylistDAO {
 
     // Récupérer toutes les playlists qui appartiennent à un utilisateur
     List<Playlist> getPlaylistsByUserId(int userId);
+
+    // Récupérer toutes les musiques d'une playlist
+    List<Music> getMusicByPlaylistId(int playlistId) throws Exception;
 }
