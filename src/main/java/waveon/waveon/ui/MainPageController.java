@@ -19,6 +19,7 @@ import waveon.waveon.core.Artist;
 import waveon.waveon.core.Music;
 import waveon.waveon.bl.UserSessionFacade;
 import waveon.waveon.core.IUser;
+import waveon.waveon.core.Notification;
 
 //components imports
 
@@ -69,7 +70,7 @@ public class MainPageController {
     @FXML
     private Button toggleNotificationButton;
     @FXML
-    private ListView<String> notificationListView;
+    private ListView<HBox> notificationListView;
 
 
     public void initialize() {
@@ -103,15 +104,29 @@ public class MainPageController {
                 return;
             }
             notificationBand.setVisible(true);
-            notificationFacade.loadNotifications();
-            notificationListView.getItems().clear();
-            for (int i = 0; i < notificationFacade.getNotificationsList().size(); i++) {
-                notificationListView.getItems().add(notificationFacade.getNotificationsList().get(i).getContent());
-            }
+            loadNotifications();
             toggleNotificationButton.setText("Close Notifications");
         } else {
             notificationBand.setVisible(false);
             toggleNotificationButton.setText("Open Notifications");
+        }
+    }
+
+    private void loadNotifications() {
+        notificationFacade.loadNotifications();
+        notificationListView.getItems().clear();
+
+        for (Notification notification : notificationFacade.getNotificationsList()) {
+            HBox hBox = new HBox();
+            Label label = new Label(notification.getContent());
+            Button deleteButton = new Button("✖");
+            deleteButton.setOnAction(event -> {
+                notificationFacade.clearNotification(notification.getId());
+                loadNotifications();
+            });
+
+            hBox.getChildren().addAll(label, deleteButton);
+            notificationListView.getItems().add(hBox);
         }
     }
 

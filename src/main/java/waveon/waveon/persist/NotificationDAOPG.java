@@ -104,6 +104,32 @@ public class NotificationDAOPG implements NotificationDAO {
     }
 
     @Override
+    public void clearNotificationsForUserById(int userId, int notificationId) {
+        PGconnector pg = PGconnector.getInstance();
+        String sql = "DELETE FROM user_notification WHERE user_id = ? AND notification_id = ?";
+        try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, userId);
+            pstmt.setInt(2, notificationId);
+            pstmt.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("Error in NotificationDAO.clearNotificationsForUserById: " + e);
+        }
+    }
+
+    @Override
+    public void clearNotificationsForArtistById(int artistId, int notificationId) {
+        PGconnector pg = PGconnector.getInstance();
+        String sql = "DELETE FROM artist_notification WHERE artist_id = ? AND notification_id = ?";
+        try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, artistId);
+            pstmt.setInt(2, notificationId);
+            pstmt.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("Error in NotificationDAO.clearNotificationsForArtistById: " + e);
+        }
+    }
+
+    @Override
     public ArrayList<Integer> getUserIdsFollowingArtist(int artistId) {
         PGconnector pg = PGconnector.getInstance();
         String sql = "SELECT user_id FROM ordinaryuser";

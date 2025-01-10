@@ -15,6 +15,10 @@ public interface NotificationDAO {
 
     void createNotification(String title, String content, String link);
 
+    void clearNotificationsForUserById(int userId, int notificationId);
+
+    void clearNotificationsForArtistById(int artistId, int notificationId);
+
     ArrayList<Integer> getUserIdsFollowingArtist(int artistId);
 
     void linkNotificationToUser(int notificationId, int userId);

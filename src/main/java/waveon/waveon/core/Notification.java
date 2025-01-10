@@ -21,4 +21,8 @@ public class Notification {
     public String getContent() {
         return content;
     }
+
+    public int getId() {
+        return id;
+    }
 }

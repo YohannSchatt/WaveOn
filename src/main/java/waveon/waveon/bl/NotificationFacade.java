@@ -37,5 +37,18 @@ public class NotificationFacade {
         return notificationsList;
     }
 
+    public void clearNotification(int notificationId) {
+        if (UserSessionFacade.getCurrentUser() != null) {
+            if (UserSessionFacade.getCurrentUser() instanceof Artist) {
+                notificationDAO.clearNotificationsForArtistById(UserSessionFacade.getCurrentUser().getId(), notificationId);
+            }
+            else {
+                notificationDAO.clearNotificationsForUserById(UserSessionFacade.getCurrentUser().getId(), notificationId);
+            }
+        }
+        else {
+            System.out.println("User not connected");
+        }
+    }
 
 }
