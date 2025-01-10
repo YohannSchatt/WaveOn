@@ -4,6 +4,7 @@ import waveon.waveon.core.Music;
 
 import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.List;
 
 public interface MusicDAO {
      ArrayList<Music> getAllMusic();
@@ -27,4 +28,6 @@ public interface MusicDAO {
     void modifyMusic( String id, Music musicInfo);
 
     boolean saveMusic(Music music);
+
+    List<Music> getListMusicsByidArtist(int id);
 }

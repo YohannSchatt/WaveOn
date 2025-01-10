@@ -16,8 +16,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MusicDAOPG implements MusicDAO {
+
     public boolean saveMusic(Music music) {
         PGconnector pg = PGconnector.getInstance();
         String sql = "INSERT INTO music (title, file_content, cover_image, artist_id, artist_name, release_date, stream_count) VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -58,6 +60,24 @@ public class MusicDAOPG implements MusicDAO {
         }
         catch (Exception e) {
             System.out.println("Error in MusicDAOPG.getMusicById : " + e);
+        }
+        return null;
+    }
+
+    public List<Music> getListMusicsByidArtist(int id) {
+        PGconnector pg = PGconnector.getInstance();
+        String sql = "SELECT * FROM music WHERE artist_id = ?";
+        try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+            List<Music> musics = new ArrayList<>();
+            while (rs.next()) {
+                musics.add(new Music(rs.getInt("id"), rs.getString("title"), rs.getInt("artist_id")));
+            }
+            return musics;
+        }
+        catch (Exception e) {
+            System.out.println("Error in MusicDAOPG.getListMusicsByidArtist : " + e);
         }
         return null;
     }

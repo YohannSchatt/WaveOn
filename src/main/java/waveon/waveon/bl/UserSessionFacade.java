@@ -27,7 +27,7 @@ public class UserSessionFacade {
 
     private UserSessionFacade() {}
 
-    public boolean login(String email, String password) {
+    public boolean login(String email, String password, boolean isArtist) {
 
         factory = AbstractFactory.getInstance();
         assert factory != null;
@@ -35,40 +35,41 @@ public class UserSessionFacade {
         artistDAO = factory.createArtistDAO();
 
         currentUser = userDAO.getUserByEmail(email);
-        if (currentUser == null) {
+
+        if(isArtist) {
             currentUser = artistDAO.getArtistByEmail(email);
-            if(currentUser == null) {
-                System.out.println("L'utilisateur n'existe pas.");
-                return false;
-            }
-            else {
-                System.out.println("L'utilisateur est un artiste.");
-                return checkCredentials(email, password);
-            }
-        } else {
-            System.out.println("L'utilisateur n'est pas un artiste.");
+            return checkCredentials(email, password);
+        }
+        else{
+            currentUser = userDAO.getUserByEmail(email);
             return checkCredentials(email, password);
         }
     }
 
-    public boolean register(String email, String username,String password) {
+    public boolean register(String email, String username,String password, boolean isArtist) {
 
         factory = AbstractFactory.getInstance();
         assert factory != null;
         userDAO = factory.createOrdUserDAO();
         artistDAO = factory.createArtistDAO();
 
-        if (userDAO.getUserByEmail(email) != null || artistDAO.getArtistByEmail(email) != null) {
-            return false;
-        } else {
-            try {
+        try {
+            if(isArtist && artistDAO.getArtistByEmail(email) == null) {
+                System.out.println("Ajout de l'artiste...");
+                artistDAO.addUser(email,username,password);
+                return true;
+            } else if (!isArtist && userDAO.getUserByEmail(email) == null) {
+                System.out.println("Ajout de l'utilisateur...");
                 userDAO.addUser(email,username,password);
                 return true;
-            }
-            catch (SQLException e) {
-                System.out.println("Erreur lors de l'ajout de l'utilisateur : " + e);
+            } else {
+                System.out.println("Ajout de l'utilisateur échoué : email déjà utilisé.");
                 return false;
             }
+        }
+        catch (SQLException e) {
+            System.out.println("Erreur lors de l'ajout de l'utilisateur : " + e);
+            return false;
         }
     }
 
@@ -94,5 +95,63 @@ public class UserSessionFacade {
 
     public void logout() {
         currentUser = null;
+    }
+
+    public boolean isArtist() {
+        return currentUser.isArtist();
+    }
+
+    public boolean enregistrerModification(String username, String email, String password) {
+        System.out.println("Enregistrement des modifications...");
+        System.out.println("Username : " + username);
+        System.out.println("Email : " + email);
+        System.out.println("Password : " + password);
+
+        if (username == null || username.trim().isEmpty() || email == null || email.trim().isEmpty()) {
+            return false;
+        }
+
+        if (currentUser != null  && (!username.equals(currentUser.getUsername()) || !email.equals(currentUser.getEmail()) || !password.isEmpty())) {
+            System.out.println("COUCOU");
+            factory = AbstractFactory.getInstance();
+            assert factory != null;
+            if(currentUser.isArtist()) {
+                ArtistDAO artistDAO = factory.createArtistDAO();
+                artistDAO.updateArtist(currentUser.getId(), username, email, password);
+                updatePersonalInfo(username, email, password);
+                return true;
+            }
+            else {
+                OrdUserDAO userDAO = factory.createOrdUserDAO();
+                userDAO.updateUser(currentUser.getId(), username, email, password);
+                updatePersonalInfo(username, email, password);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void updatePersonalInfo(String username, String email, String password) {
+        currentUser.setUsername(username);
+        currentUser.setEmail(email);
+        if (password != null && !password.trim().isEmpty()) {
+            currentUser.setPassword(password);
+        }
+    }
+
+    public boolean addFollow(int id) {
+        if (currentUser != null) {
+            userDAO.addFollow(id, currentUser.getId());
+            return true;
+        }
+        return false;
+    }
+
+    public boolean removeFollow(int id) {
+        if (currentUser != null) {
+            userDAO.removeFollow(id, currentUser.getId());
+            return true;
+        }
+        return false;
     }
 }

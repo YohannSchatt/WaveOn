@@ -3,6 +3,7 @@ package waveon.waveon.ui;
 //JavaFX imports
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.PasswordField;
@@ -38,14 +39,15 @@ public class RegisterController implements IRegisterController {
     @FXML
     public Label resultLabel;
 
+    @FXML
+    public CheckBox isArtist;
+
     @Override
     public void register() {
-        boolean sucess = registerFacade.register(usernameInput.getText(), emailInput.getText(), passwordInput.getText());
+        boolean sucess = registerFacade.register(emailInput.getText(),usernameInput.getText(), passwordInput.getText(), isArtist.isSelected());
         if (sucess) {
             resultLabel.setText("Registration successful");
-            PauseTransition pause = new PauseTransition(Duration.seconds(0.5));
-            pause.setOnFinished(event -> goToHome());
-            pause.play();
+            goToLogin();
         } else {
             resultLabel.setText("Registration failed");
         }
@@ -55,6 +57,7 @@ public class RegisterController implements IRegisterController {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/waveon/waveon/components/button/PathLoginButton.fxml"));
             hbox.getChildren().add(loader.load());
+            isArtist.setSelected(false);
         } catch (IOException e) {
             e.printStackTrace();
         }
