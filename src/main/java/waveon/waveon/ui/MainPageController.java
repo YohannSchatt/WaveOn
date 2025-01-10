@@ -2,12 +2,16 @@ package waveon.waveon.ui;
 
 // JavaFX imports
 import javafx.animation.PauseTransition;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -16,9 +20,11 @@ import waveon.waveon.core.Artist;
 import waveon.waveon.core.Music;
 import waveon.waveon.bl.UserSessionFacade;
 import waveon.waveon.core.IUser;
+import waveon.waveon.core.Playlist;
 
 //components imports
 
+import java.awt.event.ActionEvent;
 import java.util.*;
 
 public class MainPageController {
@@ -28,6 +34,7 @@ public class MainPageController {
     private final SearchFacade searchFacade = new SearchFacade();
     private PauseTransition pauseTransition;
     private List<Music> searchResults;
+    private Music selectedMusic;
 
     @FXML
     private TextField searchField;
@@ -57,6 +64,11 @@ public class MainPageController {
     private Button skipMusicButton;
     @FXML
     private Button restartMusicButton;
+    @FXML
+    private PlaylistController playlistController;
+    @FXML
+    private MenuButton addToPlaylistMenu;
+
 
     private Map<String, Integer> artistNameToIdMap = new HashMap<>();
 
@@ -66,7 +78,10 @@ public class MainPageController {
         pauseTransition = new PauseTransition(Duration.seconds(0.5));
         pauseTransition.setOnFinished(event -> handleSearch());
         searchField.textProperty().addListener((observable, oldValue, newValue) -> pauseTransition.playFromStart());
-        musicsListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> playSelectedMusic(newValue));
+        musicsListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            selectedMusic = getMusicByName(newValue);  // Assurez-vous de récupérer l'objet Music à partir de son nom
+            playSelectedMusic(newValue);  // Jouer la musique si nécessaire
+        });
         artistsListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 int artistId = artistNameToIdMap.get(newValue);
@@ -87,6 +102,9 @@ public class MainPageController {
             musicFacade.seekMusic(Duration.seconds(progressBar.getValue()));
         });
         updateLoginButton();
+        if (playlistController != null) {
+            playlistController.setMainPageController(this);
+        }
     }
 
     private void applyFilter() {
@@ -204,7 +222,7 @@ public class MainPageController {
         };
     }
 
-    private void playSelectedMusic(String musicTitle) {
+    public void playSelectedMusic(String musicTitle) {
         //if (musicTitle != null) {
         musicFacade.loadMusicByTitle(musicTitle);
         musicFacade.playMusic();
@@ -356,6 +374,45 @@ public class MainPageController {
             currentMusicLabel.setText("Now playing: " + currentMusic.getTitle());
         } else {
             currentMusicLabel.setText("No music playing");
+        }
+    }
+
+    private Music getMusicByName(String musicName) {
+        for (Music music : musicFacade.getAllMusic()) {
+            if (music.getTitle().equals(musicName)) {
+                return music;
+            }
+        }
+        return null;  // Retourne null si aucune musique n'a été trouvée
+    }
+
+    public void updateAddToPlaylistMenu() {
+        IUser currentUser = loginFacade.getCurrentUser();
+        if (currentUser == null) {
+            System.err.println("Error: No user is logged in. Cannot populate playlists.");
+            return;
+        }
+        // Clear existing items in the menu
+        addToPlaylistMenu.getItems().clear();
+        // Fetch playlists for the current user
+        List<Playlist> playlists = musicFacade.getPlaylistsByUserId(currentUser.getId());
+        // Create menu items for each playlist
+        for (Playlist playlist : playlists) {
+            MenuItem playlistItem = new MenuItem(playlist.getName());
+            playlistItem.setOnAction(event -> {
+                System.out.println("Selected playlist: " + playlist.getName());
+                boolean success = musicFacade.addMusicToPlaylist(selectedMusic, playlist);  // add the music to the playlist
+                if (success) {
+                    currentMusicLabel.setText("Musique a été ajoutée à " + playlist.getName());
+                    // Mettre à jour le menu des playlists dans le PlaylistController
+                    if (playlistController != null) {
+                        playlistController.setupPlaylistMenu();
+                    }
+                } else {
+                    currentMusicLabel.setText("Erreur lors de l'ajout de la musique à " + playlist.getName());
+                }
+            });
+            addToPlaylistMenu.getItems().add(playlistItem);
         }
     }
 }

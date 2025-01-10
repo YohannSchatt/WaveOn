@@ -8,7 +8,14 @@
 <?import javafx.collections.FXCollections?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="waveon.waveon.ui.MainPageController">
-   <center>
+    <top>
+        <HBox fx:id="topBar" alignment="TOP_RIGHT" spacing="10" BorderPane.alignment="TOP_RIGHT">
+            <children>
+                <fx:include fx:id="playlist" source="Playlist.fxml" />
+            </children>
+        </HBox>
+    </top>
+    <center>
       <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <top>
             <HBox fx:id="hBox" alignment="CENTER" prefHeight="67.0" prefWidth="600.0" spacing="10" BorderPane.alignment="CENTER" />
@@ -16,11 +23,13 @@
          <bottom>
             <VBox BorderPane.alignment="CENTER">
                 <children>
-                  <HBox alignment="CENTER" prefHeight="0.0" prefWidth="600.0">
+                    <HBox alignment="CENTER" prefHeight="0.0" prefWidth="600.0">
                      <children>
-                          <Button fx:id="playPauseButton" onAction="#togglePlayPause" text="Play Music" />
+<!--                         <Button fx:id="createPlaylistButton" text="Create Playlist" onAction="#handleCreatePlaylist"/>-->
+                         <Button fx:id="playPauseButton" onAction="#togglePlayPause" text="Play Music" />
                           <Button fx:id="skipMusicButton" onAction="#skipMusic" text="Skip" />
-                          <Button fx:id="restartMusicButton" onAction="#restartMusic" text="Restart" />
+                         <Button fx:id="restartMusicButton" onAction="#restartMusic" text="Restart" />
+                         <MenuButton fx:id="addToPlaylistMenu" text="Add to Playlist" />
                      </children>
                   </HBox>
                     <HBox spacing="10">

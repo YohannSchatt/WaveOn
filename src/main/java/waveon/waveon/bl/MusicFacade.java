@@ -4,11 +4,14 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 import waveon.waveon.core.Music;
+import waveon.waveon.core.Playlist;
 import waveon.waveon.persist.MusicDAOPG;
+import waveon.waveon.persist.PlaylistDAOPG;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MusicFacade {
@@ -18,10 +21,13 @@ public class MusicFacade {
     private int currentMusicIndex = -1;
     private boolean isPaused = false;
     private double volume = 0.5; // Default volume
+    private List<Playlist> playlists;
+    private PlaylistDAOPG playlistDAOPG;
 
     public MusicFacade() {
         this.musicDAOPG = new MusicDAOPG();
         this.musicList = musicDAOPG.getAllMusic();
+        this.playlistDAOPG = new PlaylistDAOPG();
     }
 
     public void loadMusicByTitle(String title) {
@@ -165,5 +171,40 @@ public class MusicFacade {
             mediaPlayer.dispose();
             mediaPlayer = null;
         }
+    }
+
+    public List<Music> getAllMusic() {
+        return musicList;
+    }
+
+    public boolean createPlaylist(String name, int userId) {
+        playlistDAOPG.createPlaylist(name, userId);
+        return true;
+    }
+
+    public List<Playlist> getPlaylistsByUserId(int userId) {
+        return playlistDAOPG.getPlaylistsByUserId(userId);
+    }
+
+    public boolean addMusicToPlaylist(Music music, Playlist playlist) {
+        return playlistDAOPG.addMusicToPlaylist(music.getId(), playlist.getId());
+    }
+
+    public List<Music> getMusicByPlaylistId(int playlistId) {
+        List<Music> musicList = new ArrayList<>();
+        try {
+            musicList = playlistDAOPG.getMusicByPlaylistId(playlistId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return musicList;
+    }
+
+    public boolean deletePlaylist(int playlistId) {
+        return playlistDAOPG.deletePlaylist(playlistId);
+    }
+
+    public boolean deleteMusicFromPlaylist(int playlistId, int musicId) {
+        return playlistDAOPG.deleteMusicFromPlaylist(playlistId, musicId);
     }
 }
