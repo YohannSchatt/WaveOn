@@ -14,10 +14,11 @@ public class Comments {
     }
 
     // Parameterized constructor
-    public Comments(int id, int idmusic, String content) {
+    public Comments(int id, int idmusic, String content, int iduser) {
         this.id = id;
         this.content = content;
         this.idmusic = idmusic;
+        this.iduser = iduser;
     }
 
     // Getters and Setters

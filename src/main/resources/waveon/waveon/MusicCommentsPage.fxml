@@ -8,5 +8,7 @@
         <Label text="Select Music" style="-fx-font-size: 24px;"/>
         <ComboBox fx:id="musicComboBox" prefWidth="300"/>
         <ListView fx:id="commentsListView" prefHeight="200" prefWidth="300"/>
+        <TextField fx:id="commentTextField" promptText="Enter your comment" prefWidth="300"/>
+        <Button text="Add Comment" onAction="#addComment"/>
     </children>
 </VBox>

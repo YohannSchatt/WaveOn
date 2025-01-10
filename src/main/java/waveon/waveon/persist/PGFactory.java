@@ -1,30 +1,26 @@
 package waveon.waveon.persist;
 
-
-/**
- * 
- */
 public class PGFactory extends AbstractFactory {
 
-    /**
-     * Default constructor
-     */
     public PGFactory() {}
 
-
-    /**
-     * @return
-     */
+    @Override
     public OrdUserDAOPG createOrdUserDAO() {
         return new OrdUserDAOPG();
     }
 
-    /**
-     * @return
-     */
+    @Override
     public ArtistDAOPG createArtistDAO() {
         return new ArtistDAOPG();
     }
 
-    public MusicDAOPG createMusicDAO() { return new MusicDAOPG();}
+    @Override
+    public MusicDAOPG createMusicDAO() {
+        return new MusicDAOPG();
+    }
+
+    @Override
+    public CommentsDAOPG createCommentsDAO() {
+        return new CommentsDAOPG();
+    }
 }

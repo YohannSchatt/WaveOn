@@ -17,7 +17,7 @@ public class CommentsDAOPG implements CommentsDAO {
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                return new Comments(rs.getInt("id"), rs.getInt("music_id"), rs.getString("content"));
+                return new Comments(rs.getInt("idcomment"), rs.getInt("music_id"), rs.getString("content"), rs.getInt("user_id"));
             }
         } catch (SQLException ex) {
             System.out.println("Error in CommentsDAOPG.getCommentById: " + ex.getMessage());
@@ -31,7 +31,7 @@ public class CommentsDAOPG implements CommentsDAO {
         String sql = "SELECT * FROM comments";
         try (Connection conn = pg.getConnection(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
-                comments.add(new Comments(rs.getInt("id"), rs.getInt("music_id"), rs.getString("content")));
+                comments.add(new Comments(rs.getInt("idcomment"), rs.getInt("music_id"), rs.getString("content"), rs.getInt("user_id")));
             }
         } catch (SQLException ex) {
             System.out.println("Error in CommentsDAOPG.getAllComments: " + ex.getMessage());
@@ -47,7 +47,7 @@ public class CommentsDAOPG implements CommentsDAO {
             pstmt.setInt(1, musicId);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
-                comments.add(new Comments(rs.getInt("id"), rs.getInt("music_id"), rs.getString("content")));
+                comments.add(new Comments(rs.getInt("idcomment"), rs.getInt("music_id"), rs.getString("content"), rs.getInt("user_id")));
             }
         } catch (SQLException ex) {
             System.out.println("Error in CommentsDAOPG.getCommentsByMusicId: " + ex.getMessage());
