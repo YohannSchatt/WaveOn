@@ -2,16 +2,22 @@ package waveon.waveon.ui;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import waveon.waveon.bl.MusicCommentaryFacade;
+import waveon.waveon.persist.OrdUserDAOPG;
 import waveon.waveon.core.Comments;
 import waveon.waveon.core.Music;
 
+import java.io.IOException;
 import java.util.List;
 
 public class MusicCommentsPageController {
@@ -21,9 +27,11 @@ public class MusicCommentsPageController {
     private ListView<HBox> commentsListView;
     @FXML
     private TextField commentTextField;
+    @FXML
+    private Button backToMainPageButton;
 
     private MusicCommentaryFacade musicCommentaryFacade = new MusicCommentaryFacade();
-    private int userId = 2; // Assuming userId is available, here we use a dummy userId (e.g., 1)
+    private int userId = 2; // Assuming userId is available, here we use a dummy userId (e.g., 2)
 
     @FXML
     public void initialize() {
@@ -47,7 +55,8 @@ public class MusicCommentsPageController {
                 commentsListView.setItems(FXCollections.observableArrayList());
                 for (Comments comment : comments) {
                     HBox hBox = new HBox();
-                    Text commentText = new Text(comment.getContent());
+                    String username = OrdUserDAOPG.getUserById(comment.getIDUser()).getUsername();
+                    Text commentText = new Text(comment.getContent() + " - " + username);
                     hBox.getChildren().add(commentText);
 
                     if (comment.getIDUser() == userId) {
@@ -79,40 +88,16 @@ public class MusicCommentsPageController {
         }
     }
 
-    //Version avec les likes mais pas implementé jusqu'au bout
-//    @FXML
-//    private void loadComments() {
-//        String selectedMusicTitle = musicComboBox.getValue();
-//        if (selectedMusicTitle != null) {
-//            Music selectedMusic = musicCommentaryFacade.getMusicByTitle(selectedMusicTitle);
-//            if (selectedMusic != null) {
-//                List<Comments> comments = musicCommentaryFacade.getCommentariesForMusic(selectedMusic.getId());
-//                commentsListView.setItems(FXCollections.observableArrayList());
-//                for (Comments comment : comments) {
-//                    HBox hBox = new HBox();
-//                    Text commentText = new Text(comment.getContent());
-//                    Button likeButton = new Button("Like (" + comment.getNumberLike() + ")");
-//                    if (likedComments.contains(comment.getId())) {
-//                        likeButton.setText("Unlike (" + comment.getNumberLike() + ")");
-//                    }
-//                    likeButton.setOnAction(event -> {
-//                        if (likedComments.contains(comment.getId())) {
-//                            comment.setNumberLike(comment.getNumberLike() - 1);
-//                            likedComments.remove(comment.getId());
-//                            likeButton.setText("Like (" + comment.getNumberLike() + ")");
-//                        } else {
-//                            comment.setNumberLike(comment.getNumberLike() + 1);
-//                            likedComments.add(comment.getId());
-//                            likeButton.setText("Unlike (" + comment.getNumberLike() + ")");
-//                        }
-//                    });
-//                    hBox.getChildren().addAll(commentText, likeButton);
-//                    commentsListView.getItems().add(hBox);
-//                }
-//            }
-//        }
-//    }
-
+    @FXML
+    private void handleBackToMainPage() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/waveon/waveon/MainPage.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) backToMainPageButton.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
-
-

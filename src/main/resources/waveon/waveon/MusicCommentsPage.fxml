@@ -3,12 +3,18 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="waveon.waveon.ui.MusicCommentsPageController" spacing="10" alignment="CENTER">
-    <children>
-        <Label text="Select Music" style="-fx-font-size: 24px;"/>
-        <ComboBox fx:id="musicComboBox" prefWidth="300"/>
-        <ListView fx:id="commentsListView" prefHeight="200" prefWidth="300"/>
-        <TextField fx:id="commentTextField" promptText="Enter your comment" prefWidth="300"/>
-        <Button text="Add Comment" onAction="#addComment"/>
-    </children>
-</VBox>
+<BorderPane xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="waveon.waveon.ui.MusicCommentsPageController">
+    <top>
+        <HBox alignment="CENTER">
+            <Button fx:id="backToMainPageButton" text="Back to Main Page" onAction="#handleBackToMainPage"/>
+        </HBox>
+    </top>
+    <center>
+        <VBox spacing="10" alignment="CENTER">
+            <ComboBox fx:id="musicComboBox" promptText="Select Music"/>
+            <ListView fx:id="commentsListView"/>
+            <TextField fx:id="commentTextField" promptText="Add a comment"/>
+            <Button text="Add Comment" onAction="#addComment"/>
+        </VBox>
+    </center>
+</BorderPane>

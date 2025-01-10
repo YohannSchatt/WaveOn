@@ -114,4 +114,20 @@ public class OrdUserDAOPG implements OrdUserDAO {
             System.out.println("Error in OrdUserDAOPG.removeFollow : " + e);
         }
     }
+
+    public static OrdUser getUserById(int id) {
+        PGconnector pg = PGconnector.getInstance();
+        String sql = "SELECT * FROM ordinaryuser WHERE id = ?";
+        try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return new OrdUser(rs.getInt("id"), rs.getString("username"), rs.getString("email"), rs.getString("password"));
+            }
+        }
+        catch (Exception e) {
+            System.out.println("Error in OrdUserDAOPG.getUserById : " + e);
+        }
+        return null;
+    }
 }
