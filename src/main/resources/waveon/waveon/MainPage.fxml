@@ -11,8 +11,7 @@
     <top>
         <HBox fx:id="topBar" alignment="TOP_RIGHT" spacing="10" BorderPane.alignment="TOP_RIGHT">
             <children>
-                <MenuButton fx:id="playlistMenuButton" text="Playlists" />
-                <Button fx:id="createPlaylistButton" text="Create Playlist" onAction="#handleCreatePlaylist" />
+                <fx:include fx:id="playlist" source="Playlist.fxml" />
             </children>
         </HBox>
     </top>

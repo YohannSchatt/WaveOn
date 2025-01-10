@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="waveon.waveon.ui.PlaylistController">
+    <children>
+        <HBox spacing="10" alignment="CENTER">
+            <children>
+                <MenuButton fx:id="playlistMenuButton" text="Playlists" />
+                <Button fx:id="createPlaylistButton" text="Create Playlist" onAction="#handleCreatePlaylist" />
+            </children>
+        </HBox>
+    </children>
+</VBox>
