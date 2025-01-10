@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="waveon.waveon.ui.MusicCommentsPageController">
+    <top>
+        <HBox alignment="CENTER">
+            <Button fx:id="backToMainPageButton" text="Back to Main Page" onAction="#handleBackToMainPage"/>
+        </HBox>
+    </top>
+    <center>
+        <VBox spacing="10" alignment="CENTER">
+            <ComboBox fx:id="musicComboBox" promptText="Select Music"/>
+            <ListView fx:id="commentsListView"/>
+            <TextField fx:id="commentTextField" promptText="Add a comment"/>
+            <Button text="Add Comment" onAction="#addComment"/>
+        </VBox>
+    </center>
+</BorderPane>
