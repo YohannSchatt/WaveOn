@@ -6,7 +6,6 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.collections.FXCollections?>
-
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="waveon.waveon.ui.MainPageController">
     <top>
         <HBox fx:id="topBar" alignment="TOP_RIGHT" spacing="10" BorderPane.alignment="TOP_RIGHT">
@@ -25,6 +24,7 @@
                 <children>
                     <HBox alignment="CENTER" prefHeight="0.0" prefWidth="600.0">
                      <children>
+                         <Button fx:id="toggleNotificationButton" text="Open Notifications" onAction="#toggleNotificationCenter"/>
                          <Button fx:id="playPauseButton" onAction="#togglePlayPause" text="Play Music" />
                           <Button fx:id="skipMusicButton" onAction="#skipMusic" text="Skip" />
                          <Button fx:id="restartMusicButton" onAction="#restartMusic" text="Restart" />
@@ -81,4 +81,22 @@
          </center>
       </BorderPane>
    </center>
+    <right>
+        <VBox fx:id="notificationBand" prefWidth="200.0" visible="false" BorderPane.alignment="CENTER">
+            <children>
+                <ListView fx:id="notificationListView" prefHeight="200.0" prefWidth="200.0">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            <!-- Les éléments seront ajoutés dynamiquement -->
+                        </FXCollections>
+                    </items>
+                </ListView>
+            </children>
+        </VBox>
+    </right>
+    <left>
+        <VBox prefWidth="150.0" visible="false" BorderPane.alignment="CENTER">
+
+        </VBox>
+    </left>
 </BorderPane>

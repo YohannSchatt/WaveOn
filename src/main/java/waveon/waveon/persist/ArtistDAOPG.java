@@ -10,7 +10,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.List;
 
 public class ArtistDAOPG implements ArtistDAO {
 
@@ -66,7 +65,7 @@ public class ArtistDAOPG implements ArtistDAO {
         return null;
     }
 
-    public List<OrdUser> getSubscribers(int id) {
+    public ArrayList<OrdUser> getSubscribers(int id) {
         PGconnector pg = PGconnector.getInstance();
         String sql = "SELECT ordinaryuser.id, ordinaryuser.username " +
                 "FROM subscriber " +
@@ -75,7 +74,7 @@ public class ArtistDAOPG implements ArtistDAO {
         try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
-            List<OrdUser> subscribers = new ArrayList<>();
+            ArrayList<OrdUser> subscribers = new ArrayList<>();
             while (rs.next()) {
                 OrdUser user = new OrdUser(rs.getInt("id"));
                 user.setUsername(rs.getString("username"));
@@ -103,8 +102,8 @@ public class ArtistDAOPG implements ArtistDAO {
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
             Artist artist = null;
-            List<OrdUser> subscriber = new ArrayList<>();
-            List<Music> musics = new ArrayList<>();
+            ArrayList<OrdUser> subscriber = new ArrayList<>();
+            ArrayList<Music> musics = new ArrayList<>();
             while (rs.next()) {
                 System.out.println("music_id : " + rs.getInt("music_id"));
                 if (artist == null) {

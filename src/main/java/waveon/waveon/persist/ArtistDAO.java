@@ -20,6 +20,8 @@ public interface ArtistDAO {
 
      abstract ArrayList<Artist> getAllArtists();
 
+     ArrayList<OrdUser> getSubscribers(int id);
+
      abstract Artist getArtistByMusicId(int musicId);
 
      abstract public Artist getAllInfoArtistById(int id);

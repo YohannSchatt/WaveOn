@@ -10,6 +10,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.MediaPlayer;
@@ -21,17 +23,23 @@ import waveon.waveon.core.Music;
 import waveon.waveon.bl.UserSessionFacade;
 import waveon.waveon.core.IUser;
 import waveon.waveon.core.Playlist;
+import waveon.waveon.core.Notification;
 
 //components imports
 
 import java.awt.event.ActionEvent;
 import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
 
 public class MainPageController {
 
     private final UserSessionFacade loginFacade = UserSessionFacade.getInstance();
     private final MusicFacade musicFacade = new MusicFacade();
     private final SearchFacade searchFacade = new SearchFacade();
+    private final NotificationFacade notificationFacade = new NotificationFacade();
     private PauseTransition pauseTransition;
     private List<Music> searchResults;
     private Music selectedMusic;
@@ -69,8 +77,14 @@ public class MainPageController {
     @FXML
     private MenuButton addToPlaylistMenu;
 
-
     private Map<String, Integer> artistNameToIdMap = new HashMap<>();
+    @FXML
+    private VBox notificationBand;
+    @FXML
+    private Button toggleNotificationButton;
+    @FXML
+    private ListView<HBox> notificationListView;
+
 
     public void initialize() {
         updateProgressBar();
@@ -106,6 +120,40 @@ public class MainPageController {
             playlistController.setMainPageController(this);
         }
         updateAddToPlaylistMenu();
+    }
+
+
+    @FXML
+    private void toggleNotificationCenter() {
+        if (Objects.equals(toggleNotificationButton.getText(), "Open Notifications")) {
+            if (UserSessionFacade.getCurrentUser() == null) {
+                return;
+            }
+            notificationBand.setVisible(true);
+            loadNotifications();
+            toggleNotificationButton.setText("Close Notifications");
+        } else {
+            notificationBand.setVisible(false);
+            toggleNotificationButton.setText("Open Notifications");
+        }
+    }
+
+    private void loadNotifications() {
+        notificationFacade.loadNotifications();
+        notificationListView.getItems().clear();
+
+        for (Notification notification : notificationFacade.getNotificationsList()) {
+            HBox hBox = new HBox();
+            Label label = new Label(notification.getContent());
+            Button deleteButton = new Button("✖");
+            deleteButton.setOnAction(event -> {
+                notificationFacade.clearNotification(notification.getId());
+                loadNotifications();
+            });
+
+            hBox.getChildren().addAll(label, deleteButton);
+            notificationListView.getItems().add(hBox);
+        }
     }
 
     private void applyFilter() {
@@ -223,7 +271,7 @@ public class MainPageController {
         };
     }
 
-    public void playSelectedMusic(String musicTitle) {
+    private void playSelectedMusic(String musicTitle) {
         //if (musicTitle != null) {
         musicFacade.loadMusicByTitle(musicTitle);
         musicFacade.playMusic();
@@ -380,6 +428,7 @@ public class MainPageController {
             currentMusicLabel.setText("No music playing");
         }
     }
+
 
     private Music getMusicByName(String musicName) {
         for (Music music : musicFacade.getAllMusic()) {
