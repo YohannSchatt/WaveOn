@@ -9,10 +9,6 @@ public interface OrdUserDAO {
 
     public Connection connection = null;
 
-    /**
-     * @param email
-     * @return OrduUser
-     */
     public abstract OrdUser getUserByEmail(String email);
 
     void addUser(String username, String email, String password) throws SQLException;

@@ -28,7 +28,5 @@ public interface ArtistDAO {
 
     void updateArtist(int id, String username, String email, String password);
 
-    List<OrdUser> getSubscribers(int id);
-
     void addUser(String email, String username, String password);
 }

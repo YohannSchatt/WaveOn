@@ -271,7 +271,7 @@ public class MainPageController {
         };
     }
 
-    private void playSelectedMusic(String musicTitle) {
+    void playSelectedMusic(String musicTitle) {
         //if (musicTitle != null) {
         musicFacade.loadMusicByTitle(musicTitle);
         musicFacade.playMusic();
