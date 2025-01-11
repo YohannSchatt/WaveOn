@@ -1,20 +1,13 @@
 package waveon.waveon.persist;
 
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-import javafx.util.Duration;
 import waveon.waveon.connector.PGconnector;
 import waveon.waveon.core.Music;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -188,6 +181,33 @@ public class MusicDAOPG implements MusicDAO {
         }
         return 0;
     }
+
+    public Music getMusicWithContentById(int id) {
+        PGconnector pg = PGconnector.getInstance();
+        String sql = "SELECT * FROM music WHERE id = ?";
+        try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return new Music(
+                        rs.getInt("id"),
+                        rs.getString("title"),
+                        rs.getBytes("file_content"),
+                        rs.getBytes("cover_image"),
+                        rs.getInt("artist_id"),
+                        rs.getString("artist_name"),
+                        rs.getDate("release_date"),
+                        rs.getInt("stream_count"));
+            }
+        }
+        catch (Exception e) {
+            System.out.println("Error in MusicDAOPG.getMusicWithContentById : " + e);
+        }
+
+
+        return null;
+    }
+
 
     @Override
     public ArrayList<Music> getAllMusic() {

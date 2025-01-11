@@ -26,7 +26,7 @@ public class MusicFacade {
 
     public MusicFacade() {
         this.musicDAOPG = new MusicDAOPG();
-        this.musicList = musicDAOPG.getAllMusic();
+        this.musicList = musicDAOPG.getAllMusics();
         this.playlistDAOPG = new PlaylistDAOPG();
     }
 
@@ -37,7 +37,9 @@ public class MusicFacade {
         for (int i = 0; i < musicList.size(); i++) {
             if (musicList.get(i).getTitle().equals(title)) {
                 currentMusicIndex = i;
-                initializeMediaPlayer(musicList.get(i));
+                int musicId = musicList.get(i).getId();
+                Music music = musicDAOPG.getMusicWithContentById(musicId);
+                initializeMediaPlayer(music);
                 break;
             }
         }
