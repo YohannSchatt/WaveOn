@@ -14,7 +14,7 @@ public class StartApplication extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
-            URL fxmlLocation = getClass().getResource("/waveon/waveon/MainPage.fxml");
+            URL fxmlLocation = getClass().getResource("/waveon/waveon/login.fxml");
             FXMLLoader loader = new FXMLLoader(fxmlLocation);
             Parent root = loader.load();
             primaryStage.setTitle("WaveOn");
