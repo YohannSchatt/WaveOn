@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.collections.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.collections.FXCollections?>
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="waveon.waveon.ui.MainPageController">
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="1000.0" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="waveon.waveon.ui.MainPageController">
     <top>
         <HBox fx:id="topBar" alignment="TOP_RIGHT" spacing="10" BorderPane.alignment="TOP_RIGHT">
             <children>
@@ -24,21 +26,51 @@
                 <children>
                     <HBox alignment="CENTER" prefHeight="0.0" prefWidth="600.0">
                      <children>
-                         <Button fx:id="toggleNotificationButton" text="Open Notifications" onAction="#toggleNotificationCenter"/>
-                         <Button fx:id="playPauseButton" onAction="#togglePlayPause" text="Play Music" />
-                          <Button fx:id="skipMusicButton" onAction="#skipMusic" text="Skip" />
-                         <Button fx:id="restartMusicButton" onAction="#restartMusic" text="Restart" />
-                         <MenuButton fx:id="addToPlaylistMenu" text="Add to Playlist" />
+                         <Button fx:id="toggleNotificationButton" onAction="#toggleNotificationCenter" text="Open Notifications">
+                           <HBox.margin>
+                              <Insets left="5.0" right="5.0" />
+                           </HBox.margin></Button>
+                         <Button fx:id="playPauseButton" onAction="#togglePlayPause" text="Play Music">
+                           <HBox.margin>
+                              <Insets left="5.0" right="5.0" />
+                           </HBox.margin></Button>
+                          <Button fx:id="skipMusicButton" onAction="#skipMusic" text="Skip">
+                           <HBox.margin>
+                              <Insets left="5.0" right="5.0" />
+                           </HBox.margin></Button>
+                         <Button fx:id="restartMusicButton" onAction="#restartMusic" text="Restart">
+                           <HBox.margin>
+                              <Insets left="5.0" right="5.0" />
+                           </HBox.margin></Button>
+                         <MenuButton fx:id="addToPlaylistMenu" text="Add to Playlist">
+                           <HBox.margin>
+                              <Insets left="5.0" right="5.0" />
+                           </HBox.margin></MenuButton>
                      </children>
                   </HBox>
                     <HBox spacing="10">
                         <children>
-                            <Slider fx:id="progressBar" min="0" max="1" value="0" prefHeight="18.0" prefWidth="496.0" />
-                            <Label fx:id="timerLabel" text="00:00/00:00" />
+                            <Slider fx:id="progressBar" max="1" min="0" prefHeight="30.0" prefWidth="552.0" value="0">
+                           <HBox.margin>
+                              <Insets top="10.0" />
+                           </HBox.margin></Slider>
+                            <Label fx:id="timerLabel" text="00:00/00:00">
+                           <HBox.margin>
+                              <Insets top="15.0" />
+                           </HBox.margin></Label>
                         </children>
                     </HBox>
-                    <Slider fx:id="volumeSlider" max="1" prefHeight="55.0" prefWidth="497.0" value="0.1" />
-                    <Label fx:id="currentMusicLabel" alignment="TOP_CENTER" contentDisplay="TOP" prefHeight="21.0" prefWidth="601.0" text="No music playing" />
+                    <Slider fx:id="volumeSlider" max="1" prefHeight="30.0" value="0.1">
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin></Slider>
+                    <Label fx:id="currentMusicLabel" alignment="TOP_CENTER" contentDisplay="TOP" prefHeight="21.0" prefWidth="601.0" text="No music playing">
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
+                     <padding>
+                        <Insets bottom="10.0" />
+                     </padding></Label>
                 </children>
             </VBox>
          </bottom>
@@ -47,7 +79,10 @@
                <children>
                   <HBox alignment="CENTER" prefHeight="57.0" prefWidth="600.0">
                      <children>
-                        <TextField fx:id="searchField" />
+                        <TextField fx:id="searchField" prefHeight="31.0" prefWidth="260.0">
+                           <HBox.margin>
+                              <Insets right="10.0" />
+                           </HBox.margin></TextField>
                          <ComboBox fx:id="filterComboBox" prefWidth="150.0" promptText="Streams count ↓">
                              <items>
                                  <FXCollections fx:factory="observableArrayList">
@@ -57,24 +92,45 @@
                                      <String fx:value="Streams count ↑" />
                                  </FXCollections>
                              </items>
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
                          </ComboBox>
                      </children>
+                     <VBox.margin>
+                        <Insets bottom="10.0" top="10.0" />
+                     </VBox.margin>
                   </HBox>
-                  <HBox alignment="TOP_CENTER" prefHeight="117.0" prefWidth="600.0">
+                  <HBox alignment="TOP_CENTER" prefWidth="650.0">
                      <children>
-                        <VBox prefHeight="117.0" prefWidth="183.0">
+                        <VBox prefHeight="117.0">
                            <children>
-                              <Label fx:id="musicResultLabel" text="Label" />
-                              <ListView fx:id="musicsListView" prefHeight="200.0" prefWidth="200.0" />
+                              <Label fx:id="musicResultLabel" text="Label">
+                                 <VBox.margin>
+                                    <Insets bottom="5.0" />
+                                 </VBox.margin></Label>
+                              <ListView fx:id="musicsListView" prefWidth="300.0">
+                                 <VBox.margin>
+                                    <Insets right="20.0" />
+                                 </VBox.margin></ListView>
                            </children>
                         </VBox>
-                        <VBox prefHeight="117.0" prefWidth="183.0">
+                        <VBox>
                            <children>
-                              <Label fx:id="artistResultLabel" text="Label" />
-                              <ListView fx:id="artistsListView" prefHeight="200.0" prefWidth="200.0" />
+                              <Label fx:id="artistResultLabel" text="Label">
+                                 <VBox.margin>
+                                    <Insets bottom="5.0" left="20.0" />
+                                 </VBox.margin></Label>
+                              <ListView fx:id="artistsListView" prefWidth="252.0">
+                                 <VBox.margin>
+                                    <Insets left="20.0" />
+                                 </VBox.margin></ListView>
                            </children>
                         </VBox>
                      </children>
+                     <VBox.margin>
+                        <Insets bottom="20.0" />
+                     </VBox.margin>
                   </HBox>
                </children>
             </VBox>

@@ -1,0 +1,80 @@
+/* src/main/resources/waveon/waveon/styles.css */
+.root {
+    -fx-font-family: 'Arial';
+    -fx-background-color: #000000; /* Spotify dark background */
+}
+
+#topBar {
+    -fx-background-color: #1DB954; /* Spotify green */
+    -fx-padding: 10;
+}
+
+#toggleNotificationButton, #playPauseButton, #skipMusicButton, #restartMusicButton, #addToPlaylistMenu {
+    -fx-background-color: #1f1f1f; /* Dark background */
+    -fx-text-fill: #a9a9a9;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-border-color: #1DB954;
+    -fx-border-width: 1;
+}
+
+#toggleNotificationButton:hover, #playPauseButton:hover, #skipMusicButton:hover, #restartMusicButton:hover, #addToPlaylistMenu:hover {
+    -fx-background-color: #0c5326; /* Lighter green on hover */
+}
+
+#notificationBand {
+    -fx-padding: 10;
+}
+
+#musicsListView, #artistsListView, #searchField, #filterComboBox {
+    -fx-background-color: #1f1f1f; /* Match the root background */
+    -fx-background-radius: 10;
+    -fx-text-fill: #a9a9a9;
+    -fx-padding: 10; /* Add padding between the list and the cells */
+}
+
+#notificationListView {
+    -fx-background-color: #121212; /* Match the root background */
+    -fx-background-radius: 10;
+    -fx-text-fill: #a9a9a9;
+    -fx-padding: 10; /* Add padding between the list and the cells */
+}
+
+.scroll-bar {
+    -fx-background-color: #2f2f2f; /* Dark grey background for the scrollbar track */
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: #a9a9a9; /* Light grey color for the scrollbar thumb */
+}
+
+.scroll-bar .thumb:hover {
+    -fx-background-color: #c0c0c0; /* Lighter grey color for the scrollbar thumb on hover */
+}
+#filterComboBox {
+    -fx-padding: 6; /* Add padding between the list and the cells */
+}
+
+#notificationListView .list-cell, #musicsListView .list-cell, #artistsListView .list-cell {
+    -fx-background-color: #1f1f1f; /* Match the root background */
+    -fx-text-fill: #a9a9a9;
+    -fx-border-color: #a9a9a9;
+    -fx-border-width: 0 0 1 0; /* Bottom border only */
+    -fx-padding: 5; /* Add padding inside each cell */
+}
+
+#notificationListView .list-cell:hover, #musicsListView .list-cell:hover, #artistsListView .list-cell:hover {
+    -fx-background-color: #0c5326; /* Lighter green on hover */
+}
+
+#volumeSlider, #progressBar {
+    -fx-background-radius: 10;
+    -fx-accent: #1DB954; /* Spotify green */
+    -fx-control-inner-background: #1f1f1f; /* Match the root background */
+}
+
+#currentMusicLabel {
+    -fx-text-fill: #1DB954; /* Spotify green */
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}

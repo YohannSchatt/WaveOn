@@ -93,9 +93,7 @@ public class MainPageController {
         pauseTransition.setOnFinished(event -> handleSearch());
         searchField.textProperty().addListener((observable, oldValue, newValue) -> pauseTransition.playFromStart());
         musicsListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            System.out.println("Selected music: " + newValue);
             selectedMusic = getMusicByName(newValue);  // Assurez-vous de récupérer l'objet Music à partir de son nom
-            System.out.println(musicFacade.getCurrentMusic());
             musicFacade.setCurrentMusic(selectedMusic);
             //playSelectedMusic(newValue);  // Jouer la musique si nécessaire
         });
@@ -123,6 +121,7 @@ public class MainPageController {
             playlistController.setMainPageController(this);
         }
         updateAddToPlaylistMenu();
+        handleSearch();
     }
 
 
@@ -190,18 +189,10 @@ public class MainPageController {
 
     private void handleSearch() {
         String search = searchField.getText();
-        if (!search.isEmpty()) {
-            searchFacade.searchMusic(search);
-            searchFacade.searchArtist(search);
-            updateMusicResults();
-            updateArtistResults();
-        } else {
-            musicsListView.getItems().clear();
-            artistsListView.getItems().clear();
-            musicResultLabel.setText("Music Results: ");
-            artistResultLabel.setText("Artist Results: ");
-        }
-
+        searchFacade.searchMusic(search);
+        searchFacade.searchArtist(search);
+        updateMusicResults();
+        updateArtistResults();
     }
 
     private void updateMusicResults() {
