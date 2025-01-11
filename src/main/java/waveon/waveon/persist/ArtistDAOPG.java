@@ -33,6 +33,7 @@ public class ArtistDAOPG implements ArtistDAO {
     }
 
     public Artist getArtistByEmail(String email) {
+        System.out.println("SELECT * FROM artist WHERE email = ? - " + email);
         PGconnector pg = PGconnector.getInstance();
         String sql = "SELECT * FROM artist WHERE email = ?";
         try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -50,6 +51,7 @@ public class ArtistDAOPG implements ArtistDAO {
     }
 
     public Artist getArtistById(int id) {
+        System.out.println("SELECT * FROM artist WHERE id = ? - " + id);
         PGconnector pg = PGconnector.getInstance();
         String sql = "SELECT * FROM artist WHERE id = ?";
         try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -66,6 +68,10 @@ public class ArtistDAOPG implements ArtistDAO {
     }
 
     public ArrayList<OrdUser> getSubscribers(int id) {
+        System.out.println("SELECT ordinaryuser.id, ordinaryuser.username \" +\n" +
+                "                \"FROM subscriber \" +\n" +
+                "                \"JOIN ordinaryuser ON ordinaryuser.id = subscriber.user_id \" +\n" +
+                "                \"WHERE subscriber.artist_id = ?" + id);
         PGconnector pg = PGconnector.getInstance();
         String sql = "SELECT ordinaryuser.id, ordinaryuser.username " +
                 "FROM subscriber " +
@@ -88,6 +94,14 @@ public class ArtistDAOPG implements ArtistDAO {
     }
 
     public Artist getAllInfoArtistById(int id) {
+        System.out.println("SELECT a.id AS artist_id, a.username AS artist_username, a.email AS artist_email, a.password AS artist_password, u.username as user_username, " +
+                "m.id AS music_id, m.title AS music_title, " +
+                "u.id AS user_id " +
+                "FROM artist a " +
+                "LEFT JOIN music m ON a.id = m.artist_id " +
+                "LEFT JOIN subscriber s ON a.id = s.artist_id " +
+                "LEFT JOIN ordinaryuser u ON s.user_id = u.id " +
+                "WHERE a.id = ?" + id);
         PGconnector pg = PGconnector.getInstance();
         String sql = "SELECT a.id AS artist_id, a.username AS artist_username, a.email AS artist_email, a.password AS artist_password, u.username as user_username, " +
                 "m.id AS music_id, m.title AS music_title, " +
@@ -132,6 +146,7 @@ public class ArtistDAOPG implements ArtistDAO {
 
     @Override
     public ArrayList<Artist> getArtistsByName(String name) {
+        System.out.println("SELECT * FROM artist WHERE LOWER(username) LIKE LOWER(?) - " + name);
         PGconnector pg = PGconnector.getInstance();
         String sql = "SELECT * FROM artist WHERE LOWER(username) LIKE LOWER(?)";
         try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -150,6 +165,7 @@ public class ArtistDAOPG implements ArtistDAO {
     }
 
     public ArrayList<Artist> getAllArtists() {
+        System.out.println("SELECT * FROM artist");
         PGconnector pg = PGconnector.getInstance();
         String sql = "SELECT * FROM artist";
         ArrayList<Artist> artists = new ArrayList<Artist>();
@@ -167,6 +183,7 @@ public class ArtistDAOPG implements ArtistDAO {
 
     @Override
     public Artist getArtistByMusicId(int musicId) {
+        System.out.println("SELECT * FROM artist WHERE id = (SELECT artist_id FROM music WHERE id = ?) - " + musicId);
         PGconnector pg = PGconnector.getInstance();
         String sql = "SELECT * FROM artist WHERE id = (SELECT artist_id FROM music WHERE id = ?)";
         try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {

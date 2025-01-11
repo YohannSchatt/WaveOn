@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.collections.FXCollections?>
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="waveon.waveon.ui.MainPageController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="waveon.waveon.ui.MainPageController">
     <top>
         <HBox fx:id="topBar" alignment="TOP_RIGHT" spacing="10" BorderPane.alignment="TOP_RIGHT">
             <children>
@@ -37,7 +37,7 @@
                             <Label fx:id="timerLabel" text="00:00/00:00" />
                         </children>
                     </HBox>
-                    <Slider fx:id="volumeSlider" max="1" prefHeight="55.0" prefWidth="497.0" value="0.5" />
+                    <Slider fx:id="volumeSlider" max="1" prefHeight="55.0" prefWidth="497.0" value="0.1" />
                     <Label fx:id="currentMusicLabel" alignment="TOP_CENTER" contentDisplay="TOP" prefHeight="21.0" prefWidth="601.0" text="No music playing" />
                 </children>
             </VBox>

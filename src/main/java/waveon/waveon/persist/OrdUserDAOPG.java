@@ -12,6 +12,7 @@ public class OrdUserDAOPG implements OrdUserDAO {
     public Connection connection;
 
     public OrdUser getUserByEmail(String email) {
+        System.out.println("SELECT * FROM ordinaryuser WHERE email = ?" + email);
         PGconnector pg = PGconnector.getInstance();
         String sql = "SELECT * FROM ordinaryuser WHERE email = ?";
         try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -103,6 +104,7 @@ public class OrdUserDAOPG implements OrdUserDAO {
     }
 
     public static OrdUser getUserById(int id) {
+        System.out.println("SELECT * FROM ordinaryuser WHERE id = ?" + id);
         PGconnector pg = PGconnector.getInstance();
         String sql = "SELECT * FROM ordinaryuser WHERE id = ?";
         try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {

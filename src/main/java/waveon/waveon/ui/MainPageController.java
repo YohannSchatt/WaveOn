@@ -93,8 +93,11 @@ public class MainPageController {
         pauseTransition.setOnFinished(event -> handleSearch());
         searchField.textProperty().addListener((observable, oldValue, newValue) -> pauseTransition.playFromStart());
         musicsListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            System.out.println("Selected music: " + newValue);
             selectedMusic = getMusicByName(newValue);  // Assurez-vous de récupérer l'objet Music à partir de son nom
-            playSelectedMusic(newValue);  // Jouer la musique si nécessaire
+            System.out.println(musicFacade.getCurrentMusic());
+            musicFacade.setCurrentMusic(selectedMusic);
+            //playSelectedMusic(newValue);  // Jouer la musique si nécessaire
         });
         artistsListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
@@ -293,40 +296,6 @@ public class MainPageController {
         }
     }
 
-    private void useFilterMusic(FilterOption filter) {
-        ArrayList<Music> searchResults = searchFacade.getCurrentMusicSearch();
-
-        if (searchResults == null || searchResults.isEmpty()) {
-            musicsListView.getItems().clear();
-            musicResultLabel.setText("Music Results: No matches found");
-            return;
-        }
-
-        switch (filter) {
-            case Newest:
-                searchResults.sort((m1, m2) -> m2.getReleaseDate().compareTo(m1.getReleaseDate()));
-                break;
-            case Oldest:
-                searchResults.sort(Comparator.comparing(Music::getReleaseDate));
-                break;
-            case MostListened:
-                searchResults.sort((m1, m2) -> Integer.compare(m2.getStreamCount(), m1.getStreamCount()));
-                break;
-            case LeastListened:
-                searchResults.sort(Comparator.comparingInt(Music::getStreamCount));
-                break;
-        }
-
-        ArrayList<String> formattedResults = new ArrayList<>();
-        for (Music music : searchResults) {
-            String formattedResult = music.getTitle();
-            formattedResults.add(formattedResult);
-        }
-
-        musicsListView.getItems().setAll(formattedResults);
-        musicResultLabel.setText("Music Results: " + searchResults.size() + " found");
-    }
-
     private void updateLoginButton() {
         if (UserSessionFacade.getCurrentUser() != null) {
             try {
@@ -376,6 +345,7 @@ public class MainPageController {
             musicFacade.pauseMusic();
             playPauseButton.setText("Play Music");
         } else {
+            System.out.println("Playing music" + musicFacade.getCurrentMusic().getTitle());
             musicFacade.playMusic();
             playPauseButton.setText("Pause Music");
             updateProgressBar();

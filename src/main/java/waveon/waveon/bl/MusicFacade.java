@@ -19,8 +19,9 @@ public class MusicFacade {
     private MediaPlayer mediaPlayer;
     private MusicDAOPG musicDAOPG;
     private int currentMusicIndex = -1;
+    private Music currentMusic = null;
     private boolean isPaused = false;
-    private double volume = 0.5; // Default volume
+    private double volume = 0.1; // Default volume
     private List<Playlist> playlists;
     private PlaylistDAOPG playlistDAOPG;
 
@@ -69,10 +70,12 @@ public class MusicFacade {
 
     public void playMusic() {
         if (mediaPlayer == null && !musicList.isEmpty()) {
-            loadMusicByTitle(musicList.get(0).getTitle());
+
+            loadMusicByTitle(musicList.get(currentMusicIndex).getTitle());
         }
         if (mediaPlayer != null) {
             mediaPlayer.play();
+            currentMusic = musicList.get(currentMusicIndex);
             isPaused = false;
         }
     }
@@ -102,8 +105,10 @@ public class MusicFacade {
             isPaused = false;
         }
         if (!musicList.isEmpty()) {
-            currentMusicIndex = (currentMusicIndex + 1) % musicList.size();
-            initializeMediaPlayer(musicList.get(currentMusicIndex));
+            if (currentMusic == musicList.get(currentMusicIndex)) {
+                currentMusicIndex = (currentMusicIndex + 1) % musicList.size();
+            }
+                loadMusicByTitle(musicList.get(currentMusicIndex).getTitle());
             playMusic();
         }
     }
@@ -154,6 +159,17 @@ public class MusicFacade {
             return musicList.get(currentMusicIndex);
         }
         return null;
+    }
+
+    public void setCurrentMusic(Music music) {
+        System.out.println("Setting current music to: " + music.getTitle());
+        for (int i = 0; i < musicList.size(); i++) {
+            if (musicList.get(i).getId() == music.getId()) {
+                currentMusicIndex = i;
+                System.out.println("Current music index: " + currentMusicIndex + "Done");
+                break;
+            }
+        }
     }
 
     public void uninstallMusic(String directoryPath) {
