@@ -30,4 +30,6 @@ public interface MusicDAO {
     boolean saveMusic(Music music);
 
     List<Music> getListMusicsByidArtist(int id);
+
+    Music getMusicWithContentById(int musicId);
 }

@@ -24,4 +24,5 @@ public interface PlaylistDAO {
 
     // Supprimer une musique d'une playlist
     boolean deleteMusicFromPlaylist(int playlistId, int musicId);
+
 }

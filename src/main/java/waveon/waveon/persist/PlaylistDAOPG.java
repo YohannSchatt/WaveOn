@@ -62,7 +62,7 @@ public class PlaylistDAOPG implements PlaylistDAO {
     }
 
     @Override
-    public List<Music> getMusicByPlaylistId(int playlistId) throws SQLException{
+    public List<Music> getMusicByPlaylistId(int playlistId) throws SQLException {
         String query = """
             SELECT m.id, m.title, m.file_content, m.cover_image, m.artist_id, a.username AS artist_name, 
                    m.release_date, m.stream_count
