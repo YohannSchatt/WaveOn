@@ -29,4 +29,6 @@ public interface MusicDAO {
     ArrayList<Music> getListMusicsByidArtist(int id);
 
     Music getMusicWithContentById(int musicId);
+
+    int getLastId();
 }

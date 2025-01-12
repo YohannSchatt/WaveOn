@@ -13,6 +13,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import waveon.waveon.bl.MusicCommentsFacade;
+import waveon.waveon.bl.UserSessionFacade;
 import waveon.waveon.persist.OrdUserDAOPG;
 import waveon.waveon.core.Comments;
 import waveon.waveon.core.Music;
@@ -31,7 +32,7 @@ public class MusicCommentsPageController {
     private Button backToMainPageButton;
 
     private MusicCommentsFacade musicCommentsFacade = new MusicCommentsFacade();
-    private int userId = 2; // Assuming userId is available, here we use a dummy userId (e.g., 2)
+    private int userId = UserSessionFacade.getCurrentUser().getId(); // Assuming userId is available, here we use a dummy userId (e.g., 2)
 
     @FXML
     public void initialize() {
@@ -55,11 +56,11 @@ public class MusicCommentsPageController {
                 commentsListView.setItems(FXCollections.observableArrayList());
                 for (Comments comment : comments) {
                     HBox hBox = new HBox();
-                    String username = OrdUserDAOPG.getUserById(comment.getIDUser()).getUsername();
+                    String username = OrdUserDAOPG.getUserById(comment.getUserId()).getUsername();
                     Text commentText = new Text(comment.getContent() + " - " + username);
                     hBox.getChildren().add(commentText);
 
-                    if (comment.getIDUser() == userId) {
+                    if (comment.getUserId() == userId) {
                         Button deleteButton = new Button("Delete");
                         deleteButton.setOnAction(event -> {
                             musicCommentsFacade.deleteCommentary(comment.getId());

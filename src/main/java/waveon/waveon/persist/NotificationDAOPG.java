@@ -13,6 +13,7 @@ public class NotificationDAOPG implements NotificationDAO {
     @Override
     public Notification getNotificationById(int id) {
         PGconnector pg = PGconnector.getInstance();
+        System.out.println("SELECT id, title, content, link FROM notification WHERE id = ?" + id);
         String sql = "SELECT id, title, content, link FROM notification WHERE id = ?";
         try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, id);
@@ -35,7 +36,10 @@ public class NotificationDAOPG implements NotificationDAO {
 
     @Override
     public ArrayList<Notification> getNotificationsByUserId(int userId) {
-        System.out.println("getNotificationsByUserId DAO PG");
+        System.out.println("SELECT n.id, n.title, n.content, n.link " +
+                "FROM notification n " +
+                "JOIN user_notification un ON n.id = un.notification_id " +
+                "WHERE un.user_id = ?" + userId);
         PGconnector pg = PGconnector.getInstance();
         String sql = "SELECT n.id, n.title, n.content, n.link " +
                 "FROM notification n " +
@@ -63,7 +67,10 @@ public class NotificationDAOPG implements NotificationDAO {
 
     @Override
     public ArrayList<Notification> getNotificationsByArtistId(int artistId) {
-        System.out.println("getNotificationsByArtistId DAO PG");
+        System.out.println("SELECT n.id, n.title, n.content, n.link " +
+                "FROM notification n " +
+                "JOIN artist_notification an ON n.id = an.notification_id " +
+                "WHERE an.artist_id = ?" + artistId);
         PGconnector pg = PGconnector.getInstance();
         String sql = "SELECT n.id, n.title, n.content, n.link " +
                 "FROM notification n " +

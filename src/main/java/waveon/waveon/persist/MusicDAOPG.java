@@ -170,7 +170,7 @@ public class MusicDAOPG implements MusicDAO {
         return null;
     }
 
-    public static int getLastId() {
+    public int getLastId() {
         PGconnector pg = PGconnector.getInstance();
         String sql = "SELECT MAX(id) FROM music";
         try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -207,11 +207,8 @@ public class MusicDAOPG implements MusicDAO {
         catch (Exception e) {
             System.out.println("Error in MusicDAOPG.getMusicWithContentById : " + e);
         }
-
-
         return null;
     }
-
 
 }
 
