@@ -32,7 +32,7 @@ public class MusicDAOPG implements MusicDAO {
     }
 
     public Music getMusicById(int id) {
-        System.out.println("SELECT * FROM music WHERE id = ?" + id);
+        System.out.println("SELECT * FROM music WHERE id = " + id);
         PGconnector pg = PGconnector.getInstance();
         String sql = "SELECT id,title,artist_id,artist_name,release_date,stream_count FROM music WHERE id = ?";
         try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -57,7 +57,7 @@ public class MusicDAOPG implements MusicDAO {
     }
 
     public ArrayList<Music> getListMusicsByidArtist(int id) {
-        System.out.println("SELECT * FROM music WHERE artist_id = ?" + id);
+        System.out.println("SELECT * FROM music WHERE artist_id = " + id);
         PGconnector pg = PGconnector.getInstance();
         String sql = "SELECT id,title,artist_id FROM music WHERE artist_id = ?";
         try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {

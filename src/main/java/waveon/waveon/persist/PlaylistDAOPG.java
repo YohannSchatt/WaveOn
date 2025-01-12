@@ -41,7 +41,7 @@ public class PlaylistDAOPG implements PlaylistDAO {
 
     @Override
     public ArrayList<Playlist> getPlaylistsByUserId(int userId) {
-        System.out.println("SELECT * FROM playlist WHERE userId = ?" + userId);
+        System.out.println("SELECT * FROM playlist WHERE userId = " + userId);
         ArrayList<Playlist> playlists = new ArrayList<>();
         String sql = "SELECT * FROM playlist WHERE userId = ?";
         try (Connection conn = PGconnector.getInstance().getConnection();
@@ -63,12 +63,12 @@ public class PlaylistDAOPG implements PlaylistDAO {
 
     @Override
     public ArrayList<Music> getMusicByPlaylistId(int playlistId) throws SQLException{
-        System.out.println("SELECT m.id, m.title, m.file_content, m.cover_image, m.artist_id, a.username AS artist_name, \n" +
-                "                   m.release_date, m.stream_count\n" +
-                "            FROM music m\n" +
-                "            JOIN playlist_music pm ON m.id = pm.music_id\n" +
-                "            JOIN artist a ON m.artist_id = a.id\n" +
-                "            WHERE pm.playlist_id = ?");
+        System.out.println("SELECT m.id, m.title, m.file_content, m.cover_image, m.artist_id, a.username AS artist_name, " +
+                "m.release_date, m.stream_count " +
+                "FROM music m " +
+                "JOIN playlist_music pm ON m.id = pm.music_id " +
+                "JOIN artist a ON m.artist_id = a.id " +
+                "WHERE pm.playlist_id = " + playlistId);
         String query = """
             SELECT m.id, m.title, m.artist_id, a.username AS artist_name, 
                    m.release_date, m.stream_count
