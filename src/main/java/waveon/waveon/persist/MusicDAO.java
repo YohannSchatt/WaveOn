@@ -31,4 +31,6 @@ public interface MusicDAO {
     Music getMusicWithContentById(int musicId);
 
     int getLastId();
+
+    void incrementPlayCount(int id);
 }

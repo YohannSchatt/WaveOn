@@ -33,10 +33,10 @@
                                 <ComboBox fx:id="filterComboBox" prefWidth="150.0" promptText="Streams count ↓">
                                     <items>
                                         <FXCollections fx:factory="observableArrayList">
-                                            <String fx:value="Time ↓" />
-                                            <String fx:value="Time ↑" />
-                                            <String fx:value="Streams count ↓" />
-                                          <String fx:value="Streams count ↑" />
+                                            <String fx:value="Newest" />
+                                            <String fx:value="Oldest" />
+                                            <String fx:value="MostListened" />
+                                            <String fx:value="LeastListened" />
                                       </FXCollections>
                                   </items>
                                   <HBox.margin>

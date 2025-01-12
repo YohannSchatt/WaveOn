@@ -144,7 +144,7 @@ public class MusicDAOPG implements MusicDAO {
     public ArrayList<Music> getAllMusics() {
         System.out.println("SELECT id,title,artist_id,artist_name,release_date,stream_count FROM music");
         PGconnector pg = PGconnector.getInstance();
-        String sql = "SELECT id,title,artist_id,artist_name,release_date,stream_count FROM music";
+        String sql = "SELECT id,title,artist_id,artist_name,release_date,stream_count FROM music ORDER BY id";
         try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
             ResultSet rs = pstmt.executeQuery();
             // recuperer les musiques dans une liste
@@ -184,6 +184,20 @@ public class MusicDAOPG implements MusicDAO {
             System.out.println("Error in MusicDAOPG.getLastId : " + e);
         }
         return 0;
+    }
+
+    @Override
+    public void incrementPlayCount(int id) {
+        System.out.println("UPDATE music SET stream_count = stream_count + 1 WHERE id = " + id);
+        PGconnector pg = PGconnector.getInstance();
+        String sql = "UPDATE music SET stream_count = stream_count + 1 WHERE id = ?";
+        try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, id);
+            pstmt.executeUpdate();
+        }
+        catch (Exception e) {
+            System.out.println("Error in MusicDAOPG.incrementPlayCount : " + e);
+        }
     }
 
     public Music getMusicWithContentById(int id) {

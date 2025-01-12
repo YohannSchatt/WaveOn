@@ -19,7 +19,7 @@ public class MusicFacade {
     private MediaPlayer mediaPlayer;
     private MusicDAO musicDAO;
     private PlaylistDAO playlistDAO;
-    private int currentMusicIndex = -1;
+    private int currentMusicIndex = 1;
     private Music currentMusic = null;
     private boolean isPaused = false;
     private double volume = 0.1; // Default volume
@@ -55,6 +55,30 @@ public class MusicFacade {
         currentMusicIndex = id;
         Music music = musicDAO.getMusicWithContentById(id);
         initializeMediaPlayer(music);
+        incrementPlayCount(id);
+    }
+
+    private void incrementPlayCount(int id) {
+        musicDAO.incrementPlayCount(id);
+    }
+
+    public void orderMusicList(FilterOption filterOption) {
+        switch (filterOption) {
+            case Newest:
+                musicList.sort((m1, m2) -> m2.getReleaseDate().compareTo(m1.getReleaseDate()));
+                break;
+            case Oldest:
+                musicList.sort((m1, m2) -> m1.getReleaseDate().compareTo(m2.getReleaseDate()));
+                break;
+            case MostListened:
+                musicList.sort((m1, m2) -> m2.getStreamCount() - m1.getStreamCount());
+                break;
+            case LeastListened:
+                musicList.sort((m1, m2) -> m1.getStreamCount() - m2.getStreamCount());
+                break;
+            default:
+                break;
+        }
     }
 
     // Initializes the MediaPlayer object with the music file content
@@ -180,7 +204,7 @@ public class MusicFacade {
     public Music getCurrentMusic() {
         if (currentMusic != null) {
             return currentMusic;
-        } else if (currentMusicIndex != -1 && currentMusicIndex < musicList.size()) {
+        } else if (currentMusicIndex < musicList.size()) {
             return musicList.get(currentMusicIndex-1);
         }
         return null;

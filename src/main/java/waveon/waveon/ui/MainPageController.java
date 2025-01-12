@@ -160,16 +160,16 @@ public class MainPageController {
         String selectedFilter = filterComboBox.getValue();
         if (selectedFilter != null && searchResults != null) {
             switch (selectedFilter) {
-                case "Time ↓":
+                case "Newest":
                     searchResults.sort(Comparator.comparing(Music::getReleaseDate).reversed());
                     break;
-                case "Time ↑":
+                case "Oldest":
                     searchResults.sort(Comparator.comparing(Music::getReleaseDate));
                     break;
-                case "Streams count ↑":
+                case "MostListened":
                     searchResults.sort(Comparator.comparingInt(Music::getStreamCount).reversed());
                     break;
-                case "Streams count ↓":
+                case "LeastListened":
                     searchResults.sort(Comparator.comparingInt(Music::getStreamCount));
                     break;
             }
@@ -182,6 +182,7 @@ public class MainPageController {
 
             musicsListView.getItems().setAll(formattedResults);
             musicResultLabel.setText("Music Results: " + searchResults.size() + " found");
+            musicFacade.orderMusicList(FilterOption.valueOf(selectedFilter));
         }
     }
 
