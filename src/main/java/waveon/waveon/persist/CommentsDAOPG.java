@@ -64,7 +64,7 @@ public class CommentsDAOPG implements CommentsDAO {
         try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, comment.getMusic());
             pstmt.setString(2, comment.getContent());
-            pstmt.setInt(3, comment.getIDUser());
+            pstmt.setInt(3, comment.getUserId());
             pstmt.executeUpdate();
         } catch (SQLException ex) {
             System.out.println("Error in CommentsDAOPG.addComment: " + ex.getMessage());

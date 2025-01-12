@@ -146,8 +146,6 @@ public class MainPageController {
         }
     }
 
-
-
     private void applyFilter() {
         String selectedFilter = filterComboBox.getValue();
         if (selectedFilter != null && searchResults != null) {
@@ -244,15 +242,6 @@ public class MainPageController {
             artistsListView.getItems().clear();
             artistResultLabel.setText("Artist Results: No matches found");
         }
-    }
-
-    private FilterOption convertToFilterOption(String filter) {
-        return switch (filter) {
-            case "Time ↓" -> FilterOption.Newest;
-            case "Time ↑" -> FilterOption.Oldest;
-            case "Streams count ↑" -> FilterOption.LeastListened;
-            default -> FilterOption.MostListened;
-        };
     }
 
     void playSelectedMusic(String musicTitle) {

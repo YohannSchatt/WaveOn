@@ -27,7 +27,7 @@ public class UploadMusicFacade {
             int artistId = currentArtist.getId();
             String artistName = currentArtist.getUsername(); // Récupérer le nom de l'artiste
             Date releaseDate = new Date(System.currentTimeMillis()); // Date actuelle
-            int id = MusicDAOPG.getLastId() + 1;
+            int id = musicDAO.getLastId() + 1;
             // Créer l'objet Music avec les informations nécessaires
             Music music = new Music(id, title, fileContent, coverImage, artistId, artistName, releaseDate, 0);
 
@@ -36,13 +36,13 @@ public class UploadMusicFacade {
 
             // Créer une notification pour l'artiste
             int notifId = notificationDAO.getLastId()+1;
-            notificationDAO.createNotification("Music uploaded", title + " has been uploaded successfully", "/artist/"+artistId);
+            notificationDAO.createNotification("Music uploaded", title + " has been uploaded successfully", String.valueOf(id));
             notificationDAO.linkNotificationToArtist(notifId, artistId);
 
             // Créer une notification pour les followers de l'artiste
             ArrayList<OrdUser> followers = artistDAO.getSubscribers(artistId);
             notifId = notificationDAO.getLastId()+1;
-            notificationDAO.createNotification("New music from " + artistName, artistName + " has uploaded a new music: " + title, "/artist/"+artistId);
+            notificationDAO.createNotification("New music from " + artistName, artistName + " has uploaded a new music: " + title, String.valueOf(id));
             System.out.println("nb : " + followers.size());
 
             for (OrdUser follower : followers) {

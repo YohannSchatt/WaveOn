@@ -12,6 +12,7 @@ public class NotificationFacade {
 
     NotificationDAO notificationDAO;
 
+
     public NotificationFacade() {
         AbstractFactory factory = AbstractFactory.getInstance();
         assert factory != null;

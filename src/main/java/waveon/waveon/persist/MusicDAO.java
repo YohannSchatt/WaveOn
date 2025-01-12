@@ -27,4 +27,8 @@ public interface MusicDAO {
     boolean saveMusic(Music music);
 
     ArrayList<Music> getListMusicsByidArtist(int id);
+
+    Music getMusicWithContentById(int musicId);
+
+    int getLastId();
 }

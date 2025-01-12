@@ -5,8 +5,10 @@ import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 import waveon.waveon.core.Music;
 import waveon.waveon.core.Playlist;
-import waveon.waveon.persist.MusicDAOPG;
-import waveon.waveon.persist.PlaylistDAOPG;
+import waveon.waveon.persist.AbstractFactory;
+import waveon.waveon.persist.MusicDAO;
+import waveon.waveon.persist.PlaylistDAO;
+import waveon.waveon.persist.PlaylistDAO;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -16,18 +18,20 @@ import java.util.ArrayList;
 public class MusicFacade {
     private final ArrayList<Music> musicList;
     private MediaPlayer mediaPlayer;
-    private final MusicDAOPG musicDAOPG;
+    private MusicDAO musicDAO;
+    private PlaylistDAO playlistDAO;
     private int currentMusicIndex = -1;
     private Music currentMusic = null;
     private boolean isPaused = false;
     private double volume = 0.1; // Default volume
     private ArrayList<Playlist> playlists;
-    private final PlaylistDAOPG playlistDAOPG;
 
     public MusicFacade() {
-        this.musicDAOPG = new MusicDAOPG();
-        this.musicList = musicDAOPG.getAllMusics();
-        this.playlistDAOPG = new PlaylistDAOPG();
+        AbstractFactory factory = AbstractFactory.getInstance();
+        assert factory != null;
+        musicDAO = factory.createMusicDAO();
+        this.musicList = musicDAO.getAllMusics();
+        playlistDAO = factory.createPlaylistDAO();
     }
 
     // Loads the music file content from the database and initializes the MediaPlayer object
@@ -39,7 +43,7 @@ public class MusicFacade {
             if (musicList.get(i).getTitle().equals(title)) {
                 currentMusicIndex = i;
                 int musicId = musicList.get(i).getId();
-                Music music = musicDAOPG.getMusicWithContentById(musicId);
+                Music music = musicDAO.getMusicWithContentById(musicId);
                 initializeMediaPlayer(music);
                 break;
             }
@@ -218,24 +222,24 @@ public class MusicFacade {
     // Creates a new playlist with the specified name and user ID
     // Returns true if the playlist is created successfully, false otherwise
     public boolean createPlaylist(String name, int userId) {
-        return playlistDAOPG.createPlaylist(name, userId);
+        return playlistDAO.createPlaylist(name, userId);
     }
 
     // Returns all playlists for the specified user ID
     public ArrayList<Playlist> getPlaylistsByUserId(int userId) {
-        return playlistDAOPG.getPlaylistsByUserId(userId);
+        return playlistDAO.getPlaylistsByUserId(userId);
     }
 
     // Adds a music to the specified playlist
     public boolean addMusicToPlaylist(Music music, Playlist playlist) {
-        return playlistDAOPG.addMusicToPlaylist(music.getId(), playlist.getId());
+        return playlistDAO.addMusicToPlaylist(music.getId(), playlist.getId());
     }
 
     // Returns all musics from the specified playlist
     public ArrayList<Music> getMusicsByPlaylistId(int playlistId) {
         ArrayList<Music> musicList = new ArrayList<>();
         try {
-            musicList = playlistDAOPG.getMusicByPlaylistId(playlistId);
+            musicList = playlistDAO.getMusicByPlaylistId(playlistId);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -244,11 +248,15 @@ public class MusicFacade {
 
     // Deletes the specified playlist
     public boolean deletePlaylist(int playlistId) {
-        return playlistDAOPG.deletePlaylist(playlistId);
+        return playlistDAO.deletePlaylist(playlistId);
     }
 
     // Deletes the specified music from the specified playlist
     public boolean deleteMusicFromPlaylist(int playlistId, int musicId) {
-        return playlistDAOPG.deleteMusicFromPlaylist(playlistId, musicId);
+        return playlistDAO.deleteMusicFromPlaylist(playlistId, musicId);
+    }
+
+    public int getLasId() {
+        return musicDAO.getLastId();
     }
 }

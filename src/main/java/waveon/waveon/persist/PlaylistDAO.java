@@ -3,6 +3,7 @@ package waveon.waveon.persist;
 import waveon.waveon.core.Playlist;
 import waveon.waveon.core.Music;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface PlaylistDAO {
@@ -14,10 +15,10 @@ public interface PlaylistDAO {
     boolean addMusicToPlaylist(int playlistId, int musicId);
 
     // Récupérer toutes les playlists qui appartiennent à un utilisateur
-    List<Playlist> getPlaylistsByUserId(int userId);
+    ArrayList<Playlist> getPlaylistsByUserId(int userId);
 
     // Récupérer toutes les musiques d'une playlist
-    List<Music> getMusicByPlaylistId(int playlistId) throws Exception;
+    ArrayList<Music> getMusicByPlaylistId(int playlistId) throws Exception;
 
     // Supprimer une playlist
     boolean deletePlaylist(int playlistId);
