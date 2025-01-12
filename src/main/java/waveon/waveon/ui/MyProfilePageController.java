@@ -60,6 +60,9 @@ public class MyProfilePageController {
                     Artist artist = (Artist) currentUser;
                     SearchFacade searchFacade = new SearchFacade();
                     if(searchFacade.getAllInfoArtistById(artist.getId())) {
+                        UserSessionFacade.setCurrentUser(SearchFacade.getProfilePageInfo());
+                        currentUser = UserSessionFacade.getCurrentUser();
+                        artist = (Artist) currentUser;
                         for (Music music : artist.getMusics()) {
                             myMusic.getItems().add(music.getTitle());
                         }

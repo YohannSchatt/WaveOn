@@ -1,0 +1,40 @@
+.root {
+    -fx-font-family: 'Arial';
+    -fx-background-color: #000000; /* Spotify dark background */
+}
+
+#hbox {
+    -fx-background-color: #1DB954; /* Spotify green */
+    -fx-padding: 10;
+}
+
+#passwordInput, #emailInput {
+    -fx-background-color: #363636; /* Dark background */
+    -fx-background-radius: 10;
+    -fx-text-fill: #a9a9a9;
+    -fx-border-color: #1DB954;
+    -fx-border-radius: 10;
+}
+
+#passwordInput:focused, #emailInput:focused {
+    -fx-background-color: #1f1f1f; /* Dark background */
+}
+
+#loginButton {
+    -fx-background-color: Black;
+    -fx-border-width: 3;
+    -fx-border-color: pink;
+    -fx-border-radius: 10;
+    -fx-background-radius: 12;
+    -fx-text-fill: WHITE;
+}
+
+#loginButton:hover {
+    -fx-background-color: #0c5326; /* Lighter green on hover */
+}
+
+#resultLabel {
+    -fx-text-fill: #1DB954; /* Spotify green */
+    -fx-font-size: 16;
+    -fx-font-weight: bold;
+}
