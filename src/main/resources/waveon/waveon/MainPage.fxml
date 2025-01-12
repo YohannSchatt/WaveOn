@@ -139,8 +139,16 @@
       </BorderPane>
    </center>
     <right>
-        <VBox fx:id="notificationBand" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0"
-              AnchorPane.bottomAnchor="0.0">
+        <VBox fx:id="notificationBand" prefWidth="200.0" visible="false" BorderPane.alignment="CENTER">
+            <children>
+                <ListView fx:id="notificationListView" prefHeight="200.0" prefWidth="200.0">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            <!-- Les éléments seront ajoutés dynamiquement -->
+                        </FXCollections>
+                    </items>
+                </ListView>
+            </children>
         </VBox>
     </right>
     <left>

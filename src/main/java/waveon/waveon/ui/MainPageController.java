@@ -75,6 +75,8 @@ public class MainPageController {
     private VBox notificationBand;
     @FXML
     private Button toggleNotificationButton;
+    @FXML
+    private ListView<HBox> notificationListView;
 
 
     public void initialize() {
@@ -127,8 +129,8 @@ public class MainPageController {
                 return;
             }
             notificationBand.setVisible(true);
+            loadNotifications();
             toggleNotificationButton.setText("Close Notifications");
-            initializeNotifications();
 
         } else {
             notificationBand.setVisible(false);
@@ -136,13 +138,19 @@ public class MainPageController {
         }
     }
 
-    private void initializeNotifications() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/waveon/waveon/NotificationCenter.fxml"));
-            notificationBand.getChildren().add(loader.load());
-            System.out.println("Notification band loaded");
-        } catch (Exception e) {
-            e.printStackTrace();
+    private void loadNotifications() {
+        ArrayList<Notification> notifications = notificationFacade.getNotificationsList();
+        notificationListView.getItems().clear();
+        for (Notification notification : notifications) {
+            HBox hBox = new HBox();
+            Label label = new Label(notification.getContent());
+            Button deleteButton = new Button("✖");
+            deleteButton.setOnAction(event -> {
+                notificationFacade.clearNotification(notification.getId());
+                loadNotifications();
+            });
+            hBox.getChildren().addAll(label, deleteButton);
+            notificationListView.getItems().add(hBox);
         }
     }
 
