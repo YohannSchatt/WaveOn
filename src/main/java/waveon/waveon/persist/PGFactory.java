@@ -25,4 +25,9 @@ public class PGFactory extends AbstractFactory {
     public CommentsDAOPG createCommentsDAO() {
         return new CommentsDAOPG();
     }
+
+    @Override
+    public PlaylistDAOPG createPlaylistDAO() {
+        return new PlaylistDAOPG();
+    }
 }

@@ -27,4 +27,6 @@ public abstract class AbstractFactory {
     public abstract CommentsDAO createCommentsDAO();
 
     public abstract NotificationDAO createNotificationDAO();
+
+    public abstract PlaylistDAO createPlaylistDAO();
 }

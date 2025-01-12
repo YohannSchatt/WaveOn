@@ -5,29 +5,30 @@ import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 import waveon.waveon.core.Music;
 import waveon.waveon.core.Playlist;
-import waveon.waveon.persist.MusicDAOPG;
-import waveon.waveon.persist.PlaylistDAOPG;
+import waveon.waveon.persist.*;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MusicFacade {
     private final ArrayList<Music> musicList;
     private MediaPlayer mediaPlayer;
-    private final MusicDAOPG musicDAOPG;
+    private final MusicDAO musicDAOPG;
     private int currentMusicIndex = -1;
     private Music currentMusic = null;
     private boolean isPaused = false;
     private double volume = 0.1; // Default volume
     private ArrayList<Playlist> playlists;
-    private final PlaylistDAOPG playlistDAOPG;
+    private final PlaylistDAO playlistDAOPG;
 
     public MusicFacade() {
-        this.musicDAOPG = new MusicDAOPG();
+        AbstractFactory factory = AbstractFactory.getInstance();
+        this.musicDAOPG = factory.createMusicDAO();
         this.musicList = musicDAOPG.getAllMusics();
-        this.playlistDAOPG = new PlaylistDAOPG();
+        this.playlistDAOPG = factory.createPlaylistDAO();
     }
 
     // Loads the music file content from the database and initializes the MediaPlayer object
