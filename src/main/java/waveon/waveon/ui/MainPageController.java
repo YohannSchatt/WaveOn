@@ -141,10 +141,10 @@ public class MainPageController {
     }
 
     private void loadNotifications() {
-        notificationFacade.loadNotifications();
+        ArrayList<Notification> notifications = notificationFacade.getNotificationsList();
         notificationListView.getItems().clear();
 
-        for (Notification notification : notificationFacade.getNotificationsList()) {
+        for (Notification notification : notifications) {
             HBox hBox = new HBox();
             Label label = new Label(notification.getContent());
             Button deleteButton = new Button("✖");
@@ -392,7 +392,7 @@ public class MainPageController {
 
 
     private Music getMusicByName(String musicName) {
-        for (Music music : musicFacade.getAllMusic()) {
+        for (Music music : musicFacade.getAllMusics()) {
             if (music.getTitle().equals(musicName)) {
                 return music;
             }

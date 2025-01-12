@@ -1,12 +1,12 @@
 package waveon.waveon.persist;
 
 import waveon.waveon.core.Comments;
-import java.util.List;
+import java.util.ArrayList;
 
 public interface CommentsDAO {
     Comments getCommentById(int id);
-    List<Comments> getAllComments();
-    List<Comments> getCommentsByMusicId(int musicId);
+    ArrayList<Comments> getAllComments();
+    ArrayList<Comments> getCommentsByMusicId(int musicId);
     void addComment(Comments comment);
     void updateComment(Comments comment);
     void deleteComment(int commentId);

@@ -7,9 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface MusicDAO {
-     ArrayList<Music> getAllMusic();
-
-
     Connection connection = null;
 
 
@@ -29,5 +26,5 @@ public interface MusicDAO {
 
     boolean saveMusic(Music music);
 
-    List<Music> getListMusicsByidArtist(int id);
+    ArrayList<Music> getListMusicsByidArtist(int id);
 }

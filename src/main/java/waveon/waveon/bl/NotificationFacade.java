@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class NotificationFacade {
 
-    ArrayList<Notification> notificationsList;
+
     NotificationDAO notificationDAO;
 
     public NotificationFacade() {
@@ -18,7 +18,9 @@ public class NotificationFacade {
         notificationDAO = factory.createNotificationDAO();
     }
 
-    public void loadNotifications() {
+    // Get the list of notifications for the current user
+    public ArrayList<Notification> getNotificationsList() {
+        ArrayList<Notification> notificationsList;
         System.out.println("load Notifs Facade");
         if (UserSessionFacade.getCurrentUser() != null) {
             if (UserSessionFacade.getCurrentUser() instanceof Artist) {
@@ -30,13 +32,12 @@ public class NotificationFacade {
         }
         else {
             System.out.println("User not connected");
+            notificationsList = new ArrayList<>();
         }
-    }
-
-    public ArrayList<Notification> getNotificationsList() {
         return notificationsList;
     }
 
+    // Remove the link between the notification and the user/artist
     public void clearNotification(int notificationId) {
         if (UserSessionFacade.getCurrentUser() != null) {
             if (UserSessionFacade.getCurrentUser() instanceof Artist) {

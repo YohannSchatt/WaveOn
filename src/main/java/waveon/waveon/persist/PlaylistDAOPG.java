@@ -6,7 +6,6 @@ import waveon.waveon.connector.PGconnector;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.List;
 
 public class PlaylistDAOPG implements PlaylistDAO {
 
@@ -41,8 +40,8 @@ public class PlaylistDAOPG implements PlaylistDAO {
 
 
     @Override
-    public List<Playlist> getPlaylistsByUserId(int userId) {
-        List<Playlist> playlists = new ArrayList<>();
+    public ArrayList<Playlist> getPlaylistsByUserId(int userId) {
+        ArrayList<Playlist> playlists = new ArrayList<>();
         String sql = "SELECT * FROM playlist WHERE userId = ?";
         try (Connection conn = PGconnector.getInstance().getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -62,7 +61,7 @@ public class PlaylistDAOPG implements PlaylistDAO {
     }
 
     @Override
-    public List<Music> getMusicByPlaylistId(int playlistId) throws SQLException{
+    public ArrayList<Music> getMusicByPlaylistId(int playlistId) throws SQLException{
         String query = """
             SELECT m.id, m.title, m.file_content, m.cover_image, m.artist_id, a.username AS artist_name, 
                    m.release_date, m.stream_count
@@ -75,7 +74,7 @@ public class PlaylistDAOPG implements PlaylistDAO {
              PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setInt(1, playlistId);
             ResultSet rs = pstmt.executeQuery();
-            List<Music> musics = new ArrayList<>();
+            ArrayList<Music> musics = new ArrayList<>();
             while (rs.next()) {
                 Music music = new Music(
                         rs.getInt("id"),

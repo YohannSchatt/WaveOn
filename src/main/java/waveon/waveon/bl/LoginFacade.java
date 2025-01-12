@@ -1,7 +1,6 @@
 package waveon.waveon.bl;
 
 import waveon.waveon.core.IUser;
-import waveon.waveon.core.OrdUser;
 import waveon.waveon.persist.AbstractFactory;
 import waveon.waveon.persist.ArtistDAO;
 import waveon.waveon.persist.OrdUserDAO;
@@ -19,6 +18,8 @@ public class LoginFacade {
         artistDAO = factory.createArtistDAO();
     }
 
+    // Function that logs in a user based on their email and whether they are an artist or not
+    // CurrrentUser is set to the user that is logged in
     public void login(String email, boolean isArtist) {
 
         if (isArtist) {
@@ -30,6 +31,8 @@ public class LoginFacade {
         }
     }
 
+    // Function that checks if the email and password match the current user
+    // returns true if they match, false otherwise
     public boolean checkCredentials(String email, String password) {
         if (currentUser != null) {
             if (currentUser.getPassword().equals(password) && currentUser.getEmail().equals(email)) {
@@ -42,10 +45,12 @@ public class LoginFacade {
         return false;
     }
 
+    // Function that returns the current connected user
     public static IUser getCurrentUser() {
         return currentUser;
     }
 
+    // Function that logs out the current user
     public void logout() {
         currentUser = null;
     }

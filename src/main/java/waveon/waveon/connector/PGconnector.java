@@ -19,6 +19,7 @@ public class PGconnector {
         return instance;
     }
 
+    // Function that returns a connection to the database
     public Connection getConnection() throws SQLException {
         return DriverManager.getConnection(URL, USER, PASSWORD);
     }

@@ -3,7 +3,6 @@ package waveon.waveon.bl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import waveon.waveon.core.Artist;
-import waveon.waveon.core.IUser;
 import waveon.waveon.core.OrdUser;
 import waveon.waveon.persist.AbstractFactory;
 import waveon.waveon.persist.ArtistDAO;
@@ -87,7 +86,7 @@ public class UserSessionFacadeTest {
         boolean result = userSessionFacade.register(email, username, password, true);
 
         assertTrue(result);
-        verify(mockArtistDAO).addUser(email, username, password);
+        verify(mockArtistDAO).addArtist(email, username, password);
     }
 
     @Test

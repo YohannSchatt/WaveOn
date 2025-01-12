@@ -5,7 +5,6 @@ import waveon.waveon.core.Music;
 import waveon.waveon.core.OrdUser;
 import waveon.waveon.persist.*;
 
-import javax.swing.*;
 import java.sql.Date;
 import java.util.ArrayList;
 
@@ -22,8 +21,9 @@ public class UploadMusicFacade {
         this.artistDAO = factory.createArtistDAO();
     }
 
+    // Upload a music file to the database
     public boolean uploadMusic(String title, byte[] fileContent, byte[] coverImage) {
-        if (UserSessionFacade.getCurrentUser() != null && UserSessionFacade.getCurrentUser() instanceof Artist currentArtist) {
+        if (UserSessionFacade.getCurrentUser() instanceof Artist currentArtist) {
             int artistId = currentArtist.getId();
             String artistName = currentArtist.getUsername(); // Récupérer le nom de l'artiste
             Date releaseDate = new Date(System.currentTimeMillis()); // Date actuelle
@@ -32,7 +32,6 @@ public class UploadMusicFacade {
             Music music = new Music(id, title, fileContent, coverImage, artistId, artistName, releaseDate, 0);
 
             // Sauvegarder dans la base de données
-
             musicDAO.saveMusic(music);
 
             // Créer une notification pour l'artiste
@@ -51,7 +50,6 @@ public class UploadMusicFacade {
                 notificationDAO.linkNotificationToUser(notifId, follower.getId());
             }
             return true;
-
         }
         return false;
     }

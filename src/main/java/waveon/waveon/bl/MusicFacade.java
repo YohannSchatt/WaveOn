@@ -12,18 +12,17 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 public class MusicFacade {
-    private List<Music> musicList;
+    private final ArrayList<Music> musicList;
     private MediaPlayer mediaPlayer;
-    private MusicDAOPG musicDAOPG;
+    private final MusicDAOPG musicDAOPG;
     private int currentMusicIndex = -1;
     private Music currentMusic = null;
     private boolean isPaused = false;
     private double volume = 0.1; // Default volume
-    private List<Playlist> playlists;
-    private PlaylistDAOPG playlistDAOPG;
+    private ArrayList<Playlist> playlists;
+    private final PlaylistDAOPG playlistDAOPG;
 
     public MusicFacade() {
         this.musicDAOPG = new MusicDAOPG();
@@ -31,6 +30,7 @@ public class MusicFacade {
         this.playlistDAOPG = new PlaylistDAOPG();
     }
 
+    // Loads the music file content from the database and initializes the MediaPlayer object
     public void loadMusicByTitle(String title) {
         if (mediaPlayer != null) {
             mediaPlayer.stop();
@@ -46,6 +46,7 @@ public class MusicFacade {
         }
     }
 
+    // Initializes the MediaPlayer object with the music file content
     private void initializeMediaPlayer(Music music) {
         if (music.getFileContent() != null) {
             try {
@@ -68,6 +69,7 @@ public class MusicFacade {
         }
     }
 
+    // PLay the loaded music
     public void playMusic() {
         if (mediaPlayer == null && !musicList.isEmpty()) {
 
@@ -80,6 +82,7 @@ public class MusicFacade {
         }
     }
 
+    // Pause the music (if playing) or resume the music (if paused)
     public void pauseMusic() {
         if (mediaPlayer != null) {
             if (isPaused) {
@@ -92,6 +95,7 @@ public class MusicFacade {
         }
     }
 
+    // Stop the music
     public void stopMusic() {
         if (mediaPlayer != null) {
             mediaPlayer.stop();
@@ -99,6 +103,7 @@ public class MusicFacade {
         }
     }
 
+    // Skip to the next music in the list
     public void skipMusic() {
         if (mediaPlayer != null) {
             mediaPlayer.stop();
@@ -113,12 +118,14 @@ public class MusicFacade {
         }
     }
 
+    // Restart the music (set the current time to 0)
     public void restartMusic() {
         if (mediaPlayer != null) {
             mediaPlayer.seek(Duration.ZERO);
         }
     }
 
+    // Set the volume of the music
     public void setVolume(double volume) {
         this.volume = volume; // Store the volume
         if (mediaPlayer != null) {
@@ -126,12 +133,14 @@ public class MusicFacade {
         }
     }
 
+    // Seek to a specific time in the music
     public void seekMusic(Duration time) {
         if (mediaPlayer != null) {
             mediaPlayer.seek(time);
         }
     }
 
+    // Get the current time of the music
     public Duration getCurrentTime() {
         if (mediaPlayer != null) {
             return mediaPlayer.getCurrentTime();
@@ -139,6 +148,7 @@ public class MusicFacade {
         return Duration.ZERO;
     }
 
+    // Get the total duration of the music
     public Duration getTotalDuration() {
         if (mediaPlayer != null) {
             return mediaPlayer.getTotalDuration();
@@ -146,14 +156,14 @@ public class MusicFacade {
         return Duration.ZERO;
     }
 
+    // Return the current MediaPlayer object
     public MediaPlayer getMediaPlayer() {
         return mediaPlayer;
     }
 
-    public List<Music> getMusicList() {
-        return musicList;
-    }
 
+
+    // Return the current music object
     public Music getCurrentMusic() {
         if (currentMusicIndex != -1 && currentMusicIndex < musicList.size()) {
             return musicList.get(currentMusicIndex);
@@ -161,6 +171,7 @@ public class MusicFacade {
         return null;
     }
 
+    // Set the current music object
     public void setCurrentMusic(Music music) {
         System.out.println("Setting current music to: " + music.getTitle());
         for (int i = 0; i < musicList.size(); i++) {
@@ -172,6 +183,7 @@ public class MusicFacade {
         }
     }
 
+    // Uninstall music from the specified directory
     public void uninstallMusic(String directoryPath) {
         // Implement the logic to uninstall music here
         // Delete all files in the specified directory
@@ -191,25 +203,35 @@ public class MusicFacade {
         }
     }
 
-    public List<Music> getAllMusic() {
+    // Return all musics from the DAO without the music file content to avoid memory issues
+    public ArrayList<Music> getAllMusics() {
         return musicList;
     }
 
-    public boolean createPlaylist(String name, int userId) {
-        playlistDAOPG.createPlaylist(name, userId);
-        return true;
+    // Return the current musicList
+    public ArrayList<Music> getMusicList() {
+        return musicList;
     }
 
-    public List<Playlist> getPlaylistsByUserId(int userId) {
+    // Creates a new playlist with the specified name and user ID
+    // Returns true if the playlist is created successfully, false otherwise
+    public boolean createPlaylist(String name, int userId) {
+        return playlistDAOPG.createPlaylist(name, userId);
+    }
+
+    // Returns all playlists for the specified user ID
+    public ArrayList<Playlist> getPlaylistsByUserId(int userId) {
         return playlistDAOPG.getPlaylistsByUserId(userId);
     }
 
+    // Adds a music to the specified playlist
     public boolean addMusicToPlaylist(Music music, Playlist playlist) {
         return playlistDAOPG.addMusicToPlaylist(music.getId(), playlist.getId());
     }
 
-    public List<Music> getMusicByPlaylistId(int playlistId) {
-        List<Music> musicList = new ArrayList<>();
+    // Returns all musics from the specified playlist
+    public ArrayList<Music> getMusicsByPlaylistId(int playlistId) {
+        ArrayList<Music> musicList = new ArrayList<>();
         try {
             musicList = playlistDAOPG.getMusicByPlaylistId(playlistId);
         } catch (Exception e) {
@@ -218,10 +240,12 @@ public class MusicFacade {
         return musicList;
     }
 
+    // Deletes the specified playlist
     public boolean deletePlaylist(int playlistId) {
         return playlistDAOPG.deletePlaylist(playlistId);
     }
 
+    // Deletes the specified music from the specified playlist
     public boolean deleteMusicFromPlaylist(int playlistId, int musicId) {
         return playlistDAOPG.deleteMusicFromPlaylist(playlistId, musicId);
     }

@@ -2,21 +2,15 @@ package waveon.waveon.core;
 
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Artist implements IUser {
 
     public int id;
-
-    public String username = "";
-
-    public String email = "";
-
-    public String password = "";
-
-    public List<OrdUser> subscribers = new ArrayList<OrdUser>();
-
-    public List<Music> musics = new ArrayList<Music>();
+    public String username;
+    public String email;
+    public String password;
+    public ArrayList<OrdUser> subscribers;
+    public ArrayList<Music> musics;
 
     public Artist(int id, String username, String email, String password) {
         this.id = id;
@@ -33,10 +27,6 @@ public class Artist implements IUser {
         return music;
     }
 
-    public Event[] getEvents() {
-        return events;
-    }
-
     public void addMusic(Music music) {
         Music[] newMusic = new Music[this.music.length + 1];
         System.arraycopy(this.music, 0, newMusic, 0, this.music.length);
@@ -51,96 +41,55 @@ public class Artist implements IUser {
         this.events = newEvents;
     }
 
-    /**
-     *
-     * @return int id
-     */
     @Override
     public int getId() {
         return this.id;
     }
 
-    /**
-     *
-     * @param id
-     */
-    @Override
-    public void setId(int id) {
-
-    }
-
-    /**
-     *
-     * @return String username
-     */
     @Override
     public String getUsername() {
         return this.username;
     }
 
-    /**
-     *
-     * @param username
-     */
     @Override
-    public void setUsername(String username) {
+    public void setUsername(String username) { this.username = username;}
 
-    }
-
-    /**
-     *
-     * @return String email
-     */
     @Override
     public String getEmail() {
         return this.email;
     }
 
-    /**
-     *
-     * @param email
-     */
     @Override
     public void setEmail(String email) {
         this.email = email;
     }
 
-    /**
-     *
-     * @return String password
-     */
     @Override
     public String getPassword() {
         return this.password;
     }
 
-    /**
-     *
-     * @param password
-     */
     @Override
     public void setPassword(String password) {
         this.password = password;
     }
 
     @Override
-    public boolean isArtist() {
-        return true;  // Cette classe est un artiste, donc retourne true
-    }
+    public boolean isArtist() { return true; }
 
-    public List<OrdUser> getSubscribers() {
+    public ArrayList<OrdUser> getSubscribers() {
         return this.subscribers;
     }
 
-    public void setSubscribers(List<OrdUser> subscribers) {
+    public void setSubscribers(ArrayList<OrdUser> subscribers) {
         this.subscribers = subscribers;
     }
 
-    public List<Music> getMusics() {
+    public ArrayList<Music> getMusics() {
         return this.musics;
     }
 
-    public void setMusics(List<Music> musics) {
+    public void setMusics(ArrayList<Music> musics) {
         this.musics = musics;
     }
 

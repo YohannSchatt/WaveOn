@@ -5,28 +5,27 @@ import waveon.waveon.core.OrdUser;
 
 import java.sql.Connection;
 import java.util.ArrayList;
-import java.util.List;
 
 
 public interface ArtistDAO {
 
-    public Connection connection = null;
+     Connection connection = null;
 
-     abstract Artist getArtistByEmail(String email);
+     Artist getArtistByEmail(String email);
 
-     abstract Artist getArtistById(int id);
+     Artist getArtistById(int id);
 
-     abstract  ArrayList<Artist> getArtistsByName(String name);
+     ArrayList<Artist> getArtistsByName(String name);
 
-     abstract ArrayList<Artist> getAllArtists();
+     ArrayList<Artist> getAllArtists();
 
      ArrayList<OrdUser> getSubscribers(int id);
 
-     abstract Artist getArtistByMusicId(int musicId);
+     Artist getArtistByMusicId(int musicId);
 
-     abstract public Artist getAllInfoArtistById(int id);
+     Artist getAllInfoArtistById(int id);
 
-    void updateArtist(int id, String username, String email, String password);
+     void updateArtist(int id, String username, String email, String password);
 
-    void addUser(String email, String username, String password);
+     void addArtist(String email, String username, String password);
 }

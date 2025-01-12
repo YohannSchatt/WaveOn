@@ -13,13 +13,13 @@ import java.util.ArrayList;
 
 public class ArtistDAOPG implements ArtistDAO {
 
+    private final PGconnector pg = PGconnector.getInstance();
     public ArtistDAOPG() {}
 
     public Connection connection;
 
     @Override
-    public void addUser(String email, String username, String password) {
-        PGconnector pg = PGconnector.getInstance();
+    public void addArtist(String email, String username, String password) {
         String sql = "INSERT INTO artist (email, username, password) VALUES (?, ?, ?)";
         try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, email);
@@ -28,20 +28,18 @@ public class ArtistDAOPG implements ArtistDAO {
             pstmt.executeUpdate();
         }
         catch (Exception e) {
-            System.out.println("Error in ArtistDAOPG.addUser : " + e);
+            System.out.println("Error in ArtistDAOPG.addArtist : " + e);
         }
     }
 
     public Artist getArtistByEmail(String email) {
         System.out.println("SELECT * FROM artist WHERE email = ? - " + email);
-        PGconnector pg = PGconnector.getInstance();
         String sql = "SELECT * FROM artist WHERE email = ?";
         try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, email);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                Artist artist = new Artist(rs.getInt("id"), rs.getString("username"), rs.getString("email"), rs.getString("password"));
-                return artist;
+                return new Artist(rs.getInt("id"), rs.getString("username"), rs.getString("email"), rs.getString("password"));
             }
         }
         catch (Exception e) {
@@ -52,7 +50,6 @@ public class ArtistDAOPG implements ArtistDAO {
 
     public Artist getArtistById(int id) {
         System.out.println("SELECT * FROM artist WHERE id = ? - " + id);
-        PGconnector pg = PGconnector.getInstance();
         String sql = "SELECT * FROM artist WHERE id = ?";
         try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, id);
@@ -72,7 +69,6 @@ public class ArtistDAOPG implements ArtistDAO {
                 "                \"FROM subscriber \" +\n" +
                 "                \"JOIN ordinaryuser ON ordinaryuser.id = subscriber.user_id \" +\n" +
                 "                \"WHERE subscriber.artist_id = ?" + id);
-        PGconnector pg = PGconnector.getInstance();
         String sql = "SELECT ordinaryuser.id, ordinaryuser.username " +
                 "FROM subscriber " +
                 "JOIN ordinaryuser ON ordinaryuser.id = subscriber.user_id " +
@@ -102,7 +98,6 @@ public class ArtistDAOPG implements ArtistDAO {
                 "LEFT JOIN subscriber s ON a.id = s.artist_id " +
                 "LEFT JOIN ordinaryuser u ON s.user_id = u.id " +
                 "WHERE a.id = ?" + id);
-        PGconnector pg = PGconnector.getInstance();
         String sql = "SELECT a.id AS artist_id, a.username AS artist_username, a.email AS artist_email, a.password AS artist_password, u.username as user_username, " +
                 "m.id AS music_id, m.title AS music_title, " +
                 "u.id AS user_id " +
@@ -147,7 +142,6 @@ public class ArtistDAOPG implements ArtistDAO {
     @Override
     public ArrayList<Artist> getArtistsByName(String name) {
         System.out.println("SELECT * FROM artist WHERE LOWER(username) LIKE LOWER(?) - " + name);
-        PGconnector pg = PGconnector.getInstance();
         String sql = "SELECT * FROM artist WHERE LOWER(username) LIKE LOWER(?)";
         try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, "%" + name.toLowerCase() + "%");
@@ -166,7 +160,6 @@ public class ArtistDAOPG implements ArtistDAO {
 
     public ArrayList<Artist> getAllArtists() {
         System.out.println("SELECT * FROM artist");
-        PGconnector pg = PGconnector.getInstance();
         String sql = "SELECT * FROM artist";
         ArrayList<Artist> artists = new ArrayList<Artist>();
         try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -184,7 +177,6 @@ public class ArtistDAOPG implements ArtistDAO {
     @Override
     public Artist getArtistByMusicId(int musicId) {
         System.out.println("SELECT * FROM artist WHERE id = (SELECT artist_id FROM music WHERE id = ?) - " + musicId);
-        PGconnector pg = PGconnector.getInstance();
         String sql = "SELECT * FROM artist WHERE id = (SELECT artist_id FROM music WHERE id = ?)";
         try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, musicId);
@@ -209,7 +201,6 @@ public class ArtistDAOPG implements ArtistDAO {
     }
 
     private void updateWithPassword(int id, String username, String email, String password) {
-        PGconnector pg = PGconnector.getInstance();
         String sql = "UPDATE ordinaryuser SET username = ?, email = ?, password = ? WHERE id = ?";
         try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, username);
@@ -224,7 +215,6 @@ public class ArtistDAOPG implements ArtistDAO {
     }
 
     private void updateWithOutPassword(int id, String username, String email) {
-        PGconnector pg = PGconnector.getInstance();
         String sql = "UPDATE ordinaryuser SET username = ?, email = ? WHERE id = ?";
         try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, username);

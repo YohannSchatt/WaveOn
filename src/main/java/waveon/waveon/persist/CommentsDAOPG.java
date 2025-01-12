@@ -26,8 +26,8 @@ public class CommentsDAOPG implements CommentsDAO {
     }
 
     @Override
-    public List<Comments> getAllComments() {
-        List<Comments> comments = new ArrayList<>();
+    public ArrayList<Comments> getAllComments() {
+        ArrayList<Comments> comments = new ArrayList<>();
         String sql = "SELECT * FROM comments";
         try (Connection conn = pg.getConnection(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
@@ -40,8 +40,8 @@ public class CommentsDAOPG implements CommentsDAO {
     }
 
     @Override
-    public List<Comments> getCommentsByMusicId(int musicId) {
-        List<Comments> comments = new ArrayList<>();
+    public ArrayList<Comments> getCommentsByMusicId(int musicId) {
+        ArrayList<Comments> comments = new ArrayList<>();
         String sql = "SELECT * FROM comments WHERE music_id = ?";
         try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, musicId);

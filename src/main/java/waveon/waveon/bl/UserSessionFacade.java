@@ -21,42 +21,34 @@ public class UserSessionFacade {
     }
 
     private AbstractFactory factory;
-    private OrdUserDAO userDAO;
-    private ArtistDAO artistDAO;
+    private final OrdUserDAO userDAO;
+    private final ArtistDAO artistDAO;
     private static IUser currentUser;
 
-    private UserSessionFacade() {}
-
-    public boolean login(String email, String password, boolean isArtist) {
-
+    private UserSessionFacade() {
         factory = AbstractFactory.getInstance();
         assert factory != null;
         userDAO = factory.createOrdUserDAO();
         artistDAO = factory.createArtistDAO();
-
-        currentUser = userDAO.getUserByEmail(email);
-
-        if(isArtist) {
-            currentUser = artistDAO.getArtistByEmail(email);
-            return checkCredentials(email, password);
-        }
-        else{
-            currentUser = userDAO.getUserByEmail(email);
-            return checkCredentials(email, password);
-        }
     }
 
+    // Function that logs in a user based on their email and whether they are an artist or not
+    public boolean login(String email, String password, boolean isArtist) {
+        currentUser = userDAO.getUserByEmail(email);
+        if(isArtist) {
+            currentUser = artistDAO.getArtistByEmail(email);
+        } else{
+            currentUser = userDAO.getUserByEmail(email);
+        }
+        return checkCredentials(email, password);
+    }
+
+    // Function that registers a user based on their email and whether they are an artist or not
     public boolean register(String email, String username,String password, boolean isArtist) {
-
-        factory = AbstractFactory.getInstance();
-        assert factory != null;
-        userDAO = factory.createOrdUserDAO();
-        artistDAO = factory.createArtistDAO();
-
         try {
             if(isArtist && artistDAO.getArtistByEmail(email) == null) {
                 System.out.println("Ajout de l'artiste...");
-                artistDAO.addUser(email,username,password);
+                artistDAO.addArtist(email,username,password);
                 return true;
             } else if (!isArtist && userDAO.getUserByEmail(email) == null) {
                 System.out.println("Ajout de l'utilisateur...");
@@ -73,6 +65,7 @@ public class UserSessionFacade {
         }
     }
 
+    // Function that checks if the email and password match the current user
     public boolean checkCredentials(String email, String password) {
         if (currentUser != null) {
             if (currentUser.getPassword().equals(password) && currentUser.getEmail().equals(email)) {
@@ -85,22 +78,27 @@ public class UserSessionFacade {
         return false;
     }
 
+    // Returns the current connected user
     public static IUser getCurrentUser() {
         return currentUser;
     }
 
+    // Change the current connected user
     public static void setCurrentUser(IUser user) {
         currentUser = user;
     }
 
+    // Logs out the current user
     public void logout() {
         currentUser = null;
     }
 
+    // Returns true if the current user is an artist
     public boolean isArtist() {
         return currentUser.isArtist();
     }
 
+    // Save changes to the user's profile
     public boolean enregistrerModification(String username, String email, String password) {
         System.out.println("Enregistrement des modifications...");
         System.out.println("Username : " + username);
@@ -139,19 +137,17 @@ public class UserSessionFacade {
         }
     }
 
-    public boolean addFollow(int id) {
+    // Add a follow to the current user
+    public void addFollow(int id) {
         if (currentUser != null) {
             userDAO.addFollow(id, currentUser.getId());
-            return true;
         }
-        return false;
     }
 
-    public boolean removeFollow(int id) {
+    // Remove a follow from the current user
+    public void removeFollow(int id) {
         if (currentUser != null) {
             userDAO.removeFollow(id, currentUser.getId());
-            return true;
         }
-        return false;
     }
 }

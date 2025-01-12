@@ -4,12 +4,10 @@ import waveon.waveon.connector.PGconnector;
 import waveon.waveon.core.Music;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 
 public class MusicDAOPG implements MusicDAO {
 
@@ -58,14 +56,14 @@ public class MusicDAOPG implements MusicDAO {
         return null;
     }
 
-    public List<Music> getListMusicsByidArtist(int id) {
+    public ArrayList<Music> getListMusicsByidArtist(int id) {
         System.out.println("SELECT * FROM music WHERE artist_id = ?" + id);
         PGconnector pg = PGconnector.getInstance();
         String sql = "SELECT * FROM music WHERE artist_id = ?";
         try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
-            List<Music> musics = new ArrayList<>();
+            ArrayList<Music> musics = new ArrayList<>();
             while (rs.next()) {
                 musics.add(new Music(rs.getInt("id"), rs.getString("title"), rs.getInt("artist_id")));
             }
@@ -215,34 +213,5 @@ public class MusicDAOPG implements MusicDAO {
     }
 
 
-    @Override
-    public ArrayList<Music> getAllMusic() {
-        ArrayList<Music> musicList = new ArrayList<>();
-        String query = "SELECT * FROM music";
-
-        try (Connection connection = PGconnector.getInstance().getConnection();
-             PreparedStatement statement = connection.prepareStatement(query);
-             ResultSet resultSet = statement.executeQuery()) {
-
-            while (resultSet.next()) {
-                int id = resultSet.getInt("id");
-                String title = resultSet.getString("title");
-                byte[] fileContent = resultSet.getBytes("file_content");
-                byte[] coverMusic = resultSet.getBytes("cover_image");
-                int artistId = resultSet.getInt("artist_id");
-                String artistName = resultSet.getString("artist_name");
-                Date releaseDate = resultSet.getDate("release_date");
-                int streamCount = resultSet.getInt("stream_count");
-
-
-                Music music = new Music(id, title, fileContent, coverMusic, artistId, artistName, releaseDate, streamCount);
-                musicList.add(music);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return musicList;
-    }
 }
 

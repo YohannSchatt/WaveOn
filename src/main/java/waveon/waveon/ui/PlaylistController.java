@@ -102,7 +102,7 @@ public class PlaylistController {
             playlistContextMenu.getItems().add(deletePlaylistItem);
 
             Menu playlistSubMenu = new Menu("Songs");
-            List<Music> songs = musicFacade.getMusicByPlaylistId(playlist.getId());
+            List<Music> songs = musicFacade.getMusicsByPlaylistId(playlist.getId());
 
             for (Music music : songs) {
                 Label musicLabel = new Label(music.getTitle());
