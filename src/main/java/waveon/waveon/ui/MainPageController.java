@@ -81,19 +81,14 @@ public class MainPageController {
 
     public void initialize() {
         updateProgressBar();
-        System.out.println("filterComboBox initialzing");
         filterComboBox.setOnAction(event -> applyFilter());
-        System.out.println("pauseTransition initialzing");
         pauseTransition = new PauseTransition(Duration.seconds(0.5));
         pauseTransition.setOnFinished(event -> handleSearch());
-        System.out.println("searchField initialzing");
         searchField.textProperty().addListener((observable, oldValue, newValue) -> pauseTransition.playFromStart());
-        System.out.println("music listView initialzing");
         musicsListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             selectedMusic = getMusicByName(newValue);  // Assurez-vous de récupérer l'objet Music à partir de son nom
             musicFacade.setCurrentMusic(selectedMusic);
         });
-        System.out.println("searchField initialzing");
         artistsListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 int artistId = artistNameToIdMap.get(newValue);

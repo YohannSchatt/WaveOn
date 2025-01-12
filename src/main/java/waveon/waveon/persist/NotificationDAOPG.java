@@ -157,22 +157,6 @@ public class NotificationDAOPG implements NotificationDAO {
     }
 
     @Override
-    public ArrayList<Integer> getUserIdsFollowingArtist(int artistId) {
-        PGconnector pg = PGconnector.getInstance();
-        String sql = "SELECT user_id FROM ordinaryuser";
-        ArrayList<Integer> followersId = new ArrayList<>();
-        try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            ResultSet rs = pstmt.executeQuery();
-            while (rs.next()) {
-                followersId.add(rs.getInt("user_id"));
-            }
-        } catch (Exception e) {
-            System.out.println("Error in NotificationDAO.getUserIdsFollowingArtist: " + e);
-        }
-        return followersId;
-    }
-
-    @Override
     public void linkNotificationToUser(int notificationId, int userId) {
         PGconnector pg = PGconnector.getInstance();
         String sql = "INSERT INTO user_notification (user_id, notification_id) VALUES (?, ?)";

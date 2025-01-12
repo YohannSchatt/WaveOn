@@ -12,7 +12,7 @@ public interface MusicDAO {
 
     Music getMusicById(int id);
 
-    ArrayList<Music> getMusicsByArtist(String artist);
+    ArrayList<Music> getMusicsByArtist(int artistId);
 
     ArrayList<Music> getAllMusics();
 

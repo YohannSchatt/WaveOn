@@ -12,7 +12,7 @@ public class CommentsDAOPG implements CommentsDAO {
 
     @Override
     public Comments getCommentById(int id) {
-        System.out.println("SELECT * FROM comments WHERE id = ?" + id);
+        System.out.println("SELECT * FROM comments WHERE id = " + id);
         String sql = "SELECT * FROM comments WHERE id = ?";
         try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, id);
@@ -43,7 +43,7 @@ public class CommentsDAOPG implements CommentsDAO {
 
     @Override
     public ArrayList<Comments> getCommentsByMusicId(int musicId) {
-        System.out.println("SELECT * FROM comments WHERE music_id = ?" + musicId);
+        System.out.println("SELECT * FROM comments WHERE music_id = " + musicId);
         ArrayList<Comments> comments = new ArrayList<>();
         String sql = "SELECT * FROM comments WHERE music_id = ?";
         try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {

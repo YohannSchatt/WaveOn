@@ -89,9 +89,6 @@ public class MusicFacade {
         }
         if (mediaPlayer != null) {
             mediaPlayer.play();
-            for (Music music : musicList) {
-                System.out.println("Music: " + music.getTitle());
-            }
             currentMusic = musicList.get(currentMusicIndex-1);
             isPaused = false;
         }

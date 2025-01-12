@@ -112,12 +112,12 @@ public class MusicDAOPG implements MusicDAO {
     public void modifyMusic(String id, Music musicInfo){}
 
 
-    public ArrayList<Music> getMusicsByArtist(String artist) {
-        System.out.println("SELECT id,title,artist_id,artist_name,release_date,stream_count FROM music WHERE artist_id = ?" + artist);
+    public ArrayList<Music> getMusicsByArtist(int artistId) {
+        System.out.println("SELECT id,title,artist_id,artist_name,release_date,stream_count FROM music WHERE artist_id = " + artistId);
         PGconnector pg = PGconnector.getInstance();
         String sql = "SELECT id,title,artist_id,artist_name,release_date,stream_count FROM music WHERE artist_id = ?";
         try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, artist);
+            pstmt.setInt(1, artistId);
             ResultSet rs = pstmt.executeQuery();
             // recuperer les musiques dans une liste
             ArrayList<Music> musics = new ArrayList<>();
@@ -171,6 +171,7 @@ public class MusicDAOPG implements MusicDAO {
     }
 
     public int getLastId() {
+        System.out.println("SELECT MAX(id) FROM music");
         PGconnector pg = PGconnector.getInstance();
         String sql = "SELECT MAX(id) FROM music";
         try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -186,7 +187,7 @@ public class MusicDAOPG implements MusicDAO {
     }
 
     public Music getMusicWithContentById(int id) {
-        System.out.println("CONTENT -------- SELECT * FROM music WHERE id = ?" + id);
+        System.out.println("SELECT * FROM music WHERE id = " + id);
         PGconnector pg = PGconnector.getInstance();
         String sql = "SELECT * FROM music WHERE id = ?";
         try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
