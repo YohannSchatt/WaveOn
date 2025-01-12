@@ -76,7 +76,7 @@ public class MusicDAOPG implements MusicDAO {
     }
 
     public ArrayList<Music> getMusicsByName(String name) {
-        System.out.println("SELECT id,title,artist_id,artist_name,release_date,stream_count FROM music WHERE LOWER(title) LIKE LOWER(?)" + name);
+        System.out.println("SELECT id,title,artist_id,artist_name,release_date,stream_count FROM music WHERE LOWER(title) LIKE LOWER(" + name + ")");
         PGconnector pg = PGconnector.getInstance();
         String sql = "SELECT id,title,artist_id,artist_name,release_date,stream_count FROM music WHERE LOWER(title) LIKE LOWER(?)"; // Corrigé ici
         try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {

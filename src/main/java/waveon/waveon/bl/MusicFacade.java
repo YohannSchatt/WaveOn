@@ -188,12 +188,10 @@ public class MusicFacade {
 
     // Set the current music object
     public void setCurrentMusic(Music music) {
-        System.out.println("Setting current music to: " + music.getTitle());
         currentMusic = music;
         for (Music m : musicList) {
             if (m.getId() == music.getId()) {
                 currentMusicIndex = m.getId();
-                System.out.println("Current music index: " + currentMusicIndex + "Done");
                 break;
             }
         }
