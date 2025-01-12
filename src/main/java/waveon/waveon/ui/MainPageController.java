@@ -2,16 +2,11 @@ package waveon.waveon.ui;
 
 // JavaFX imports
 import javafx.animation.PauseTransition;
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.MediaPlayer;
@@ -25,9 +20,6 @@ import waveon.waveon.core.IUser;
 import waveon.waveon.core.Playlist;
 import waveon.waveon.core.Notification;
 
-//components imports
-
-import java.awt.event.ActionEvent;
 import java.util.*;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -43,6 +35,7 @@ public class MainPageController {
     private PauseTransition pauseTransition;
     private List<Music> searchResults;
     private Music selectedMusic;
+    private final NotificationController notificationController = new NotificationController();
 
     @FXML
     private TextField searchField;
@@ -82,21 +75,23 @@ public class MainPageController {
     private VBox notificationBand;
     @FXML
     private Button toggleNotificationButton;
-    @FXML
-    private ListView<HBox> notificationListView;
 
 
     public void initialize() {
         updateProgressBar();
+        System.out.println("filterComboBox initialzing");
         filterComboBox.setOnAction(event -> applyFilter());
+        System.out.println("pauseTransition initialzing");
         pauseTransition = new PauseTransition(Duration.seconds(0.5));
         pauseTransition.setOnFinished(event -> handleSearch());
+        System.out.println("searchField initialzing");
         searchField.textProperty().addListener((observable, oldValue, newValue) -> pauseTransition.playFromStart());
+        System.out.println("music listView initialzing");
         musicsListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             selectedMusic = getMusicByName(newValue);  // Assurez-vous de récupérer l'objet Music à partir de son nom
             musicFacade.setCurrentMusic(selectedMusic);
-            //playSelectedMusic(newValue);  // Jouer la musique si nécessaire
         });
+        System.out.println("searchField initialzing");
         artistsListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 int artistId = artistNameToIdMap.get(newValue);
@@ -132,31 +127,26 @@ public class MainPageController {
                 return;
             }
             notificationBand.setVisible(true);
-            loadNotifications();
             toggleNotificationButton.setText("Close Notifications");
+            initializeNotifications();
+
         } else {
             notificationBand.setVisible(false);
             toggleNotificationButton.setText("Open Notifications");
         }
     }
 
-    private void loadNotifications() {
-        ArrayList<Notification> notifications = notificationFacade.getNotificationsList();
-        notificationListView.getItems().clear();
-
-        for (Notification notification : notifications) {
-            HBox hBox = new HBox();
-            Label label = new Label(notification.getContent());
-            Button deleteButton = new Button("✖");
-            deleteButton.setOnAction(event -> {
-                notificationFacade.clearNotification(notification.getId());
-                loadNotifications();
-            });
-
-            hBox.getChildren().addAll(label, deleteButton);
-            notificationListView.getItems().add(hBox);
+    private void initializeNotifications() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/waveon/waveon/NotificationCenter.fxml"));
+            notificationBand.getChildren().add(loader.load());
+            System.out.println("Notification band loaded");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
+
+
 
     private void applyFilter() {
         String selectedFilter = filterComboBox.getValue();

@@ -68,9 +68,13 @@ public class LoginController implements ILoginController {
     public void goToHome() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/waveon/waveon/MainPage.fxml"));
+            System.out.println("loading scene");
             Parent root = loader.load();
+            System.out.println("loading scene");
             Stage stage = (Stage) emailInput.getScene().getWindow();
+            System.out.println("loading scene");
             stage.setScene(new Scene(root));
+            System.out.println("loading scene");
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();

@@ -165,7 +165,9 @@ public class MusicFacade {
 
     // Return the current music object
     public Music getCurrentMusic() {
-        if (currentMusicIndex != -1 && currentMusicIndex < musicList.size()) {
+        if (currentMusic != null) {
+            return currentMusic;
+        } else if (currentMusicIndex != -1 && currentMusicIndex < musicList.size()) {
             return musicList.get(currentMusicIndex);
         }
         return null;

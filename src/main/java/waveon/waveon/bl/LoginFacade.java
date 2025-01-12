@@ -6,13 +6,12 @@ import waveon.waveon.persist.ArtistDAO;
 import waveon.waveon.persist.OrdUserDAO;
 
 public class LoginFacade {
-    private AbstractFactory factory;
     OrdUserDAO userDAO;
     ArtistDAO artistDAO;
     private static IUser currentUser;
 
     public LoginFacade() {
-        factory = AbstractFactory.getInstance();
+        AbstractFactory factory = AbstractFactory.getInstance();
         assert factory != null;
         userDAO = factory.createOrdUserDAO();
         artistDAO = factory.createArtistDAO();
