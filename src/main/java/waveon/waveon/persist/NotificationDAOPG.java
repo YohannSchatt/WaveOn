@@ -25,7 +25,7 @@ public class NotificationDAOPG implements NotificationDAO {
                         rs.getInt("id"),
                         rs.getString("title"),
                         rs.getString("content"),
-                        rs.getString("link"));
+                        rs.getInt("link"));
             }
             return notification;
         } catch (Exception e) {
@@ -55,7 +55,7 @@ public class NotificationDAOPG implements NotificationDAO {
                         rs.getInt("id"),
                         rs.getString("title"),
                         rs.getString("content"),
-                        rs.getString("link"));
+                        rs.getInt("link"));
                 notifications.add(notification);
             }
             return notifications;
@@ -86,12 +86,32 @@ public class NotificationDAOPG implements NotificationDAO {
                         rs.getInt("id"),
                         rs.getString("title"),
                         rs.getString("content"),
-                        rs.getString("link"));
+                        rs.getInt("link"));
                 notifications.add(notification);
             }
             return notifications;
         } catch (Exception e) {
             System.out.println("Error in NotificationDAO.getNotificationsByUserId: " + e);
+        }
+        return null;
+    }
+
+    public Notification getNotificationByContent(String content) {
+        PGconnector pg = PGconnector.getInstance();
+        String sql = "SELECT id, title, content, link FROM notification WHERE content = ?";
+        try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, content);
+
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return new Notification(
+                        rs.getInt("id"),
+                        rs.getString("title"),
+                        rs.getString("content"),
+                        rs.getInt("link"));
+            }
+        } catch (Exception e) {
+            System.out.println("Error in NotificationDAO.getNotificationByContent: " + e);
         }
         return null;
     }

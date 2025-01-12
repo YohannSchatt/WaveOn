@@ -8,7 +8,6 @@ import waveon.waveon.core.Playlist;
 import waveon.waveon.persist.AbstractFactory;
 import waveon.waveon.persist.MusicDAO;
 import waveon.waveon.persist.PlaylistDAO;
-import waveon.waveon.persist.PlaylistDAO;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -39,15 +38,23 @@ public class MusicFacade {
         if (mediaPlayer != null) {
             mediaPlayer.stop();
         }
-        for (int i = 0; i < musicList.size(); i++) {
-            if (musicList.get(i).getTitle().equals(title)) {
-                currentMusicIndex = i;
-                int musicId = musicList.get(i).getId();
-                Music music = musicDAO.getMusicWithContentById(musicId);
+        for (Music value : musicList) {
+            if (value.getTitle().equals(title)) {
+                currentMusicIndex = value.getId();
+                Music music = musicDAO.getMusicWithContentById(currentMusicIndex);
                 initializeMediaPlayer(music);
                 break;
             }
         }
+    }
+
+    public void loadMusicById(int id) {
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+        }
+        currentMusicIndex = id;
+        Music music = musicDAO.getMusicWithContentById(id);
+        initializeMediaPlayer(music);
     }
 
     // Initializes the MediaPlayer object with the music file content
@@ -75,19 +82,23 @@ public class MusicFacade {
 
     // PLay the loaded music
     public void playMusic() {
-        if (mediaPlayer == null && !musicList.isEmpty()) {
-
-            loadMusicByTitle(musicList.get(currentMusicIndex).getTitle());
+        if (mediaPlayer == null && currentMusic != null) {
+            loadMusicById(currentMusic.getId());
+        } else if (mediaPlayer == null && !musicList.isEmpty()) {
+            loadMusicById(currentMusicIndex);
         }
         if (mediaPlayer != null) {
             mediaPlayer.play();
-            currentMusic = musicList.get(currentMusicIndex);
+            for (Music music : musicList) {
+                System.out.println("Music: " + music.getTitle());
+            }
+            currentMusic = musicList.get(currentMusicIndex-1);
             isPaused = false;
         }
     }
 
     // Pause the music (if playing) or resume the music (if paused)
-    public void pauseMusic() {
+    public void togglePauseResumeMusic() {
         if (mediaPlayer != null) {
             if (isPaused) {
                 mediaPlayer.play();
@@ -98,6 +109,7 @@ public class MusicFacade {
             }
         }
     }
+
 
     // Stop the music
     public void stopMusic() {
@@ -114,10 +126,10 @@ public class MusicFacade {
             isPaused = false;
         }
         if (!musicList.isEmpty()) {
-            if (currentMusic == musicList.get(currentMusicIndex)) {
+            if (currentMusic == musicList.get(currentMusicIndex-1)) {
                 currentMusicIndex = (currentMusicIndex + 1) % musicList.size();
             }
-                loadMusicByTitle(musicList.get(currentMusicIndex).getTitle());
+                loadMusicById(currentMusicIndex);
             playMusic();
         }
     }
@@ -172,7 +184,7 @@ public class MusicFacade {
         if (currentMusic != null) {
             return currentMusic;
         } else if (currentMusicIndex != -1 && currentMusicIndex < musicList.size()) {
-            return musicList.get(currentMusicIndex);
+            return musicList.get(currentMusicIndex-1);
         }
         return null;
     }
@@ -180,9 +192,10 @@ public class MusicFacade {
     // Set the current music object
     public void setCurrentMusic(Music music) {
         System.out.println("Setting current music to: " + music.getTitle());
-        for (int i = 0; i < musicList.size(); i++) {
-            if (musicList.get(i).getId() == music.getId()) {
-                currentMusicIndex = i;
+        currentMusic = music;
+        for (Music m : musicList) {
+            if (m.getId() == music.getId()) {
+                currentMusicIndex = m.getId();
                 System.out.println("Current music index: " + currentMusicIndex + "Done");
                 break;
             }
@@ -233,6 +246,10 @@ public class MusicFacade {
     // Adds a music to the specified playlist
     public boolean addMusicToPlaylist(Music music, Playlist playlist) {
         return playlistDAO.addMusicToPlaylist(music.getId(), playlist.getId());
+    }
+
+    public Music getMusicById(int id) {
+        return musicDAO.getMusicById(id);
     }
 
     // Returns all musics from the specified playlist

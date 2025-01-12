@@ -53,4 +53,7 @@ public class NotificationFacade {
         }
     }
 
+    public Notification getNotificationByContent(String content) {
+        return notificationDAO.getNotificationByContent(content);
+    }
 }

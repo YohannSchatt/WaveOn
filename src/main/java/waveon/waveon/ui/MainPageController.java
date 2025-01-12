@@ -152,6 +152,13 @@ public class MainPageController {
             hBox.getChildren().addAll(label, deleteButton);
             notificationListView.getItems().add(hBox);
         }
+        notificationListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            Label label = (Label) newValue.getChildren().get(0);
+            String notificationContent = label.getText();
+            Notification notification = notificationFacade.getNotificationByContent(notificationContent);
+            selectedMusic = musicFacade.getMusicById(notification.getLink());  // Assurez-vous de récupérer l'objet Music à partir de son nom
+            musicFacade.setCurrentMusic(selectedMusic);
+        });
     }
 
     private void applyFilter() {
@@ -252,19 +259,13 @@ public class MainPageController {
         }
     }
 
-    void playSelectedMusic(String musicTitle) {
-        //if (musicTitle != null) {
-        musicFacade.loadMusicByTitle(musicTitle);
+    void playMusic(int musicId) {
+        musicFacade.loadMusicById(musicId);
         musicFacade.playMusic();
-        updateCurrentMusicLabel(musicTitle);
         updatePlayPauseButton();
         updateProgressBar();
-        //}
     }
 
-    private void updateCurrentMusicLabel(String musicTitle) {
-        currentMusicLabel.setText("Playing: " + musicTitle);
-    }
 
     private void updatePlayPauseButton() {
         if (musicFacade.getMediaPlayer() != null && musicFacade.getMediaPlayer().getStatus() == MediaPlayer.Status.PLAYING) {
@@ -319,24 +320,33 @@ public class MainPageController {
 
     @FXML
     private void togglePlayPause() {
-        if (musicFacade.getMediaPlayer() != null && musicFacade.getMediaPlayer().getStatus() == MediaPlayer.Status.PLAYING) {
-            musicFacade.pauseMusic();
-            playPauseButton.setText("Play Music");
-        } else {
-            System.out.println("Playing music" + musicFacade.getCurrentMusic().getTitle());
+        if (musicFacade.getMediaPlayer() == null) {
             musicFacade.playMusic();
             playPauseButton.setText("Pause Music");
-            updateProgressBar();
+            updateCurrentMusicLabel();
+        } else {
+            if (musicFacade.getMediaPlayer().getStatus() == MediaPlayer.Status.PLAYING) {
+                playPauseButton.setText("Play Music");
+            } else {
+                playPauseButton.setText("Pause Music");
+            }
+            musicFacade.togglePauseResumeMusic();
         }
-        updateCurrentMusicLabel();
         updateProgressBar();
     }
 
     @FXML
     private void skipMusic() {
-        musicFacade.skipMusic();
-        updateProgressBar();
-        updateCurrentMusicLabel();
+        if (musicFacade.getMediaPlayer() == null) {
+            musicFacade.playMusic();
+            playPauseButton.setText("Pause Music");
+            updateCurrentMusicLabel();
+        } else {
+            musicFacade.skipMusic();
+            playPauseButton.setText("Pause Music");
+            updateProgressBar();
+            updateCurrentMusicLabel();
+        }
     }
 
     @FXML

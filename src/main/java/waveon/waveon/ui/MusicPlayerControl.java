@@ -62,7 +62,7 @@ public class MusicPlayerControl extends VBox {
     @FXML
     private void togglePlayPause() {
         if (musicFacade.getMediaPlayer() != null && musicFacade.getMediaPlayer().getStatus() == MediaPlayer.Status.PLAYING) {
-            musicFacade.pauseMusic();
+            musicFacade.togglePauseResumeMusic();
             playPauseButton.setText("Play Music");
         } else {
             musicFacade.playMusic();

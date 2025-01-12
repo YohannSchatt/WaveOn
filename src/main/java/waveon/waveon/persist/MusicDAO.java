@@ -10,7 +10,7 @@ public interface MusicDAO {
     Connection connection = null;
 
 
-    Music getMusicById( String id);
+    Music getMusicById(int id);
 
     ArrayList<Music> getMusicsByArtist(String artist);
 

@@ -26,4 +26,6 @@ public interface NotificationDAO {
     void linkNotificationToArtist(int notificationId, int artistId);
 
     int getLastId();
+
+    Notification getNotificationByContent(String content);
 }
