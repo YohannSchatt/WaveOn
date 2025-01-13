@@ -186,7 +186,11 @@ public class MusicFacade {
         }
         if (!musicList.isEmpty()) {
             if (currentMusic == musicList.get(currentMusicIndex - 1)) {
-                currentMusicIndex = (currentMusicIndex + 1) % musicList.size();
+                if( currentMusicIndex + 1 <= musicList.size() ){
+                    currentMusicIndex = currentMusicIndex + 1;
+                } else{
+                    currentMusicIndex = 1;
+                };
             }
             loadMusicById(currentMusicIndex);
             playMusic();
@@ -266,7 +270,7 @@ public class MusicFacade {
     public Music getCurrentMusic() {
         if (currentMusic != null) {
             return currentMusic;
-        } else if (currentMusicIndex < musicList.size()) {
+        } else if (currentMusicIndex <= musicList.size()) {
             return musicList.get(currentMusicIndex - 1);
         }
         return null;
