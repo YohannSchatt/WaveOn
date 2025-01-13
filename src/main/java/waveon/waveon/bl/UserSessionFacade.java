@@ -110,7 +110,6 @@ public class UserSessionFacade {
         }
 
         if (currentUser != null  && (!username.equals(currentUser.getUsername()) || !email.equals(currentUser.getEmail()) || !password.isEmpty())) {
-            System.out.println("COUCOU");
             factory = AbstractFactory.getInstance();
             assert factory != null;
             if(currentUser.isArtist()) {
