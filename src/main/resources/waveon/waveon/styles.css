@@ -1,11 +1,11 @@
 /* src/main/resources/waveon/waveon/styles.css */
 .root {
     -fx-font-family: 'Arial';
-    -fx-background-color: #000000; /* Spotify dark background */
+    -fx-background-color: #000000; /* dark background */
 }
 
 #topBar {
-    -fx-background-color: #1DB954; /* Spotify green */
+    -fx-background-color: #1DB954; /* green */
     -fx-padding: 10;
 }
 
@@ -69,12 +69,12 @@
 
 #volumeSlider, #progressBar {
     -fx-background-radius: 10;
-    -fx-accent: #1DB954; /* Spotify green */
+    -fx-accent: #1DB954; /* green */
     -fx-control-inner-background: #1f1f1f; /* Match the root background */
 }
 
 #currentMusicLabel {
-    -fx-text-fill: #1DB954; /* Spotify green */
+    -fx-text-fill: #1DB954; /* green */
     -fx-font-size: 16px;
     -fx-font-weight: bold;
 }
