@@ -30,4 +30,7 @@ public class PGFactory extends AbstractFactory {
     public PlaylistDAOPG createPlaylistDAO() {
         return new PlaylistDAOPG();
     }
+
+    @Override
+    public ConversationDAOPG createConversationDAO() {return new ConversationDAOPG();}
 }
