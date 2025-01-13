@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 public class MusicFacade {
     private final ArrayList<Music> musicList;
-    private MediaPlayer mediaPlayer;
+    private static MediaPlayer mediaPlayer;
     private MusicDAO musicDAO;
     private PlaylistDAO playlistDAO;
     private int currentMusicIndex = 1;
