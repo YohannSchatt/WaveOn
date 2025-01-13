@@ -56,7 +56,7 @@ public class LoginController implements ILoginController {
         boolean artist = isArtist.isSelected();
         if (loginFacade.login(email,password,artist)) {
             resultLabel.setText("Login successful");
-            PauseTransition pause = new PauseTransition(Duration.seconds(0.5));
+            PauseTransition pause = new PauseTransition(Duration.seconds(0.1));
             pause.setOnFinished(event -> goToHome());
             pause.play();
         } else {

@@ -31,12 +31,12 @@ public class MusicDAOPG implements MusicDAO {
         }
     }
 
-    public Music getMusicById(String id) {
-        System.out.println("SELECT * FROM music WHERE id = ?" + id);
+    public Music getMusicById(int id) {
+        System.out.println("SELECT * FROM music WHERE id = " + id);
         PGconnector pg = PGconnector.getInstance();
-        String sql = "SELECT * FROM music WHERE id = ?";
+        String sql = "SELECT id,title,artist_id,artist_name,release_date,stream_count FROM music WHERE id = ?";
         try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, Integer.parseInt(id));
+            pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
                 return new Music(
@@ -44,9 +44,9 @@ public class MusicDAOPG implements MusicDAO {
                         rs.getString("title"),
                         null,null,
                         rs.getInt("artist_id"),
-                        rs.getString("artistName"),
-                        rs.getDate("releaseDate"),
-                        rs.getInt("streamCount"));
+                        rs.getString("artist_name"),
+                        rs.getDate("release_date"),
+                        rs.getInt("stream_count"));
 
             }
         }
@@ -57,9 +57,9 @@ public class MusicDAOPG implements MusicDAO {
     }
 
     public ArrayList<Music> getListMusicsByidArtist(int id) {
-        System.out.println("SELECT * FROM music WHERE artist_id = ?" + id);
+        System.out.println("SELECT * FROM music WHERE artist_id = " + id);
         PGconnector pg = PGconnector.getInstance();
-        String sql = "SELECT * FROM music WHERE artist_id = ?";
+        String sql = "SELECT id,title,artist_id FROM music WHERE artist_id = ?";
         try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
@@ -76,7 +76,7 @@ public class MusicDAOPG implements MusicDAO {
     }
 
     public ArrayList<Music> getMusicsByName(String name) {
-        System.out.println("SELECT id,title,artist_id,artist_name,release_date,stream_count FROM music WHERE LOWER(title) LIKE LOWER(?)" + name);
+        System.out.println("SELECT id,title,artist_id,artist_name,release_date,stream_count FROM music WHERE LOWER(title) LIKE LOWER(" + name + ")");
         PGconnector pg = PGconnector.getInstance();
         String sql = "SELECT id,title,artist_id,artist_name,release_date,stream_count FROM music WHERE LOWER(title) LIKE LOWER(?)"; // Corrigé ici
         try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -112,12 +112,12 @@ public class MusicDAOPG implements MusicDAO {
     public void modifyMusic(String id, Music musicInfo){}
 
 
-    public ArrayList<Music> getMusicsByArtist(String artist) {
-        System.out.println("SELECT id,title,artist_id,artist_name,release_date,stream_count FROM music WHERE artist_id = ?" + artist);
+    public ArrayList<Music> getMusicsByArtist(int artistId) {
+        System.out.println("SELECT id,title,artist_id,artist_name,release_date,stream_count FROM music WHERE artist_id = " + artistId);
         PGconnector pg = PGconnector.getInstance();
         String sql = "SELECT id,title,artist_id,artist_name,release_date,stream_count FROM music WHERE artist_id = ?";
         try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, artist);
+            pstmt.setInt(1, artistId);
             ResultSet rs = pstmt.executeQuery();
             // recuperer les musiques dans une liste
             ArrayList<Music> musics = new ArrayList<>();
@@ -144,7 +144,7 @@ public class MusicDAOPG implements MusicDAO {
     public ArrayList<Music> getAllMusics() {
         System.out.println("SELECT id,title,artist_id,artist_name,release_date,stream_count FROM music");
         PGconnector pg = PGconnector.getInstance();
-        String sql = "SELECT id,title,artist_id,artist_name,release_date,stream_count FROM music";
+        String sql = "SELECT id,title,artist_id,artist_name,release_date,stream_count FROM music ORDER BY id";
         try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
             ResultSet rs = pstmt.executeQuery();
             // recuperer les musiques dans une liste
@@ -170,7 +170,8 @@ public class MusicDAOPG implements MusicDAO {
         return null;
     }
 
-    public static int getLastId() {
+    public int getLastId() {
+        System.out.println("SELECT MAX(id) FROM music");
         PGconnector pg = PGconnector.getInstance();
         String sql = "SELECT MAX(id) FROM music";
         try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -185,8 +186,22 @@ public class MusicDAOPG implements MusicDAO {
         return 0;
     }
 
+    @Override
+    public void incrementPlayCount(int id) {
+        System.out.println("UPDATE music SET stream_count = stream_count + 1 WHERE id = " + id);
+        PGconnector pg = PGconnector.getInstance();
+        String sql = "UPDATE music SET stream_count = stream_count + 1 WHERE id = ?";
+        try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, id);
+            pstmt.executeUpdate();
+        }
+        catch (Exception e) {
+            System.out.println("Error in MusicDAOPG.incrementPlayCount : " + e);
+        }
+    }
+
     public Music getMusicWithContentById(int id) {
-        System.out.println("CONTENT -------- SELECT * FROM music WHERE id = ?" + id);
+        System.out.println("SELECT * FROM music WHERE id = " + id);
         PGconnector pg = PGconnector.getInstance();
         String sql = "SELECT * FROM music WHERE id = ?";
         try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -207,11 +222,8 @@ public class MusicDAOPG implements MusicDAO {
         catch (Exception e) {
             System.out.println("Error in MusicDAOPG.getMusicWithContentById : " + e);
         }
-
-
         return null;
     }
-
 
 }
 

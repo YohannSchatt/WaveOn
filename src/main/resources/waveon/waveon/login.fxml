@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="550.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="waveon.waveon.ui.LoginController">
+<AnchorPane prefHeight="550.0" prefWidth="600.0" stylesheets="@styles/login.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="waveon.waveon.ui.LoginController">
    <children>
       <BorderPane prefHeight="550.0" prefWidth="600.0">
          <center>

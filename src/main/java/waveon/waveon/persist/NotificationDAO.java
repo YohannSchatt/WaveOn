@@ -19,11 +19,11 @@ public interface NotificationDAO {
 
     void clearNotificationsForArtistById(int artistId, int notificationId);
 
-    ArrayList<Integer> getUserIdsFollowingArtist(int artistId);
-
     void linkNotificationToUser(int notificationId, int userId);
 
     void linkNotificationToArtist(int notificationId, int artistId);
 
     int getLastId();
+
+    Notification getNotificationByContent(String content);
 }

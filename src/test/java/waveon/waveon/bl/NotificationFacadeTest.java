@@ -36,7 +36,7 @@ public class NotificationFacadeTest {
         UserSessionFacade.setCurrentUser(mockArtist);
 
         ArrayList<Notification> mockNotifications = new ArrayList<>();
-        mockNotifications.add(new Notification(1, "New song released", "content", "link"));
+        mockNotifications.add(new Notification(1, "New song released", "content", 1));
 
         when(mockNotificationDAO.getNotificationsByArtistId(1)).thenReturn(mockNotifications);
 
@@ -52,7 +52,7 @@ public class NotificationFacadeTest {
         UserSessionFacade.setCurrentUser(mockUser);
 
         ArrayList<Notification> mockNotifications = new ArrayList<>();
-        mockNotifications.add(new Notification(2, "Follow request", "content", "link"));
+        mockNotifications.add(new Notification(2, "Follow request", "content", 1));
 
         when(mockNotificationDAO.getNotificationsByUserId(2)).thenReturn(mockNotifications);
 

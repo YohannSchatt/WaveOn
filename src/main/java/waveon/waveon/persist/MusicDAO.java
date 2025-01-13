@@ -10,9 +10,9 @@ public interface MusicDAO {
     Connection connection = null;
 
 
-    Music getMusicById( String id);
+    Music getMusicById(int id);
 
-    ArrayList<Music> getMusicsByArtist(String artist);
+    ArrayList<Music> getMusicsByArtist(int artistId);
 
     ArrayList<Music> getAllMusics();
 
@@ -27,4 +27,10 @@ public interface MusicDAO {
     boolean saveMusic(Music music);
 
     ArrayList<Music> getListMusicsByidArtist(int id);
+
+    Music getMusicWithContentById(int musicId);
+
+    int getLastId();
+
+    void incrementPlayCount(int id);
 }

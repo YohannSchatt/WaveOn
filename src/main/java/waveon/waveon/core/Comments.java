@@ -4,8 +4,8 @@ public class Comments {
 
     private int id;
     private String content;
-    private int iduser;
-    private int idmusic;
+    private int userid;
+    private int musicid;
     private int numberLike;
     private Comments[] answers;
 
@@ -14,20 +14,16 @@ public class Comments {
     }
 
     // Parameterized constructor
-    public Comments(int id, int idmusic, String content, int iduser) {
+    public Comments(int id, int musicid, String content, int userid) {
         this.id = id;
         this.content = content;
-        this.idmusic = idmusic;
-        this.iduser = iduser;
+        this.musicid = musicid;
+        this.userid = userid;
     }
 
     // Getters and Setters
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getContent() {
@@ -38,20 +34,16 @@ public class Comments {
         this.content = content;
     }
 
-    public int getIDUser() {
-        return iduser;
-    }
-
-    public void setIDUser(int iduser) {
-        this.id = iduser;
+    public int getUserId() {
+        return userid;
     }
 
     public int getMusic() {
-        return idmusic;
+        return musicid;
     }
 
-    public void setMusic(int  idmusic) {
-        this.idmusic = idmusic;
+    public void setMusic(int musicid) {
+        this.musicid = musicid;
     }
 
     public int getNumberLike() {
@@ -62,21 +54,13 @@ public class Comments {
         this.numberLike = numberLike;
     }
 
-    public Comments[] getAnswers() {
-        return answers;
-    }
-
-    public void setAnswers(Comments[] answers) {
-        this.answers = answers;
-    }
-
     @Override
     public String toString() {
         return "Comments{" +
                 "id=" + id +
                 ", content='" + content + '\'' +
-                ", user_id=" + iduser +
-                ", music=" + idmusic +
+                ", user_id=" + userid +
+                ", music=" + musicid +
                 ", numberLike=" + numberLike +
                 '}';
     }

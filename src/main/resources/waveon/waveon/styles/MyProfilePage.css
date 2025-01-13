@@ -1,0 +1,55 @@
+/* src/main/resources/waveon/waveon/styles/myprofile.css */
+.root {
+    -fx-font-family: 'Arial';
+    -fx-background-color: #000000; /* Spotify dark background */
+}
+
+#nav {
+    -fx-background-color: #1DB954; /* Spotify green */
+    -fx-padding: 10;
+}
+
+#usernameField, #emailField, #passwordField {
+    -fx-background-color: #363636; /* Dark background */
+    -fx-background-radius: 10;
+    -fx-text-fill: #a9a9a9;
+    -fx-border-color: #1DB954;
+    -fx-border-radius: 10;
+}
+
+#usernameField:focused, #emailField:focused, #passwordField:focused {
+    -fx-background-color: #1f1f1f; /* Dark background */
+}
+
+#saveModification {
+    -fx-background-color: Black;
+    -fx-border-width: 3;
+    -fx-border-color: pink;
+    -fx-border-radius: 10;
+    -fx-background-radius: 12;
+    -fx-text-fill: WHITE;
+}
+
+#saveModification:hover {
+    -fx-background-color: #0c5326; /* Lighter green on hover */
+}
+
+#result {
+    -fx-text-fill: #1DB954; /* Spotify green */
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.accordion .titled-pane > .content {
+    -fx-background-color: #1f1f1f; /* Dark background */
+}
+
+.accordion {
+    -fx-background-color: Black;
+    -fx-text-fill: #a9a9a9;
+}
+
+.list-view {
+    -fx-background-color: #363636; /* Dark background */
+    -fx-control-inner-background: #363636; /* Dark background */
+}

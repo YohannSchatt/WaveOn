@@ -12,6 +12,7 @@ public class NotificationFacade {
 
     NotificationDAO notificationDAO;
 
+
     public NotificationFacade() {
         AbstractFactory factory = AbstractFactory.getInstance();
         assert factory != null;
@@ -21,7 +22,6 @@ public class NotificationFacade {
     // Get the list of notifications for the current user
     public ArrayList<Notification> getNotificationsList() {
         ArrayList<Notification> notificationsList;
-        System.out.println("load Notifs Facade");
         if (UserSessionFacade.getCurrentUser() != null) {
             if (UserSessionFacade.getCurrentUser() instanceof Artist) {
                 notificationsList = notificationDAO.getNotificationsByArtistId(UserSessionFacade.getCurrentUser().getId());
@@ -52,4 +52,7 @@ public class NotificationFacade {
         }
     }
 
+    public Notification getNotificationByContent(String content) {
+        return notificationDAO.getNotificationByContent(content);
+    }
 }

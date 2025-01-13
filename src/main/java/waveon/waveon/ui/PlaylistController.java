@@ -125,7 +125,7 @@ public class PlaylistController {
 
                 musicLabel.setOnMouseClicked(event -> {
                     if (event.getButton() == MouseButton.PRIMARY && mainPageController != null) {
-                        mainPageController.playSelectedMusic(music.getTitle());
+                        mainPageController.playMusic(music.getId());
                     }
                 });
 

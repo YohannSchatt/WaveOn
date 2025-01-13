@@ -2,16 +2,11 @@ package waveon.waveon.ui;
 
 // JavaFX imports
 import javafx.animation.PauseTransition;
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.MediaPlayer;
@@ -25,9 +20,6 @@ import waveon.waveon.core.IUser;
 import waveon.waveon.core.Playlist;
 import waveon.waveon.core.Notification;
 
-//components imports
-
-import java.awt.event.ActionEvent;
 import java.util.*;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -43,6 +35,7 @@ public class MainPageController {
     private PauseTransition pauseTransition;
     private List<Music> searchResults;
     private Music selectedMusic;
+    private final NotificationController notificationController = new NotificationController();
 
     @FXML
     private TextField searchField;
@@ -95,7 +88,6 @@ public class MainPageController {
         musicsListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             selectedMusic = getMusicByName(newValue);  // Assurez-vous de récupérer l'objet Music à partir de son nom
             musicFacade.setCurrentMusic(selectedMusic);
-            //playSelectedMusic(newValue);  // Jouer la musique si nécessaire
         });
         artistsListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
@@ -134,6 +126,7 @@ public class MainPageController {
             notificationBand.setVisible(true);
             loadNotifications();
             toggleNotificationButton.setText("Close Notifications");
+
         } else {
             notificationBand.setVisible(false);
             toggleNotificationButton.setText("Open Notifications");
@@ -143,7 +136,6 @@ public class MainPageController {
     private void loadNotifications() {
         ArrayList<Notification> notifications = notificationFacade.getNotificationsList();
         notificationListView.getItems().clear();
-
         for (Notification notification : notifications) {
             HBox hBox = new HBox();
             Label label = new Label(notification.getContent());
@@ -152,26 +144,32 @@ public class MainPageController {
                 notificationFacade.clearNotification(notification.getId());
                 loadNotifications();
             });
-
             hBox.getChildren().addAll(label, deleteButton);
             notificationListView.getItems().add(hBox);
         }
+        notificationListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            Label label = (Label) newValue.getChildren().get(0);
+            String notificationContent = label.getText();
+            Notification notification = notificationFacade.getNotificationByContent(notificationContent);
+            selectedMusic = musicFacade.getMusicById(notification.getLink());  // Assurez-vous de récupérer l'objet Music à partir de son nom
+            musicFacade.setCurrentMusic(selectedMusic);
+        });
     }
 
     private void applyFilter() {
         String selectedFilter = filterComboBox.getValue();
         if (selectedFilter != null && searchResults != null) {
             switch (selectedFilter) {
-                case "Time ↓":
+                case "Newest":
                     searchResults.sort(Comparator.comparing(Music::getReleaseDate).reversed());
                     break;
-                case "Time ↑":
+                case "Oldest":
                     searchResults.sort(Comparator.comparing(Music::getReleaseDate));
                     break;
-                case "Streams count ↑":
+                case "MostListened":
                     searchResults.sort(Comparator.comparingInt(Music::getStreamCount).reversed());
                     break;
-                case "Streams count ↓":
+                case "LeastListened":
                     searchResults.sort(Comparator.comparingInt(Music::getStreamCount));
                     break;
             }
@@ -184,6 +182,7 @@ public class MainPageController {
 
             musicsListView.getItems().setAll(formattedResults);
             musicResultLabel.setText("Music Results: " + searchResults.size() + " found");
+            musicFacade.orderMusicList(FilterOption.valueOf(selectedFilter));
         }
     }
 
@@ -256,28 +255,13 @@ public class MainPageController {
         }
     }
 
-    private FilterOption convertToFilterOption(String filter) {
-        return switch (filter) {
-            case "Time ↓" -> FilterOption.Newest;
-            case "Time ↑" -> FilterOption.Oldest;
-            case "Streams count ↑" -> FilterOption.LeastListened;
-            default -> FilterOption.MostListened;
-        };
-    }
-
-    void playSelectedMusic(String musicTitle) {
-        //if (musicTitle != null) {
-        musicFacade.loadMusicByTitle(musicTitle);
+    void playMusic(int musicId) {
+        musicFacade.loadMusicById(musicId);
         musicFacade.playMusic();
-        updateCurrentMusicLabel(musicTitle);
         updatePlayPauseButton();
         updateProgressBar();
-        //}
     }
 
-    private void updateCurrentMusicLabel(String musicTitle) {
-        currentMusicLabel.setText("Playing: " + musicTitle);
-    }
 
     private void updatePlayPauseButton() {
         if (musicFacade.getMediaPlayer() != null && musicFacade.getMediaPlayer().getStatus() == MediaPlayer.Status.PLAYING) {
@@ -332,24 +316,33 @@ public class MainPageController {
 
     @FXML
     private void togglePlayPause() {
-        if (musicFacade.getMediaPlayer() != null && musicFacade.getMediaPlayer().getStatus() == MediaPlayer.Status.PLAYING) {
-            musicFacade.pauseMusic();
-            playPauseButton.setText("Play Music");
-        } else {
-            System.out.println("Playing music" + musicFacade.getCurrentMusic().getTitle());
+        if (musicFacade.getMediaPlayer() == null) {
             musicFacade.playMusic();
             playPauseButton.setText("Pause Music");
-            updateProgressBar();
+            updateCurrentMusicLabel();
+        } else {
+            if (musicFacade.getMediaPlayer().getStatus() == MediaPlayer.Status.PLAYING) {
+                playPauseButton.setText("Play Music");
+            } else {
+                playPauseButton.setText("Pause Music");
+            }
+            musicFacade.togglePauseResumeMusic();
         }
-        updateCurrentMusicLabel();
         updateProgressBar();
     }
 
     @FXML
     private void skipMusic() {
-        musicFacade.skipMusic();
-        updateProgressBar();
-        updateCurrentMusicLabel();
+        if (musicFacade.getMediaPlayer() == null) {
+            musicFacade.playMusic();
+            playPauseButton.setText("Pause Music");
+            updateCurrentMusicLabel();
+        } else {
+            musicFacade.skipMusic();
+            playPauseButton.setText("Pause Music");
+            updateProgressBar();
+            updateCurrentMusicLabel();
+        }
     }
 
     @FXML

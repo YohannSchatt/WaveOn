@@ -3,7 +3,7 @@ package waveon.waveon.core;
 
 public class Notification {
 
-    public Notification(int id, String title, String content, String link) {
+    public Notification(int id, String title, String content, int link) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -16,7 +16,7 @@ public class Notification {
 
     public String content;
 
-    public String link;
+    public int link;
 
     public String getContent() {
         return content;
@@ -24,5 +24,9 @@ public class Notification {
 
     public int getId() {
         return id;
+    }
+
+    public int getLink() {
+        return link;
     }
 }

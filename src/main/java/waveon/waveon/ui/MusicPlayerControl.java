@@ -10,6 +10,10 @@ import javafx.util.Duration;
 import waveon.waveon.bl.MusicFacade;
 import waveon.waveon.core.Music;
 
+/**
+ * The MusicPlayerControl class provides the UI controls for managing music playback,
+ * including play/pause, skip, restart, volume control, and progress tracking.
+ */
 public class MusicPlayerControl extends VBox {
     private MusicFacade musicFacade;
 
@@ -28,14 +32,25 @@ public class MusicPlayerControl extends VBox {
     @FXML
     private Slider volumeSlider;
 
+    /**
+     * Constructs a new MusicPlayerControl instance.
+     */
     public MusicPlayerControl() {
         // Default constructor
     }
 
+    /**
+     * Sets the MusicFacade instance to be used by this control.
+     *
+     * @param musicFacade the MusicFacade instance
+     */
     public void setMusicFacade(MusicFacade musicFacade) {
         this.musicFacade = musicFacade;
     }
 
+    /**
+     * Initializes the UI components and their event listeners.
+     */
     @FXML
     private void initialize() {
         // Set the initial text for the play/pause button
@@ -59,10 +74,13 @@ public class MusicPlayerControl extends VBox {
         });
     }
 
+    /**
+     * Toggles between playing and pausing the music playback.
+     */
     @FXML
     private void togglePlayPause() {
         if (musicFacade.getMediaPlayer() != null && musicFacade.getMediaPlayer().getStatus() == MediaPlayer.Status.PLAYING) {
-            musicFacade.pauseMusic();
+            musicFacade.togglePauseResumeMusic();
             playPauseButton.setText("Play Music");
         } else {
             musicFacade.playMusic();
@@ -73,6 +91,9 @@ public class MusicPlayerControl extends VBox {
         updateProgressBar();
     }
 
+    /**
+     * Skips to the next music track in the list.
+     */
     @FXML
     private void skipMusic() {
         musicFacade.skipMusic();
@@ -80,11 +101,17 @@ public class MusicPlayerControl extends VBox {
         updateCurrentMusicLabel();
     }
 
+    /**
+     * Restarts the current music track from the beginning.
+     */
     @FXML
     private void restartMusic() {
         musicFacade.restartMusic();
     }
 
+    /**
+     * Updates the progress bar to reflect the current playback time.
+     */
     private void updateProgressBar() {
         if (musicFacade != null && musicFacade.getMediaPlayer() != null) {
             Duration totalDuration = musicFacade.getTotalDuration();
@@ -97,18 +124,33 @@ public class MusicPlayerControl extends VBox {
         }
     }
 
+    /**
+     * Updates the timer label to show the current and total playback time.
+     *
+     * @param currentTime the current playback time
+     * @param totalDuration the total duration of the music track
+     */
     private void updateTimerLabel(Duration currentTime, Duration totalDuration) {
         String currentTimeStr = formatDuration(currentTime);
         String totalDurationStr = formatDuration(totalDuration);
         timerLabel.setText(currentTimeStr + "/" + totalDurationStr);
     }
 
+    /**
+     * Formats a Duration object into a string in the format MM:SS.
+     *
+     * @param duration the Duration object to format
+     * @return the formatted duration string
+     */
     private String formatDuration(Duration duration) {
         int minutes = (int) duration.toMinutes();
         int seconds = (int) duration.toSeconds() % 60;
         return String.format("%02d:%02d", minutes, seconds);
     }
 
+    /**
+     * Updates the label to show the title of the currently playing music track.
+     */
     private void updateCurrentMusicLabel() {
         Music currentMusic = musicFacade.getCurrentMusic();
         if (currentMusic != null) {
