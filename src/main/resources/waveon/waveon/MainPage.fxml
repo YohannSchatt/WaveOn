@@ -30,7 +30,7 @@
                                     <HBox.margin>
                                         <Insets right="10.0" />
                                   </HBox.margin></TextField>
-                                <ComboBox fx:id="filterComboBox" prefWidth="150.0" promptText="Streams count ↓">
+                                <ComboBox fx:id="filterComboBox" prefWidth="150.0" promptText="MostListened">
                                     <items>
                                         <FXCollections fx:factory="observableArrayList">
                                             <String fx:value="Newest" />

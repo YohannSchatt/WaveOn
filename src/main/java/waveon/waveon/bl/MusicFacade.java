@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 /**
  * The MusicFacade class provides methods to manage and control music playback,
@@ -20,7 +21,7 @@ import java.util.ArrayList;
  * It also handles volume control, playlist management, and music ordering.
  */
 public class MusicFacade {
-    private final ArrayList<Music> musicList;
+    private ArrayList<Music> musicList;
     private static MediaPlayer mediaPlayer;
     private MusicDAO musicDAO;
     private PlaylistDAO playlistDAO;
@@ -29,6 +30,7 @@ public class MusicFacade {
     private boolean isPaused = false;
     private double volume = 0.1; // Default volume
     private ArrayList<Playlist> playlists;
+    private SearchFacade searchFacade = new SearchFacade();
 
     /**
      * Constructs a new MusicFacade instance and initializes the music and playlist DAOs.
@@ -39,6 +41,7 @@ public class MusicFacade {
         musicDAO = factory.createMusicDAO();
         this.musicList = musicDAO.getAllMusics();
         playlistDAO = factory.createPlaylistDAO();
+
     }
 
     /**
@@ -69,7 +72,6 @@ public class MusicFacade {
         if (mediaPlayer != null) {
             mediaPlayer.stop();
         }
-        currentMusicIndex = id;
         Music music = musicDAO.getMusicWithContentById(id);
         initializeMediaPlayer(music);
         incrementPlayCount(id);
@@ -95,17 +97,41 @@ public class MusicFacade {
                 musicList.sort((m1, m2) -> m2.getReleaseDate().compareTo(m1.getReleaseDate()));
                 break;
             case Oldest:
-                musicList.sort((m1, m2) -> m1.getReleaseDate().compareTo(m2.getReleaseDate()));
+                musicList.sort(Comparator.comparing(Music::getReleaseDate));
                 break;
             case MostListened:
                 musicList.sort((m1, m2) -> m2.getStreamCount() - m1.getStreamCount());
                 break;
             case LeastListened:
-                musicList.sort((m1, m2) -> m1.getStreamCount() - m2.getStreamCount());
-                break;
-            default:
+                musicList.sort(Comparator.comparingInt(Music::getStreamCount));
                 break;
         }
+        currentMusicIndex = 1;
+    }
+
+    public void updateSearchMusicList(String search) {
+        searchFacade.searchMusic(search);
+        musicList = searchFacade.getCurrentMusicSearch();
+        currentMusicIndex = 1;
+    }
+
+    
+
+    /**
+     * Sets the current music object.
+     *
+     * @param music the music object to set as current
+     */
+    public void setCurrentMusic(Music music) {
+        if (music != null) {
+                for (int i=0; i < musicList.size(); i++) {
+                if (musicList.get(i).getId() == music.getId()) {
+                    currentMusicIndex = i + 1;
+                    break;
+                }
+            }
+        } 
+
     }
 
     /**
@@ -142,7 +168,7 @@ public class MusicFacade {
         if (mediaPlayer == null && currentMusic != null) {
             loadMusicById(currentMusic.getId());
         } else if (mediaPlayer == null && !musicList.isEmpty()) {
-            loadMusicById(currentMusicIndex);
+            loadMusicById(musicList.get(currentMusicIndex - 1).getId());
         }
         if (mediaPlayer != null) {
             mediaPlayer.play();
@@ -186,9 +212,12 @@ public class MusicFacade {
         }
         if (!musicList.isEmpty()) {
             if (currentMusic == musicList.get(currentMusicIndex - 1)) {
-                currentMusicIndex = (currentMusicIndex + 1) % musicList.size();
+                currentMusicIndex = (currentMusicIndex % musicList.size() ) +1;
             }
-            loadMusicById(currentMusicIndex);
+            else {
+                currentMusic = musicList.get(currentMusicIndex - 1);
+            }
+            loadMusicById(musicList.get(currentMusicIndex - 1).getId());
             playMusic();
         }
     }
@@ -270,21 +299,6 @@ public class MusicFacade {
             return musicList.get(currentMusicIndex - 1);
         }
         return null;
-    }
-
-    /**
-     * Sets the current music object.
-     *
-     * @param music the music object to set as current
-     */
-    public void setCurrentMusic(Music music) {
-        currentMusic = music;
-        for (Music m : musicList) {
-            if (m.getId() == music.getId()) {
-                currentMusicIndex = m.getId();
-                break;
-            }
-        }
     }
 
     /**
