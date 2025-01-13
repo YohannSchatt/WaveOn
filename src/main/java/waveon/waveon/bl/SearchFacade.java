@@ -3,9 +3,11 @@ package waveon.waveon.bl;
 import waveon.waveon.core.Artist;
 import waveon.waveon.core.Music;
 
+import waveon.waveon.core.OrdUser;
 import waveon.waveon.persist.AbstractFactory;
 import waveon.waveon.persist.ArtistDAO;
 import waveon.waveon.persist.MusicDAO;
+import waveon.waveon.persist.OrdUserDAO;
 
 import java.util.*;
 
@@ -14,8 +16,10 @@ public class SearchFacade {
 
     private final MusicDAO MusicDAO;
     private final ArtistDAO ArtistDAO;
+    private final OrdUserDAO OrdUserDAO;
     private static ArrayList<Music> currentMusicSearch = new ArrayList<>();
     private static ArrayList<Artist> currentArtistSearch = new ArrayList<>();
+    private static ArrayList<OrdUser> currentOrdUserSearch = new ArrayList<>();
 
     public static Artist profilePageInfo;
 
@@ -25,6 +29,7 @@ public class SearchFacade {
         assert factory != null;
         MusicDAO = factory.createMusicDAO();
         ArtistDAO = factory.createArtistDAO();
+        OrdUserDAO = factory.createOrdUserDAO();
     }
 
     // Fetches the matching musics with the search string
@@ -43,6 +48,11 @@ public class SearchFacade {
     // Returns the current artist search results
     public ArrayList<Artist> getCurrentArtistSearch() { return currentArtistSearch; }
 
+    public ArrayList<OrdUser> getCurrentOrdUserSearch() { return currentOrdUserSearch; }
+
+    public static void setCurrentOrdUserSearch(ArrayList<OrdUser> currentOrdUserSearch) {SearchFacade.currentOrdUserSearch = currentOrdUserSearch; }
+
+    public void searchOrdUser(String search) {setCurrentOrdUserSearch(OrdUserDAO.getUserByName(search));}
 
     public static void setProfilePageInfo(Artist profilePageInfo) {
         SearchFacade.profilePageInfo = profilePageInfo;

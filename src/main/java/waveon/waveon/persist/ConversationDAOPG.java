@@ -28,7 +28,7 @@ public class ConversationDAOPG implements ConversationDAO {
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
                 int conversationId = rs.getInt("id");
-                Conversation conversation = new Conversation();
+                Conversation conversation = new Conversation(conversationId);
                 OrdUser user1 = new OrdUser(rs.getInt("user_id1"));
                 OrdUser user2 = new OrdUser(rs.getInt("user_id2"));
                 OrdUser[] users = new OrdUser[]{user1, user2};
@@ -65,7 +65,8 @@ public class ConversationDAOPG implements ConversationDAO {
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                Conversation conversation = new Conversation();
+                int conversationId = rs.getInt("id");
+                Conversation conversation = new Conversation(conversationId);
                 OrdUser user1 = new OrdUser(rs.getInt("user_id1"));
                 OrdUser user2 = new OrdUser(rs.getInt("user_id2"));
                 OrdUser[] users = new OrdUser[]{user1, user2};
@@ -113,7 +114,7 @@ public class ConversationDAOPG implements ConversationDAO {
         }
     }
 
-    public boolean addMessage(int id, int author_id, String message) {
+    public boolean sendMessage(int id, int author_id, String message) {
         PGconnector pg = PGconnector.getInstance();
         String sql = "INSERT INTO message (conversation_id, author_id, content) VALUES (?, ?, ?)";
         try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {

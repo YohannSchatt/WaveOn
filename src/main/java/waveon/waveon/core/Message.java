@@ -34,6 +34,9 @@ public class Message {
      */
     public Date date;
 
+    public Message(String text, boolean b) {
+    }
+
     public OrdUser getAuthor() {
         return Author;
     }

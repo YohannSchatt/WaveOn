@@ -1,6 +1,9 @@
 package waveon.waveon.persist;
 
 import waveon.waveon.core.Conversation;
+import waveon.waveon.core.Message;
+
+import java.util.ArrayList;
 
 public interface ConversationDAO {
 
@@ -10,8 +13,10 @@ public interface ConversationDAO {
 
     boolean deleteMessage(int id);
 
-    boolean addMessage(int id, int author_id, String message);
+    boolean sendMessage(int id, int author_id, String message);
 
     boolean createConversation(int id_user1, int id_user2);
+
+    public ArrayList<Message> getMessagesByConversationId(int id);
 
 }

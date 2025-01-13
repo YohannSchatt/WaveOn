@@ -4,6 +4,7 @@ import waveon.waveon.core.OrdUser;
 import waveon.waveon.connector.PGconnector;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class OrdUserDAOPG implements OrdUserDAO {
 
@@ -116,6 +117,23 @@ public class OrdUserDAOPG implements OrdUserDAO {
         }
         catch (Exception e) {
             System.out.println("Error in OrdUserDAOPG.getUserById : " + e);
+        }
+        return null;
+    }
+
+    public ArrayList<OrdUser> getUserByName(String name) {
+        PGconnector pg = PGconnector.getInstance();
+        String sql = "SELECT * FROM ordinaryuser WHERE username LIKE ?";
+        try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, "%" + name + "%");
+            ResultSet rs = pstmt.executeQuery();
+            ArrayList<OrdUser> users = new ArrayList<>();
+            while (rs.next()) {
+                users.add(new OrdUser(rs.getInt("id"), rs.getString("email"),rs.getString("username"), rs.getString("password")));
+            }
+            return users;
+        } catch (Exception e) {
+            System.out.println("Error in OrdUserDAOPG.getUserByName : " + e);
         }
         return null;
     }

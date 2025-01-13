@@ -10,8 +10,9 @@ public class Conversation {
     /**
      * Default constructor
      */
-    public Conversation() {
-    }
+    public Conversation(int id) {}
+
+    public int id;
 
     /**
      * 
@@ -45,6 +46,14 @@ public class Conversation {
 
     public void removeMessage(Message message) {
         ListMessage.remove(message);
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
     }
 
 }

@@ -284,8 +284,6 @@ public class MainPageController {
                 FXMLLoader loader2 = new FXMLLoader(getClass().getResource("/waveon/waveon/components/button/CommentarySectionButton.fxml"));
                 hBox.getChildren().add(loader2.load());
 
-                FXMLLoader loader3 = new FXMLLoader(getClass().getResource("/waveon/waveon/components/button/PrivateMessageButton.fxml"));
-                hBox.getChildren().add(loader3.load());
                 IUser currentUser = UserSessionFacade.getCurrentUser();
                 if (currentUser.isArtist()) {
                     Button Upload = new Button("Upload Music");
@@ -301,6 +299,9 @@ public class MainPageController {
                         }
                     });
                     hBox.getChildren().add(Upload);
+                    } else if (!currentUser.isArtist()) {
+                    FXMLLoader loader3 = new FXMLLoader(getClass().getResource("/waveon/waveon/components/button/PrivateMessageButton.fxml"));
+                    hBox.getChildren().add(loader3.load());
                     }
                 }
             catch (Exception e) {

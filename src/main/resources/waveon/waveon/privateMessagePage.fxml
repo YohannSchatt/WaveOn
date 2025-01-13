@@ -6,9 +6,31 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="waveon.waveon.ui.PrivateMessagePage"
-            prefHeight="400.0" prefWidth="600.0">
-
+<AnchorPane prefHeight="471.0" prefWidth="745.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="waveon.waveon.ui.PrivateMessagePageController">
+   <children>
+      <BorderPane layoutX="-2.0" layoutY="-2.0" prefHeight="547.0" prefWidth="745.0">
+         <top>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+         </top>
+         <left>
+            <VBox alignment="CENTER" spacing="8" prefHeight="447.0" prefWidth="179.0" BorderPane.alignment="CENTER">
+               <children>
+                  <TextField fx:id="searchField" promptText="Username" />
+                  <Button fx:id="search" mnemonicParsing="false" text="Search" onAction="#searchUser" />
+                  <ListView fx:id="listUser" prefHeight="373.0" prefWidth="179.0" />
+               </children>
+            </VBox>
+         </left>
+         <center>
+            <VBox alignment="CENTER" spacing="8" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Label text="Conversation with " />
+                  <ListView fx:id="conversation" prefHeight="238.0" prefWidth="566.0" />
+                  <TextField fx:id="brouillon" prefHeight="57.0" prefWidth="566.0" promptText="Message" />
+                  <Button fx:id="send" mnemonicParsing="false" text="Send" onAction="#sendMessage"/>
+               </children>
+            </VBox>
+         </center>
+      </BorderPane>
+   </children>
 </AnchorPane>

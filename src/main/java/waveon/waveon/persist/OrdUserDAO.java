@@ -4,6 +4,7 @@ import waveon.waveon.core.OrdUser;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public interface OrdUserDAO {
 
@@ -19,4 +20,6 @@ public interface OrdUserDAO {
     void addFollow(int id, int idToFollow);
 
     void removeFollow(int id, int idToUnfollow);
+
+    ArrayList<OrdUser> getUserByName(String name);
 }
