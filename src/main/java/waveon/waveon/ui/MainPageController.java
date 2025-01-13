@@ -86,7 +86,7 @@ public class MainPageController {
         pauseTransition.setOnFinished(event -> handleSearch());
         searchField.textProperty().addListener((observable, oldValue, newValue) -> pauseTransition.playFromStart());
         musicsListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            selectedMusic = getMusicByName(newValue);  // Assurez-vous de récupérer l'objet Music à partir de son nom
+            selectedMusic = getMusicByName(newValue);
             musicFacade.setCurrentMusic(selectedMusic);
         });
         artistsListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -283,6 +283,9 @@ public class MainPageController {
 
                 FXMLLoader loader2 = new FXMLLoader(getClass().getResource("/waveon/waveon/components/button/CommentarySectionButton.fxml"));
                 hBox.getChildren().add(loader2.load());
+
+                FXMLLoader loader3 = new FXMLLoader(getClass().getResource("/waveon/waveon/components/button/PrivateMessageButton.fxml"));
+                hBox.getChildren().add(loader3.load());
                 // Si l'utilisateur est un artiste
                 IUser currentUser = UserSessionFacade.getCurrentUser();
                 if (currentUser.isArtist()) {
