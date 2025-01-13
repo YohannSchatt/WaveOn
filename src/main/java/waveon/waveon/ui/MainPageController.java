@@ -286,14 +286,13 @@ public class MainPageController {
 
                 FXMLLoader loader3 = new FXMLLoader(getClass().getResource("/waveon/waveon/components/button/PrivateMessageButton.fxml"));
                 hBox.getChildren().add(loader3.load());
-                // Si l'utilisateur est un artiste
                 IUser currentUser = UserSessionFacade.getCurrentUser();
                 if (currentUser.isArtist()) {
                     Button Upload = new Button("Upload Music");
                     Upload.setOnAction(event -> {
                         try {
-                            FXMLLoader loader3 = new FXMLLoader(getClass().getResource("/waveon/waveon/UploadMusic.fxml"));
-                            Parent root = loader3.load();
+                            FXMLLoader loader4 = new FXMLLoader(getClass().getResource("/waveon/waveon/UploadMusic.fxml"));
+                            Parent root = loader4.load();
                             Stage stage = (Stage) hBox.getScene().getWindow();
                             stage.setScene(new Scene(root));
                             stage.show();
