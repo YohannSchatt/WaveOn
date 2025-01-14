@@ -40,7 +40,7 @@ public class MusicCommentsFacade {
     }
 
     // Adds a new comment to a music
-    public void addCommentary(String content, int userId, int musicId) {
+    public void addComment(String content, int userId, int musicId) {
         Comments newComment = new Comments(0, musicId, content, userId);
         commentsDAO.addComment(newComment);
     }
@@ -51,7 +51,7 @@ public class MusicCommentsFacade {
     }
 
     // Deletes a comment
-    public void deleteCommentary(int commentId) {
+    public void deleteComment(int commentId) {
         commentsDAO.deleteComment(commentId);
     }
 }

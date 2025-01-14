@@ -188,7 +188,6 @@ public class MusicDAOPG implements MusicDAO {
 
     @Override
     public void incrementPlayCount(int id) {
-        System.out.println("UPDATE music SET stream_count = stream_count + 1 WHERE id = " + id);
         PGconnector pg = PGconnector.getInstance();
         String sql = "UPDATE music SET stream_count = stream_count + 1 WHERE id = ?";
         try (Connection conn = pg.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {

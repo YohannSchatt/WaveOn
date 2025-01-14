@@ -63,7 +63,7 @@ public class MusicCommentsPageController {
                     if (comment.getUserId() == userId) {
                         Button deleteButton = new Button("Delete");
                         deleteButton.setOnAction(event -> {
-                            musicCommentsFacade.deleteCommentary(comment.getId());
+                            musicCommentsFacade.deleteComment(comment.getId());
                             loadComments(); // Reload comments to reflect the deletion
                         });
                         hBox.getChildren().add(deleteButton);
@@ -82,7 +82,7 @@ public class MusicCommentsPageController {
         if (selectedMusicTitle != null && commentContent != null && !commentContent.trim().isEmpty()) {
             Music selectedMusic = musicCommentsFacade.getMusicByTitle(selectedMusicTitle);
             if (selectedMusic != null) {
-                musicCommentsFacade.addCommentary(commentContent, userId, selectedMusic.getId());
+                musicCommentsFacade.addComment(commentContent, userId, selectedMusic.getId());
                 loadComments(); // Reload comments to show the new comment
                 commentTextField.clear(); // Clear the text field after adding the comment
             }

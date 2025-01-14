@@ -114,6 +114,8 @@ public class MainPageController {
         }
         updateAddToPlaylistMenu();
         handleSearch();
+        applyFilter();
+
     }
 
 
@@ -132,6 +134,7 @@ public class MainPageController {
             toggleNotificationButton.setText("Open Notifications");
         }
     }
+
 
     private void loadNotifications() {
         ArrayList<Notification> notifications = notificationFacade.getNotificationsList();
@@ -161,13 +164,13 @@ public class MainPageController {
         if (selectedFilter != null && searchResults != null) {
             switch (selectedFilter) {
                 case "Newest":
-                    searchResults.sort(Comparator.comparing(Music::getReleaseDate).reversed());
+                    searchResults.sort((m1, m2) -> m2.getReleaseDate().compareTo(m1.getReleaseDate()));
                     break;
                 case "Oldest":
                     searchResults.sort(Comparator.comparing(Music::getReleaseDate));
                     break;
                 case "MostListened":
-                    searchResults.sort(Comparator.comparingInt(Music::getStreamCount).reversed());
+                    searchResults.sort((m1, m2) -> m2.getStreamCount() - m1.getStreamCount());
                     break;
                 case "LeastListened":
                     searchResults.sort(Comparator.comparingInt(Music::getStreamCount));
@@ -192,6 +195,7 @@ public class MainPageController {
         searchFacade.searchArtist(search);
         updateMusicResults();
         updateArtistResults();
+        musicFacade.updateSearchMusicList(search);
     }
 
     private void updateMusicResults() {

@@ -66,24 +66,32 @@ public class ProfilePageController {
                 subscribe.setText("Unsubscribe");
                 subscribe.setStyle("-fx-background-color: red");
                 subscribe.setOnAction(event -> {
-                    UserSessionFacade userSessionFacade = UserSessionFacade.getInstance();
-                    userSessionFacade.removeFollow(SearchFacade.getProfilePageInfo().id);
-                    this.searchFacade.getAllInfoArtistById(SearchFacade.getProfilePageInfo().id);
-                    updateSubscribers();
-                    switchButtonSubscriber();
+                    removeFollow();
                 });
             } else {
                 subscribe.setText("Subscribe");
                 subscribe.setStyle("-fx-background-color: green");
                 subscribe.setOnAction(event -> {
-                    UserSessionFacade userSessionFacade = UserSessionFacade.getInstance();
-                    userSessionFacade.addFollow(SearchFacade.getProfilePageInfo().id);
-                    this.searchFacade.getAllInfoArtistById(SearchFacade.getProfilePageInfo().id);
-                    updateSubscribers();
-                    switchButtonSubscriber();
+                    addFollow();
                 });
             }
         }
+    }
+
+    public void addFollow() {
+        UserSessionFacade userSessionFacade = UserSessionFacade.getInstance();
+        userSessionFacade.addFollow(SearchFacade.getProfilePageInfo().id);
+        this.searchFacade.getAllInfoArtistById(SearchFacade.getProfilePageInfo().id);
+        updateSubscribers();
+        switchButtonSubscriber();
+    }
+
+    public void removeFollow() {
+        UserSessionFacade userSessionFacade = UserSessionFacade.getInstance();
+        userSessionFacade.removeFollow(SearchFacade.getProfilePageInfo().id);
+        this.searchFacade.getAllInfoArtistById(SearchFacade.getProfilePageInfo().id);
+        updateSubscribers();
+        switchButtonSubscriber();
     }
 
     private void updateListMusic() {
