@@ -34,6 +34,9 @@ public class MusicCommentsPageController {
     private MusicCommentsFacade musicCommentsFacade = new MusicCommentsFacade();
     private int userId = UserSessionFacade.getCurrentUser().getId(); // Assuming userId is available, here we use a dummy userId (e.g., 2)
 
+    /**
+     * Initializes the musicComboBox with music titles and adds a listener to load comments when a music item is selected.
+     */
     @FXML
     public void initialize() {
         // Load music titles into the ComboBox
@@ -46,6 +49,9 @@ public class MusicCommentsPageController {
         musicComboBox.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> loadComments());
     }
 
+    /**
+     * Loads comments for the selected music track into the commentsListView.
+     */
     @FXML
     private void loadComments() {
         String selectedMusicTitle = musicComboBox.getValue();
@@ -75,6 +81,9 @@ public class MusicCommentsPageController {
         }
     }
 
+    /**
+     * Adds a new comment to the selected music track.
+     */
     @FXML
     private void addComment() {
         String selectedMusicTitle = musicComboBox.getValue();
@@ -89,6 +98,9 @@ public class MusicCommentsPageController {
         }
     }
 
+    /**
+     * Navigates back to the main page.
+     */
     @FXML
     private void handleBackToMainPage() {
         try {
